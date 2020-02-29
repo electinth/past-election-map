@@ -12,7 +12,6 @@ const Main = styled.main`
 const Viz = () => {
 	return (
 		<Main>
-			<h1>Thailand Past Election Map</h1>
 			<CountryMap />
 		</Main>
 	);
