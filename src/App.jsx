@@ -1,12 +1,16 @@
 import React from 'react';
-import Header from './components/Header';
+import Nav from './components/Nav';
 import GlobalStyles from './styles/GlobalStyles';
+import GlobalFont from './styles/fonts';
+import Viz from './components/Viz';
 
 const App = () => {
 	return (
 		<>
 			<GlobalStyles />
-			<Header />
+			<GlobalFont />
+			<Nav />
+			<Viz />
 		</>
 	);
 };

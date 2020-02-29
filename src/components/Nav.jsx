@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import COLOR from '../styles/color';
 
-const FixedHeader = styled.header`
+const FixedNav = styled.nav`
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -24,15 +24,15 @@ const ElectLogo = styled.a`
 	text-decoration: none;
 `;
 
-const Header = () => {
+const Nav = () => {
 	return (
-		<FixedHeader>
+		<FixedNav>
 			<span>
 				Past Election Map |{' '}
 				<ElectLogo href="https://elect.in.th/">Elect</ElectLogo>
 			</span>
-		</FixedHeader>
+		</FixedNav>
 	);
 };
 
-export default Header;
+export default Nav;
