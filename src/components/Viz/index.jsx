@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import CountryMap from './CountryMap';
 
 const Main = styled.main`
 	width: 96rem;
@@ -12,6 +13,7 @@ const Viz = () => {
 	return (
 		<Main>
 			<h1>Thailand Past Election Map</h1>
+			<CountryMap />
 		</Main>
 	);
 };
