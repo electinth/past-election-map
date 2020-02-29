@@ -6,15 +6,16 @@
 	"scripts": {
 		"clean": "rm -rf build/ && rm -rf dist/",
 		"start": "parcel src/index.html",
-		"build": "parcel build src/index.html -d build/"
+		"build": "parcel build src/index.html -d build/",
+		"format": "prettier --write \"src/**/*.{js,jsx,json,yml,md}\""
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/codeforthailand/past-election-map.git"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"keywords": ["map","topology","cartography","geopolitical","thailand"],
+	"author": "ELECT <contact@elect.in.th>",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/codeforthailand/past-election-map/issues"
 	},
@@ -23,6 +24,9 @@
 		"@babel/core": "^7.8.6",
 		"@babel/preset-env": "^7.8.6",
 		"@babel/preset-react": "^7.8.3",
+		"doctoc": "^1.4.0",
+		"husky": "^4.2.3",
+		"lint-staged": "^10.0.8",
 		"parcel-bundler": "^1.12.4",
 		"prettier": "^1.19.1"
 	},
@@ -35,5 +39,21 @@
 	},
 	"browserslist": [
 		"last 1 Chrome versions"
-	]
+	],
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"src/**/*.{js,jsx,json,yml,md}": [
+			"prettier --write",
+			"git add"
+		],
+		"README.md": [
+			"doctoc",
+			"prettier --write",
+			"git add"
+		]
+	}
 }
