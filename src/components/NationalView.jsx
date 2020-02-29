@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Bar } from './Article';
+import Dropdown from './Dropdown';
 
 const NationalView = () => {
 	return (
@@ -12,7 +13,9 @@ const NationalView = () => {
 					<li>2562</li>
 				</ul>
 			</Bar>
-			<Bar>Hello</Bar>
+			<Bar>
+				<Dropdown>ประเทศไทย</Dropdown>
+			</Bar>
 		</>
 	);
 };
