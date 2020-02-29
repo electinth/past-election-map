@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import CountryGeoJson from '../../data/geojson/thailand.geo.json';
 
-const CountryMap = () => {
+const Map = () => {
 	useEffect(() => {
 		const w = 500,
 			h = 1000,
@@ -37,4 +37,4 @@ const CountryMap = () => {
 	);
 };
 
-export default CountryMap;
+export default Map;
