@@ -6,8 +6,9 @@
 	"scripts": {
 		"clean": "rm -rf build/ && rm -rf dist/",
 		"start": "parcel src/index.html",
+		"prebuild": "npm run clean",
 		"build": "parcel build src/index.html -d build/",
-		"format": "prettier --write \"src/**/*.{js,jsx,json,yml,md}\""
+		"format": "prettier --write \"src/!(data)/**/*.{js,jsx,json,yml,md}\""
 	},
 	"repository": {
 		"type": "git",
@@ -46,7 +47,7 @@
 		}
 	},
 	"lint-staged": {
-		"src/**/*.{js,jsx,json,yml,md}": [
+		"src/!(data)/**/*.{js,jsx,json,yml,md}": [
 			"prettier --write",
 			"git add"
 		],
