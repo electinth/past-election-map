@@ -4,9 +4,9 @@
 	"description": "Past general election comparison map for Thailand",
 	"main": "index.js",
 	"scripts": {
-		"clean": "rm dist/bundle.js",
+		"clean": "rm -rf build/ && rm -rf dist/",
 		"start": "parcel src/index.html",
-		"build-prod": "parcel build src/index.html"
+		"build": "parcel build src/index.html -d build/"
 	},
 	"repository": {
 		"type": "git",
