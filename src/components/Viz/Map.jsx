@@ -6,14 +6,18 @@ import { withRouter } from 'react-router-dom';
 const Map = props => {
 	useEffect(() => {
 		console.log(CountryGeoJson);
-		const w = 500,
+		const w = innerWidth,
 			h = 1000,
-			SCALE = 1500;
+			SCALE = 2250;
 
 		const projection = d3
 			.geoMercator()
-			.translate([-2350, 650])
+			.translate([0, 0])
 			.scale([SCALE]);
+
+		const bkk = projection([100.5, 13.7]);
+
+		projection.translate([-bkk[0] + w / 2, -bkk[1] + 300]);
 
 		const path = d3.geoPath(projection);
 
