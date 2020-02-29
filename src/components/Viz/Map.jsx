@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import CountryGeoJson from '../../data/geojson/thailand.geo.json';
+import { withRouter } from 'react-router-dom';
 
-const Map = () => {
+const Map = props => {
 	useEffect(() => {
+		console.log(CountryGeoJson);
 		const w = 500,
 			h = 1000,
 			SCALE = 1500;
@@ -19,6 +21,7 @@ const Map = () => {
 			.select('#vis')
 			.attr('width', w)
 			.attr('height', h);
+
 		const $map = d3.select('#map');
 
 		const $path = $map
@@ -27,8 +30,18 @@ const Map = () => {
 			.enter()
 			.append('path')
 			.attr('d', path)
-			.attr('fill', 'white');
+			.attr('fill', 'white')
+			.on('click', EnterProvincialView);
 	}, []);
+
+	function EnterProvincialView({ properties: { name } }) {
+		const province = name
+			.toLowerCase()
+			.split(' ')
+			.join('');
+		const path = `/province/${province}`;
+		props.history.push(path);
+	}
 
 	return (
 		<svg id="vis">
@@ -37,4 +50,4 @@ const Map = () => {
 	);
 };
 
-export default Map;
+export default withRouter(Map);

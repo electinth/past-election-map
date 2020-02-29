@@ -15,18 +15,18 @@ const App = () => {
 			<GlobalStyles />
 			<GlobalFont />
 			<Nav />
-			<main>
-				<Viz />
-				<Article>
-					<BrowserRouter>
+			<BrowserRouter>
+				<main>
+					<Viz />
+					<Article>
 						<Switch>
 							<Route path="/" exact component={NationalView} />
 							<Route path="/province/:province" component={ProvincialView} />
 							<Route path="/compare/:province" component={CompareView} />
 						</Switch>
-					</BrowserRouter>
-				</Article>
-			</main>
+					</Article>
+				</main>
+			</BrowserRouter>
 		</>
 	);
 };
