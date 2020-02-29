@@ -1,14 +1,18 @@
 import React from 'react';
-
+import { Bar } from './Article';
+import Dropdown from './Dropdown';
 const ProvincialView = ({
 	match: {
 		params: { province }
 	}
 }) => {
 	return (
-		<h2>
-			<span>{province}</span>
-		</h2>
+		<>
+			<Bar></Bar>
+			<Bar>
+				<Dropdown>{province}</Dropdown>
+			</Bar>
+		</>
 	);
 };
 
