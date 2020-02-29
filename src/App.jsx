@@ -17,7 +17,6 @@ const App = () => {
 			<Nav />
 			<BrowserRouter>
 				<main>
-					<Viz />
 					<Article>
 						<Switch>
 							<Route path="/" exact component={NationalView} />
@@ -25,6 +24,7 @@ const App = () => {
 							<Route path="/compare/:province" component={CompareView} />
 						</Switch>
 					</Article>
+					<Viz />
 				</main>
 			</BrowserRouter>
 		</>
