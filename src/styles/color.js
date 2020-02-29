@@ -1,7 +1,7 @@
 const COLOR = {
 	white: '#ffffff',
-	black: '#272727',
-	paperGray: '#eeeeee',
+	background: '#262626',
+	nav: '#222222',
 	pink: '#fcbbdd',
 	primary: '#ef314b'
 };

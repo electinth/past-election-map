@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import COLOR from '../styles/color';
 
 const FixedNav = styled.nav`
@@ -7,15 +8,16 @@ const FixedNav = styled.nav`
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 3rem;
+	height: 5rem;
+	padding: 0 3rem;
 
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 
-	font-size: 1.6rem;
+	font-size: 2.25rem;
 
-	background-color: ${COLOR.black};
+	background-color: ${COLOR.nav};
 	color: ${COLOR.white};
 `;
 
@@ -27,10 +29,8 @@ const ElectLogo = styled.a`
 const Nav = () => {
 	return (
 		<FixedNav>
-			<span>
-				Past Election Map |{' '}
-				<ElectLogo href="https://elect.in.th/">Elect</ElectLogo>
-			</span>
+			<ElectLogo href="https://elect.in.th/">ELECT</ElectLogo>
+			<span>About Us</span>
 		</FixedNav>
 	);
 };

@@ -5,7 +5,7 @@ import CountryMap from './CountryMap';
 const Main = styled.main`
 	width: 96rem;
 	margin: 0 auto;
-	margin-top: 3rem;
+	margin-top: 5rem;
 	padding: 1rem 2rem;
 `;
 
