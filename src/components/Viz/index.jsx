@@ -5,9 +5,8 @@ import Map from './Map';
 const Figure = styled.figure`
 	position: fixed;
 	top: 5rem;
-	width: 100vw;
+	width: 100%;
 	text-align: center;
-	padding: 1rem 2rem;
 `;
 
 const Viz = () => {

@@ -7,6 +7,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import NationalView from './components/NationalView';
 import ProvincialView from './components/ProvincialView';
 import CompareView from './components/CompareView';
+import { Article } from './components/Article';
 
 const App = () => {
 	return (
@@ -14,15 +15,18 @@ const App = () => {
 			<GlobalStyles />
 			<GlobalFont />
 			<Nav />
-			<Viz />
-
-			<BrowserRouter>
-				<Switch>
-					<Route path="/" exact component={NationalView} />
-					<Route path="/province/:province" component={ProvincialView} />
-					<Route path="/compare/:province" component={CompareView} />
-				</Switch>
-			</BrowserRouter>
+			<main>
+				<Viz />
+				<Article>
+					<BrowserRouter>
+						<Switch>
+							<Route path="/" exact component={NationalView} />
+							<Route path="/province/:province" component={ProvincialView} />
+							<Route path="/compare/:province" component={CompareView} />
+						</Switch>
+					</BrowserRouter>
+				</Article>
+			</main>
 		</>
 	);
 };
