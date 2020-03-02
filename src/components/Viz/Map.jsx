@@ -1,7 +1,22 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
-import CountryGeoJson from '../../data/geojson/thailand.geo.json';
+import * as topojson from 'topojson-client';
+import * as tps from 'topojson-simplify';
+import CountryTopoJson from '../../data/geojson/election.topo.json';
 import { withRouter } from 'react-router-dom';
+
+// Default topojson layer
+const currentLayer = 'election-2562';
+
+// Precompute simplify topojson
+const simplifyMinWeight = 1e-5;
+const ContryTopo = tps.presimplify(CountryTopoJson);
+
+// mock color scheme
+const color = d3
+  .scaleThreshold()
+  .domain(d3.range(0, 10))
+  .range(d3.schemeDark2);
 
 const Map = props => {
   let active;
@@ -31,15 +46,75 @@ const Map = props => {
 
     const $map = d3.select('#map');
 
+    // simplify topology on the fly
+    // @see https://bl.ocks.org/maryzam/5f0db76db6bceb00aae4b04a69bcb43d
+    const geo = tps.simplify(ContryTopo, simplifyMinWeight);
+
+    // Election zones
     const $path = $map
-      .selectAll('path')
-      .data(CountryGeoJson.features)
+      .selectAll('path.zone')
+      .data(topojson.feature(geo, geo.objects[currentLayer]).features)
       .enter()
       .append('path')
+      .attr(
+        'class',
+        d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
+      )
       .attr('d', path)
-      .attr('fill', 'white')
+      .attr('fill', function(d) {
+        return color(d.properties.province_id % 10);
+      })
       .attr('cursor', 'pointer')
       .on('click', click);
+
+    // Prepare for border drawing
+    const $border = d3.select('#border');
+
+    // Country border
+    const $border_country = $border
+      .append('path')
+      .datum(
+        topojson.mesh(geo, geo.objects[currentLayer], function(a, b) {
+          return a === b;
+        })
+      )
+      .attr('class', 'country-border')
+      .attr('d', path)
+      .attr('fill', 'transparent')
+      .attr('stroke-width', '1.2')
+      .attr('stroke', 'white');
+
+    // Province borders
+    const $border_province = $border
+      .append('path')
+      .datum(
+        topojson.mesh(geo, geo.objects[currentLayer], function(a, b) {
+          return (
+            a !== b && a.properties.province_id !== b.properties.province_id
+          );
+        })
+      )
+      .attr('class', 'province-border')
+      .attr('d', path)
+      .attr('fill', 'transparent')
+      .attr('stroke-width', '0.6')
+      .attr('stroke', 'white');
+
+    // Zone borders
+    const $border_zone = $border
+      .append('path')
+      .datum(
+        topojson.mesh(geo, geo.objects[currentLayer], function(a, b) {
+          return (
+            a !== b && a.properties.province_id === b.properties.province_id
+          );
+        })
+      )
+      .attr('class', 'zone-border')
+      .attr('d', path)
+      .attr('fill', 'transparent')
+      .attr('stroke-width', '0.1')
+      .attr('stroke', 'white');
   }, []);
 
   function click(d) {
@@ -75,8 +150,8 @@ const Map = props => {
       .attr('transform', '');
   }
 
-  function EnterProvincialView({ properties: { name } }) {
-    const province = name
+  function EnterProvincialView({ properties: { province_name } }) {
+    const province = province_name
       .toLowerCase()
       .split(' ')
       .join('');
@@ -87,6 +162,7 @@ const Map = props => {
   return (
     <svg id="vis">
       <g id="map"></g>
+      <g id="border" style={{ pointerEvents: 'none' }}></g>
     </svg>
   );
 };

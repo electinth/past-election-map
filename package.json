@@ -42,7 +42,9 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
-    "styled-components": "^5.0.1"
+    "styled-components": "^5.0.1",
+    "topojson-client": "^3.1.0",
+    "topojson-simplify": "^3.0.3"
   },
   "browserslist": [
     "last 1 Chrome versions"
