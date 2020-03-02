@@ -1,60 +1,66 @@
 {
-	"name": "past-election-map",
-	"version": "1.0.0",
-	"description": "Past general election comparison map for Thailand",
-	"main": "index.js",
-	"scripts": {
-		"clean": "rm -rf build/ && rm -rf dist/",
-		"start": "parcel src/index.html",
-		"prebuild": "npm run clean",
-		"build": "parcel build src/index.html -d build/",
-		"format": "prettier --write \"src/!(data)/**/*.{js,jsx,json,yml,md}\""
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/codeforthailand/past-election-map.git"
-	},
-	"keywords": ["map","topology","cartography","geopolitical","thailand"],
-	"author": "ELECT <contact@elect.in.th>",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/codeforthailand/past-election-map/issues"
-	},
-	"homepage": "https://github.com/codeforthailand/past-election-map#readme",
-	"devDependencies": {
-		"@babel/core": "^7.8.6",
-		"@babel/preset-env": "^7.8.6",
-		"@babel/preset-react": "^7.8.3",
-		"doctoc": "^1.4.0",
-		"husky": "^4.2.3",
-		"lint-staged": "^10.0.8",
-		"parcel-bundler": "^1.12.4",
-		"prettier": "^1.19.1"
-	},
-	"dependencies": {
-		"d3": "^5.15.0",
-		"react": "^16.13.0",
-		"react-dom": "^16.13.0",
-		"react-router-dom": "^5.1.2",
-		"styled-components": "^5.0.1"
-	},
-	"browserslist": [
-		"last 1 Chrome versions"
-	],
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
-	},
-	"lint-staged": {
-		"src/!(data)/**/*.{js,jsx,json,yml,md}": [
-			"prettier --write",
-			"git add"
-		],
-		"README.md": [
-			"doctoc",
-			"prettier --write",
-			"git add"
-		]
-	}
+  "name": "past-election-map",
+  "version": "1.0.0",
+  "description": "Past general election comparison map for Thailand",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf build/ && rm -rf dist/",
+    "start": "parcel src/index.html",
+    "prebuild": "npm run clean",
+    "build": "parcel build src/index.html -d build/",
+    "format": "prettier --write \"src/!(data)/**/*.{js,jsx,json,yml,md}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeforthailand/past-election-map.git"
+  },
+  "keywords": [
+    "map",
+    "topology",
+    "cartography",
+    "geopolitical",
+    "thailand"
+  ],
+  "author": "ELECT <contact@elect.in.th>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codeforthailand/past-election-map/issues"
+  },
+  "homepage": "https://github.com/codeforthailand/past-election-map#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/preset-react": "^7.8.3",
+    "doctoc": "^1.4.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^1.19.1"
+  },
+  "dependencies": {
+    "d3": "^5.15.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-router-dom": "^5.1.2",
+    "styled-components": "^5.0.1"
+  },
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/!(data)/**/*.{js,jsx,json,yml,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "README.md": [
+      "doctoc",
+      "prettier --write",
+      "git add"
+    ]
+  }
 }
