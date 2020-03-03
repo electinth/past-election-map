@@ -1,23 +1,18 @@
 import React from 'react';
 
-import { Bar } from './Article';
-import Dropdown from './Dropdown';
-
-const NationalView = () => {
+const NationalLeft = () => {
   return (
     <>
-      <Bar>
-        <ul>
-          <li>2554</li>
-          <li>2557</li>
-          <li>2562</li>
-        </ul>
-      </Bar>
-      <Bar>
-        <Dropdown>ประเทศไทย</Dropdown>
-      </Bar>
+      <h1>This is national Left</h1>
+    </>
+  );
+};
+const NationalRight = () => {
+  return (
+    <>
+      <h1>This is national Right</h1>
     </>
   );
 };
 
-export default NationalView;
+export { NationalLeft, NationalRight };

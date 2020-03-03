@@ -1,19 +1,18 @@
 import React from 'react';
-import { Bar } from './Article';
-import Dropdown from './Dropdown';
-const ProvincialView = ({
-  match: {
-    params: { province }
-  }
-}) => {
+
+const ProvincialLeft = () => {
   return (
     <>
-      <Bar></Bar>
-      <Bar>
-        <Dropdown>{province}</Dropdown>
-      </Bar>
+      <h1>This is Provincial Left</h1>
+    </>
+  );
+};
+const ProvincialRight = () => {
+  return (
+    <>
+      <h1>This is Provincial Right</h1>
     </>
   );
 };
 
-export default ProvincialView;
+export { ProvincialLeft, ProvincialRight };
