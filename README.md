@@ -46,6 +46,57 @@ npm run build
 | [Staging](https://distracted-ardinghelli-b8c205.netlify.com/) | Latest features awaiting for release.        |
 | Production                                                    | Public website. No launch date yet.          |
 
+## System Design
+
+### Election zone
+
+Election zone data is stored in `src/data/thailand-election.topojson` with multiple object layers for each election year e.g. B.E. 2562, 2557, 2554 and 2550. This is a concise data:
+
+
+```js
+{
+  type: "Topology",
+  arcs: [
+    /* ... */
+  ],
+  objects: {
+    "eleciton-2562": {
+      /* ... */
+    },
+    "eleciton-2557": {
+      /* ... */
+    },
+    "eleciton-2554": {
+      /* ... */
+    },
+    "eleciton-2550": {
+      type: "GeometryCollection",
+      geometries: [
+        {
+          arcs: [[4567, -3932, -3905, -3920, -4038]],
+          type: 'Polygon',
+          properties: {
+            id: '90-6',
+            province_id: '90',
+            province_name: 'สงขลา',
+            province_name_en: 'Songkhla',
+            zone_id: 6,
+            zone_name: 'สงขลา เขต 6'
+            code_name: 'สข',
+            code_name_en: 'SKA',
+            region_id: '4',
+            region_name: 'ใต้',
+            detail:
+              'อ.คลองหอยโข่ง, อ.สะเดา ...',
+          }
+        },
+        /* more election zones */
+      ]
+    }
+  }
+}
+```
+
 ## Help Wanted
 
 ### Contribute

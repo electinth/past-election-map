@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
-import CountryTopoJson from '../../data/geojson/election.topo.json';
+import CountryTopoJson from '../../data/thailand-election.topo.json';
 import { withRouter } from 'react-router-dom';
 
 // Default topojson layer
