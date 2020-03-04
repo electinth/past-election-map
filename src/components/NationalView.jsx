@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import MapContext from '../map/context';
 
 const NationalLeft = () => {
+  const { setProvince } = useContext(MapContext);
+
+  useEffect(() => {
+    setProvince('ประเทศไทย');
+  }, []);
   return (
     <>
       <h1>This is national Left</h1>

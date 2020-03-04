@@ -1,17 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Bar } from './Article';
 import Dropdown from './Dropdown';
-import {
-  Route,
-  Switch,
-  useLocation,
-  useParams,
-  useRouteMatch
-} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
+import MapContext from '../map/context';
 
 const MapView = props => {
+  const { province } = useContext(MapContext);
+
   return (
     <>
       <Bar>
@@ -28,7 +25,7 @@ const MapView = props => {
         </div>
       </Bar>
       <Bar>
-        <Dropdown>ประเทศไทย</Dropdown>
+        <Dropdown>{province}</Dropdown>
         <div className="bar--lower__right">
           <Switch>
             <Route path="/" exact component={NationalRight} />
