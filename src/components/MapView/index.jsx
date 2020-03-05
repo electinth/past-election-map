@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import Dropdown from './Dropdown';
+import Dropdown from '../Dropdown';
 import { Route, Switch } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
-import MapContext from '../map/context';
+import MapContext from '../../map/context';
 
 const MapView = props => {
   const { province } = useContext(MapContext);
@@ -11,10 +11,11 @@ const MapView = props => {
   return (
     <>
       <div className="bar bar__left">
-        <ul>
-          <li>2554</li>
-          <li>2557</li>
-          <li>2562</li>
+        <ul className="year-choice--list">
+          <li className="year-choice--list-item">ปี 2562</li>
+          <li className="year-choice--list-item">ปี 2557</li>
+          <li className="year-choice--list-item">ปี 2554</li>
+          <li className="year-choice--list-item">ปี 2550</li>
         </ul>
         <div className="bar--lower__left">
           <Switch>

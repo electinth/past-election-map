@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import MapContext from '../map/context';
+import MapContext from '../../map/context';
 
 const NationalLeft = () => {
   const { setProvince } = useContext(MapContext);

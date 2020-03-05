@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import MapContext from '../map/context';
+import MapContext from '../../map/context';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
