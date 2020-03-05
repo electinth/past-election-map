@@ -1,6 +1,6 @@
 .bar {
-  flex: 0 0 30%;
-  max-width: 50rem;
+  flex: 0 0 25%;
+  max-width: 40rem;
 
   display: flex;
   justify-content: center;
@@ -22,10 +22,9 @@
   }
 
   &--list-item {
-    flex: 0 0 40%;
     font-size: 2rem;
 
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 2.5rem;
     margin: 0.5rem;
     display: flex;
     justify-content: center;
