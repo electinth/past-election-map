@@ -5,4 +5,39 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  flex-flow: column;
+
+  & > * {
+    width: 100%;
+  }
+}
+
+.year-choice {
+  &--list {
+    list-style: none;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+  }
+
+  &--list-item {
+    flex: 0 0 40%;
+    font-size: 2rem;
+
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--color-white);
+    border-radius: 1rem;
+    background-color: black;
+    cursor: pointer;
+
+    &:hover {
+      color: black;
+      background-color: var(--color-white);
+    }
+  }
 }

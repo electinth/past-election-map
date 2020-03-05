@@ -7,11 +7,7 @@ const NationalLeft = () => {
   useEffect(() => {
     setProvince('ประเทศไทย');
   }, []);
-  return (
-    <>
-      <h1>This is national Left</h1>
-    </>
-  );
+  return <></>;
 };
 const NationalRight = () => {
   return (
