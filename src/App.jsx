@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Nav from './components/Nav';
 
-import GlobalFont from './styles/fonts';
 import Viz from './components/Viz';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import CompareView from './components/CompareView';
@@ -12,7 +11,6 @@ const App = () => {
   const [province, setProvince] = useState('ประเทศไทย');
   return (
     <>
-      <GlobalFont />
       <Nav />
       <MapContext.Provider value={{ province, setProvince }}>
         <BrowserRouter>
