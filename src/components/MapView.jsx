@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Bar } from './Article';
 import Dropdown from './Dropdown';
 import { Route, Switch } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
@@ -11,7 +10,7 @@ const MapView = props => {
 
   return (
     <>
-      <Bar>
+      <div className="bar bar__left">
         <ul>
           <li>2554</li>
           <li>2557</li>
@@ -23,8 +22,8 @@ const MapView = props => {
             <Route path="/province/:province" component={ProvincialLeft} />
           </Switch>
         </div>
-      </Bar>
-      <Bar>
+      </div>
+      <div className="bar bar__right">
         <Dropdown>{province}</Dropdown>
         <div className="bar--lower__right">
           <Switch>
@@ -32,7 +31,7 @@ const MapView = props => {
             <Route path="/province/:province" component={ProvincialRight} />
           </Switch>
         </div>
-      </Bar>
+      </div>
     </>
   );
 };

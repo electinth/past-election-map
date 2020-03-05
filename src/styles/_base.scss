@@ -1,0 +1,41 @@
+:root {
+  font-size: 62.5%;
+  font-family: 'Noto Sans Thai', 'Thonburi', sans-serif;
+  color: var(--color-white);
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-background);
+}
+
+.detail-layer {
+  z-index: 100;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 5rem;
+  height: calc(100vh - 5rem);
+  padding: 5rem 2rem 1rem 2rem;
+  pointer-events: none;
+}
+
+.viz-layer {
+  z-index: 1;
+  position: fixed;
+  top: 5rem;
+  width: 100%;
+  text-align: center;
+}

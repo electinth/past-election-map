@@ -35,12 +35,14 @@
     "husky": "^4.2.3",
     "lint-staged": "^10.0.8",
     "parcel-bundler": "^1.12.4",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "sass": "^1.26.2"
   },
   "dependencies": {
     "d3": "^5.15.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-is": "^16.13.0",
     "react-router-dom": "^5.1.2",
     "styled-components": "^5.0.1",
     "topojson-client": "^3.1.0",

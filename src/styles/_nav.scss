@@ -1,0 +1,23 @@
+.nav {
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5rem;
+  padding: 0 3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: 2.25rem;
+
+  background-color: var(--color-nav);
+  color: var(--color-white);
+
+  &--logo {
+    color: var(--color-white);
+    text-decoration: none;
+  }
+}
