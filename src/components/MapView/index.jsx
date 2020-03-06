@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Dropdown from '../Dropdown';
+import Dropdown from './Dropdown';
 import { Route, Switch } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
