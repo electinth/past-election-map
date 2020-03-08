@@ -1,6 +1,7 @@
 .dropdown {
   &--container {
     width: 100%;
+    position: relative;
   }
 
   &--button {
@@ -40,5 +41,23 @@
       left: 0.9rem;
       top: 0.65rem;
     }
+  }
+
+  &--items {
+    position: absolute;
+    top: 6rem;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-white);
+    border-radius: 1.5rem;
+    height: 40vh;
+    overflow-y: scroll;
+  }
+
+  &--item {
+    padding: 1rem 2rem;
+    color: var(--color-black);
+    font-size: 1.75rem;
+    border-bottom: 0.1rem dotted var(--color-black);
   }
 }

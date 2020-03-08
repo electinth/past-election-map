@@ -10,10 +10,19 @@ import CountryTopoJson from './data/thailand-election.topo.json';
 
 const App = () => {
   const [province, setProvince] = useState('ประเทศไทย');
+  const [electionYear, setElectionYear] = useState('election-2562');
   return (
     <>
       <Nav />
-      <MapContext.Provider value={{ province, setProvince, CountryTopoJson }}>
+      <MapContext.Provider
+        value={{
+          electionYear,
+          setElectionYear,
+          province,
+          setProvince,
+          CountryTopoJson
+        }}
+      >
         <BrowserRouter>
           <main>
             <article className="detail-layer">

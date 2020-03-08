@@ -7,9 +7,8 @@ import { withRouter } from 'react-router-dom';
 import MapContext from '../../map/context.jsx';
 
 const Map = props => {
-  const { CountryTopoJson } = useContext(MapContext);
+  const { electionYear, CountryTopoJson } = useContext(MapContext);
   // Default topojson layer
-  const currentLayer = 'election-2562';
 
   // Precompute simplify topojson
   const simplifyMinWeight = 1e-5;
@@ -55,7 +54,7 @@ const Map = props => {
     // Election zones
     const $path = $map
       .selectAll('path.zone')
-      .data(topojson.feature(geo, geo.objects[currentLayer]).features)
+      .data(topojson.feature(geo, geo.objects[electionYear]).features)
       .enter()
       .append('path')
       .attr(
@@ -76,7 +75,7 @@ const Map = props => {
     const $border_country = $border
       .append('path')
       .datum(
-        topojson.mesh(geo, geo.objects[currentLayer], function(a, b) {
+        topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
           return a === b;
         })
       )
@@ -90,7 +89,7 @@ const Map = props => {
     const $border_province = $border
       .append('path')
       .datum(
-        topojson.mesh(geo, geo.objects[currentLayer], function(a, b) {
+        topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
           return (
             a !== b && a.properties.province_id !== b.properties.province_id
           );
@@ -106,7 +105,7 @@ const Map = props => {
     const $border_zone = $border
       .append('path')
       .datum(
-        topojson.mesh(geo, geo.objects[currentLayer], function(a, b) {
+        topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
           return (
             a !== b && a.properties.province_id === b.properties.province_id
           );
@@ -120,7 +119,6 @@ const Map = props => {
   }, []);
 
   function click(d, i, N) {
-    console.log(d, i, N);
     EnterProvincialView(d);
     if (active === d) return reset();
     $svg.selectAll('.active').classed('active', false);
