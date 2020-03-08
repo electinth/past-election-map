@@ -2,24 +2,25 @@ import React, { useEffect, useContext } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
-import CountryTopoJson from '../../data/thailand-election.topo.json';
+// import CountryTopoJson from '../../data/thailand-election.topo.json';
 import { withRouter } from 'react-router-dom';
 import MapContext from '../../map/context.jsx';
 
-// Default topojson layer
-const currentLayer = 'election-2562';
-
-// Precompute simplify topojson
-const simplifyMinWeight = 1e-5;
-const ContryTopo = tps.presimplify(CountryTopoJson);
-
-// mock color scheme
-const color = d3
-  .scaleThreshold()
-  .domain(d3.range(0, 10))
-  .range(d3.schemeDark2);
-
 const Map = props => {
+  const { CountryTopoJson } = useContext(MapContext);
+  // Default topojson layer
+  const currentLayer = 'election-2562';
+
+  // Precompute simplify topojson
+  const simplifyMinWeight = 1e-5;
+  const ContryTopo = tps.presimplify(CountryTopoJson);
+
+  // mock color scheme
+  const color = d3
+    .scaleThreshold()
+    .domain(d3.range(0, 10))
+    .range(d3.schemeDark2);
+
   let active;
   let $svg;
   let path;
@@ -43,7 +44,7 @@ const Map = props => {
     $svg = d3
       .select('#vis')
       .attr('width', w)
-      .attr('height', h);
+      .attr('height', Math.max(800, h));
 
     const $map = d3.select('#map');
 
@@ -118,7 +119,8 @@ const Map = props => {
       .attr('stroke', 'white');
   }, []);
 
-  function click(d) {
+  function click(d, i, N) {
+    console.log(d, i, N);
     EnterProvincialView(d);
     if (active === d) return reset();
     $svg.selectAll('.active').classed('active', false);
