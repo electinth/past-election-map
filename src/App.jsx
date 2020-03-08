@@ -11,6 +11,7 @@ import CountryTopoJson from './data/thailand-election.topo.json';
 const App = () => {
   const [province, setProvince] = useState('ประเทศไทย');
   const [electionYear, setElectionYear] = useState('election-2562');
+  console.log(CountryTopoJson);
   return (
     <>
       <Nav />
