@@ -14,6 +14,7 @@ const Map = props => {
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
 
   useEffect(() => {
+    if (CountryTopoJson.length === 0) return;
     console.log('First useEffect');
     map = D3Map(
       CountryTopoJson,
@@ -26,7 +27,7 @@ const Map = props => {
     const $svg = d3.select(svgRef.current);
     map.setSVG($svg);
     map.render(electionYear);
-  }, []);
+  }, [CountryTopoJson]);
 
   useEffect(() => {
     if (!map) return;

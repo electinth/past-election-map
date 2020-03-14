@@ -6,11 +6,13 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import CompareView from './components/CompareView';
 import MapView from './components/MapView';
 import MapContext from './map/context';
-import CountryTopoJson from './data/thailand-election.topo.json';
+// import CountryTopoJson from './data/thailand-election.topo.json';
+import useFetch from './map/useFetch';
 
 const App = () => {
   const [province, setProvince] = useState('ประเทศไทย');
   const [electionYear, setElectionYear] = useState('election-2562');
+  const [CountryTopoJson] = useFetch();
   console.log(CountryTopoJson);
   return (
     <>

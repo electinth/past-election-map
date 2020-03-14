@@ -7,6 +7,7 @@ const Dropdown = props => {
   const { electionYear, setProvince, CountryTopoJson } = useContext(MapContext);
   const [showItems, setShowItems] = useState(false);
   useEffect(() => {
+    if (CountryTopoJson.length === 0) return;
     provinces = Array.from(
       new Set(
         CountryTopoJson.objects[electionYear].geometries.map(
