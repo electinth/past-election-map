@@ -10,6 +10,7 @@ import MapContext from './map/context';
 import useFetch from './map/useFetch';
 
 const App = () => {
+  console.log('APP');
   const [province, setProvince] = useState('ประเทศไทย');
   const [electionYear, setElectionYear] = useState('election-2562');
   const [CountryTopoJson] = useFetch();
@@ -30,7 +31,7 @@ const App = () => {
           <main>
             <article className="detail-layer">
               <Switch>
-                <Route path="/" component={MapView} />
+                <Route path="/:year?" component={MapView} />
                 <Route path="/compare/:province" component={CompareView} />
               </Switch>
             </article>

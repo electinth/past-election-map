@@ -7,6 +7,7 @@ const ProvincialLeft = () => {
   const { setProvince } = useContext(MapContext);
 
   useEffect(() => {
+    console.log('paramProvince', paramProvince);
     setProvince(paramProvince);
   }, [paramProvince]);
   return (

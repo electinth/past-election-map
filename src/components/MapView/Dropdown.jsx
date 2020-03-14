@@ -16,7 +16,7 @@ const Dropdown = props => {
       )
     ).sort();
     console.log('Run', electionYear);
-  }, [electionYear]);
+  }, [electionYear, CountryTopoJson]);
   return (
     <div className="dropdown--container">
       <button
@@ -35,7 +35,7 @@ const Dropdown = props => {
               onClick={() => {
                 setProvince(province);
                 setShowItems(prev => !prev);
-                props.history.push(`/province/${province}`);
+                props.history.push(`/${electionYear}/${province}`);
               }}
             >
               {province}

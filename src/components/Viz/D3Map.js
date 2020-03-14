@@ -36,7 +36,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
 
   const setElectionYear = year => {
     electionYear = year;
-    render(electionYear);
+    // TODOs update MAP;
     console.log('set Election Year', $svg);
   };
 
@@ -97,7 +97,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
       .on('click', ({ properties: { province_name } }) =>
         province_name === province
           ? push('/')
-          : push(`/province/${province_name}`)
+          : push(`/${electionYear}/${province_name}`)
       );
 
     // Prepare for border drawing

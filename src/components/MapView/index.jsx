@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Dropdown from './Dropdown';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useParams } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
 import MapContext from '../../map/context';
 
 const MapView = props => {
+  const { year: paramYear } = useParams();
   const { province, electionYear, setElectionYear } = useContext(MapContext);
   const TH_ELECTION_YEAR = [
     { en: 'election-2562', th: 'ปี 2562' },
@@ -13,6 +14,11 @@ const MapView = props => {
     { en: 'election-2554', th: 'ปี 2554' },
     { en: 'election-2550', th: 'ปี 2550' }
   ];
+
+  useEffect(() => {
+    if (!paramYear) return;
+    setElectionYear(paramYear);
+  }, [paramYear]);
 
   return (
     <>
@@ -23,20 +29,16 @@ const MapView = props => {
               className={`year-choice--list-item ${en === electionYear &&
                 'year-choice--list-item__active'}`}
               key={en}
-              onClick={() => setElectionYear(en)}
+              onClick={() => props.history.push(`/${en}/${province}`)}
             >
               {th}
             </li>
           ))}
-          {/* <li className="year-choice--list-item">ปี 2562</li>
-          <li className="year-choice--list-item">ปี 2557</li>
-          <li className="year-choice--list-item">ปี 2554</li>
-          <li className="year-choice--list-item">ปี 2550</li> */}
         </ul>
         <div className="bar--lower__left">
           <Switch>
             <Route path="/" exact component={NationalLeft} />
-            <Route path="/province/:province" component={ProvincialLeft} />
+            <Route path="/:year/:province" component={ProvincialLeft} />
           </Switch>
         </div>
       </div>
@@ -45,7 +47,7 @@ const MapView = props => {
         <div className="bar--lower__right">
           <Switch>
             <Route path="/" exact component={NationalRight} />
-            <Route path="/province/:province" component={ProvincialRight} />
+            <Route path="/:year/:province" component={ProvincialRight} />
           </Switch>
         </div>
       </div>

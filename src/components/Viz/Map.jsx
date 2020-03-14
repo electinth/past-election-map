@@ -31,9 +31,15 @@ const Map = props => {
 
   useEffect(() => {
     if (!map) return;
+    if (!electionYear) return;
+    map.setElectionYear(electionYear);
+  }, [electionYear, CountryTopoJson]);
+
+  useEffect(() => {
+    if (!map) return;
     console.log('Province Changed');
     map.setProvince(province);
-  }, [province]);
+  }, [province, CountryTopoJson]);
 
   return (
     <svg id="vis" ref={svgRef} width={w} height={h}>
