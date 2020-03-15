@@ -47,19 +47,23 @@
   &--items {
     position: absolute;
     top: 6rem;
-    left: 0;
-    width: 100%;
+    left: 5%;
+    width: 90%;
     background-color: var(--color-white);
-    border-radius: 1.5rem;
     height: 40vh;
     overflow-y: scroll;
     cursor: pointer;
   }
 
   &--item {
-    padding: 1rem 2rem;
     color: var(--color-black);
+    padding: 1rem 1.5rem;
     font-size: 1.75rem;
     border-bottom: 0.1rem dotted var(--color-black);
+
+    &:hover {
+      background-color: var(--color-black);
+      color: var(--color-white);
+    }
   }
 }

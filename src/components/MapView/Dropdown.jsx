@@ -15,7 +15,8 @@ const Dropdown = props => {
         )
       )
     ).sort();
-    console.log('Run', electionYear);
+
+    provinces.unshift('ประเทศไทย');
   }, [electionYear, CountryTopoJson]);
   return (
     <div className="dropdown--container">
@@ -35,7 +36,9 @@ const Dropdown = props => {
               onClick={() => {
                 setProvince(province);
                 setShowItems(prev => !prev);
-                props.history.push(`/${electionYear}/${province}`);
+                province === 'ประเทศไทย'
+                  ? props.history.push(`/${electionYear}`)
+                  : props.history.push(`/${electionYear}/${province}`);
               }}
             >
               {province}
