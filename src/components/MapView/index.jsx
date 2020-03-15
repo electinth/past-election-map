@@ -29,7 +29,11 @@ const MapView = props => {
               className={`year-choice--list-item ${en === electionYear &&
                 'year-choice--list-item__active'}`}
               key={en}
-              onClick={() => props.history.push(`/${en}/${province}`)}
+              onClick={() =>
+                province === 'ประเทศไทย'
+                  ? props.history.push(`/${en}`)
+                  : props.history.push(`/${en}/${province}`)
+              }
             >
               {th}
             </li>
@@ -37,7 +41,7 @@ const MapView = props => {
         </ul>
         <div className="bar--lower__left">
           <Switch>
-            <Route path="/" exact component={NationalLeft} />
+            <Route path="/:year" exact component={NationalLeft} />
             <Route path="/:year/:province" component={ProvincialLeft} />
           </Switch>
         </div>
@@ -46,7 +50,7 @@ const MapView = props => {
         <Dropdown>{province}</Dropdown>
         <div className="bar--lower__right">
           <Switch>
-            <Route path="/" exact component={NationalRight} />
+            <Route path="/:year" exact component={NationalRight} />
             <Route path="/:year/:province" component={ProvincialRight} />
           </Switch>
         </div>

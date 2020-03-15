@@ -95,7 +95,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
       .attr('fill', d => color(d.properties.province_id % 10))
       .on('click', ({ properties: { province_name } }) =>
         province_name === province
-          ? push('/')
+          ? push(`/${electionYear}`)
           : push(`/${electionYear}/${province_name}`)
       );
 
