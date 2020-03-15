@@ -30,7 +30,6 @@ const MapView = () => {
           </Switch>
         </div>
       </aside>
-      <Viz />
     </>
   );
 };

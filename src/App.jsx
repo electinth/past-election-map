@@ -37,7 +37,7 @@ const App = () => {
                 <Route path="/compare/:province" component={CompareView} />
               </Switch>
             </article>
-            {/* <Viz /> */}
+            <Viz />
           </main>
         </BrowserRouter>
       </MapContext.Provider>
