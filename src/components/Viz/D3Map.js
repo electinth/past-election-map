@@ -57,7 +57,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
 
       const b = path.bounds(selection);
       const zoomScale =
-        0.75 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h);
+        0.875 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h);
       const centroid = path.centroid(selection);
       const translate = [
         zoomScale * -centroid[0] + w / 2,
@@ -92,7 +92,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
         d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
       )
       .attr('d', path)
-      .attr('fill', d => color(d.properties.province_id % 10))
+      .attr('fill', d => color(d.properties.province_id % 9))
       .on('click', ({ properties: { province_name } }) =>
         province_name === province
           ? push(`/${electionYear}`)

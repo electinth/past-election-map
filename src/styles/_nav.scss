@@ -20,4 +20,13 @@
     color: var(--color-white);
     text-decoration: none;
   }
+
+  &--header {
+    white-space: nowrap;
+    overflow: scroll;
+  }
+
+  &--about-us {
+    white-space: nowrap;
+  }
 }
