@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf build/ && rm -rf dist/",
-    "start": "parcel src/index.html",
+    "start": "parcel src/index.html --host 0.0.0.0",
     "prebuild": "npm run clean",
     "build": "parcel build src/index.html -d build/",
     "format": "prettier --write \"src/!(data)/**/*.{js,jsx,json,yml,md}\""

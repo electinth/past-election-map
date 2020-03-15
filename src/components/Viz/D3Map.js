@@ -3,8 +3,7 @@ import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 
 function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
-  console.log('Shoiuld run only once');
-  let $svg = null,
+  let $vis,
     $map,
     electionYear = initElectionYear,
     province = initProvince;
@@ -28,21 +27,21 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
 
   const geo = tps.simplify(CountryTopo, simplifyMinWeight);
 
-  const setSVG = svg => {
-    $svg = svg;
-    console.log('setSVG', $svg);
-    $map = $svg.select('#map');
+  const setVis = vis => {
+    $vis = vis;
+    console.log('setVis', $vis);
+    $map = $vis.select('#map');
   };
 
   const setElectionYear = year => {
     electionYear = year;
     // TODOs update MAP;
-    console.log('set Election Year', $svg);
+    console.log('set Election Year', $vis);
   };
 
   const setProvince = newProvince => {
     province = newProvince;
-    console.log($svg);
+    console.log($vis);
     if (province !== 'ประเทศไทย') {
       // Reset
       console.log('setProvince', electionYear);
@@ -61,19 +60,19 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
         0.75 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h);
       const centroid = path.centroid(selection);
       const translate = [
-        zoomScale * (-centroid[0] + w / 2),
-        zoomScale * (-centroid[1] + h / 2)
+        zoomScale * -centroid[0] + w / 2,
+        zoomScale * -centroid[1] + h / 2
       ];
 
       let transform = `translate(${translate[0]}, ${translate[1]}) scale(${zoomScale})`;
 
-      $svg
+      $vis
         .transition()
         .duration(750)
         .attr('transform', transform);
     } else {
       // Zoom that province
-      $svg
+      $vis
         .transition()
         .duration(750)
         .attr('transform', '');
@@ -150,7 +149,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
       .attr('stroke', 'white');
   };
 
-  return { render, setSVG, setElectionYear, setProvince };
+  return { render, setVis, setElectionYear, setProvince };
 }
 
 export default D3Map;

@@ -5,12 +5,12 @@ import D3Map from './D3Map';
 import MapContext from '../../map/context';
 import { withRouter } from 'react-router-dom';
 
-const w = 400,
-  h = 700;
+const w = innerWidth,
+  h = innerHeight;
 
 let map;
 const Map = props => {
-  const svgRef = useRef();
+  const visRef = useRef();
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
 
   useEffect(() => {
@@ -24,8 +24,8 @@ const Map = props => {
       electionYear,
       province
     );
-    const $svg = d3.select(svgRef.current);
-    map.setSVG($svg);
+    const $gVis = d3.select(visRef.current);
+    map.setVis($gVis);
     map.render(electionYear);
   }, [CountryTopoJson]);
 
@@ -42,9 +42,11 @@ const Map = props => {
   }, [province, CountryTopoJson]);
 
   return (
-    <svg id="vis" ref={svgRef} width={w} height={h}>
-      <g id="map"></g>
-      <g id="border" style={{ pointerEvents: 'none' }}></g>
+    <svg width={w} height={h}>
+      <g id="vis" ref={visRef}>
+        <g id="map"></g>
+        <g id="border" style={{ pointerEvents: 'none' }}></g>
+      </g>
     </svg>
   );
 };
