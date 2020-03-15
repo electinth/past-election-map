@@ -8,6 +8,7 @@ import MapView from './components/MapView';
 import MapContext from './map/context';
 // import CountryTopoJson from './data/thailand-election.topo.json';
 import useFetch from './map/useFetch';
+import AboutUs from './components/AboutUs';
 
 const App = () => {
   console.log('APP');
@@ -17,7 +18,6 @@ const App = () => {
   console.log(CountryTopoJson);
   return (
     <>
-      <Nav />
       <MapContext.Provider
         value={{
           electionYear,
@@ -28,14 +28,16 @@ const App = () => {
         }}
       >
         <BrowserRouter>
+          <Nav />
           <main>
             <article className="detail-layer">
               <Switch>
+                <Route path="/about-us" component={AboutUs} />
                 <Route path="/:year?" component={MapView} />
                 <Route path="/compare/:province" component={CompareView} />
               </Switch>
             </article>
-            <Viz />
+            {/* <Viz /> */}
           </main>
         </BrowserRouter>
       </MapContext.Provider>

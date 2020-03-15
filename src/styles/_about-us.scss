@@ -1,0 +1,55 @@
+.about-us {
+  max-width: 90rem;
+  margin: 0 auto;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  padding: 2rem 5rem;
+  border-radius: 2.5rem;
+  font-size: 1.8rem;
+
+  &--header {
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &--section {
+    & + & {
+      margin-top: 3rem;
+    }
+
+    &__program,
+    &__design {
+      span + span {
+        &::before {
+          content: ', ';
+        }
+      }
+
+      a {
+        text-decoration: none;
+        color: currentColor;
+
+        &:hover {
+          border-bottom: 1px dotted currentColor;
+        }
+      }
+    }
+  }
+
+  &--source {
+    &-list-item + &-list-item {
+      margin-top: 2rem;
+    }
+
+    &-list {
+      list-style: none;
+    }
+
+    &-table {
+      & tr > td {
+        width: 100%;
+      }
+    }
+  }
+}

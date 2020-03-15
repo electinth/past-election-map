@@ -5,6 +5,7 @@ import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
 import MapContext from '../../map/context';
 import ElectionYear from './ElectionYear';
+import Viz from '../Viz';
 
 const MapView = () => {
   const { province } = useContext(MapContext);
@@ -29,6 +30,7 @@ const MapView = () => {
           </Switch>
         </div>
       </aside>
+      <Viz />
     </>
   );
 };

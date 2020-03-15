@@ -22,11 +22,21 @@
   }
 
   &--header {
-    white-space: nowrap;
-    overflow: scroll;
+    // white-space: nowrap;
+    // overflow: scroll;
+
+    &__link {
+      text-decoration: none;
+      color: currentColor;
+    }
   }
 
   &--about-us {
     white-space: nowrap;
+
+    &__link {
+      text-decoration: none;
+      color: currentColor;
+    }
   }
 }
