@@ -104,7 +104,9 @@ const AboutUs = props => {
         <span>
           <a href="https://github.com/thasarito">thasarito</a>
         </span>
-        <span>phoneee</span>
+        <span>
+          <a href="https://github.com/phoneee/">phoneee</a>
+        </span>
       </section>
 
       <section className="about-us--section about-us--section__design">
