@@ -1,3 +1,25 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
+
+- [Past Election Map for Thailand](#past-election-map-for-thailand)
+  - [What is this about?](#what-is-this-about)
+  - [Development](#development)
+    - [Prerequisites](#prerequisites)
+    - [Install dependencies](#install-dependencies)
+    - [Run development mode](#run-development-mode)
+    - [Build the project into a static web page](#build-the-project-into-a-static-web-page)
+    - [Resources for Developers](#resources-for-developers)
+    - [Environments](#environments)
+  - [System Design](#system-design)
+    - [Election zone](#election-zone)
+  - [Help Wanted](#help-wanted)
+    - [Contribute](#contribute)
+    - [Join Slack](#join-slack)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Past Election Map for Thailand
 
 ### What is this about?
@@ -40,18 +62,17 @@ npm run build
 
 ### Environments
 
-| Environment                                                   | Description                                  |
-| ------------------------------------------------------------- | -------------------------------------------- |
-| Dev                                                           | Each PR will be built and hosted on Netlify. |
-| [Staging](https://distracted-ardinghelli-b8c205.netlify.com/) | Latest features awaiting for release.        |
-| Production                                                    | Public website. No launch date yet.          |
+| Environment                                       | Description                                  |
+| ------------------------------------------------- | -------------------------------------------- |
+| Dev                                               | Each PR will be built and hosted on Netlify. |
+| [Staging](https://past-election-map.netlify.com/) | Latest features awaiting for release.        |
+| Production                                        | Public website. No launch date yet.          |
 
 ## System Design
 
 ### Election zone
 
 Election zone data is stored in `src/data/thailand-election.topojson` with multiple object layers for each election year e.g. B.E. 2562, 2557, 2554 and 2550. This is a concise data:
-
 
 ```js
 {
