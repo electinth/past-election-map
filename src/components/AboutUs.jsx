@@ -50,18 +50,22 @@ const AboutUs = props => {
           <li className="about-us--source-list-item">
             <table className="about-us--source-table">
               <caption>ข้อมูลการแบ่งเขตการเลือกตั้ง</caption>
-              <tr>
-                <th>ปี</th>
-                <th>ที่มา</th>
-              </tr>
-              {DISTRICT_SOURCE.map(({ year, link }) => (
+              <thead>
                 <tr>
-                  <td>{year}</td>
-                  <td>
-                    <a href={link}>{link}</a>
-                  </td>
+                  <th>ปี</th>
+                  <th>ที่มา</th>
                 </tr>
-              ))}
+              </thead>
+              <tbody>
+                {DISTRICT_SOURCE.map(({ year, link }) => (
+                  <tr key={year}>
+                    <td>{year}</td>
+                    <td>
+                      <a href={link}>{link}</a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </li>
           <li className="about-us--source-list-item">
@@ -71,18 +75,22 @@ const AboutUs = props => {
                 กกต. สำหรับการแสดงผล โดยไม่รวมการเปลี่ยนแปลงจากการลาออก พ้นสภาพ
                 หรือเลือกตั้งซ่อม)
               </caption>
-              <tr>
-                <th>ปี</th>
-                <th>ที่มา</th>
-              </tr>
-              {ELECTION_RESULT.map(({ year, link }) => (
+              <thead>
                 <tr>
-                  <td>{year}</td>
-                  <td>
-                    <a href={link}>{link}</a>
-                  </td>
+                  <th>ปี</th>
+                  <th>ที่มา</th>
                 </tr>
-              ))}
+              </thead>
+              <tbody>
+                {ELECTION_RESULT.map(({ year, link }) => (
+                  <tr key={year}>
+                    <td>{year}</td>
+                    <td>
+                      <a href={link}>{link}</a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </li>
         </ul>

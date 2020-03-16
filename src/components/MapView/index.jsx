@@ -16,7 +16,7 @@ const MapView = () => {
         <ElectionYear />
         <div className="bar--lower__left">
           <Switch>
-            <Route path="/:year" exact component={NationalLeft} />
+            <Route path="/:year?" exact component={NationalLeft} />
             <Route path="/:year/:province" component={ProvincialLeft} />
           </Switch>
         </div>
@@ -25,7 +25,7 @@ const MapView = () => {
         <Dropdown>{province}</Dropdown>
         <div className="bar--lower__right">
           <Switch>
-            <Route path="/:year" exact component={NationalRight} />
+            <Route path="/:year?" exact component={NationalRight} />
             <Route path="/:year/:province" component={ProvincialRight} />
           </Switch>
         </div>
