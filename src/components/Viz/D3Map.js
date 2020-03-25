@@ -5,6 +5,10 @@ import * as tps from 'topojson-simplify';
 function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
   let $vis,
     $map,
+    $zone,
+    $border_country,
+    $border_province,
+    $border_zone,
     electionYear = initElectionYear,
     province = initProvince;
   const SCALE = 2250;
@@ -36,7 +40,41 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
   const setElectionYear = year => {
     electionYear = year;
     // TODOs update MAP;
-    console.log('set Election Year', $vis);
+    $zone
+      .data(topojson.feature(geo, geo.objects[electionYear]).features)
+      .call(drawMap);
+
+    console.log(topojson.feature(geo, geo.objects[electionYear]).features);
+    console.log($zone);
+
+    $border_country
+      .datum(
+        topojson.mesh(geo, geo.objects[year], function(a, b) {
+          return a === b;
+        })
+      )
+      .call(updateBorderCountry);
+
+    $border_province
+      .datum(
+        topojson.mesh(geo, geo.objects[year], function(a, b) {
+          return (
+            a !== b && a.properties.province_id !== b.properties.province_id
+          );
+        })
+      )
+      .call(updateBorderProvince);
+
+    $border_zone
+      .datum(
+        topojson.mesh(geo, geo.objects[year], function(a, b) {
+          return (
+            a !== b && a.properties.province_id === b.properties.province_id
+          );
+        })
+      )
+      .call(updateBorderZone);
+    console.log('set Election Year', electionYear);
   };
 
   const setProvince = newProvince => {
@@ -79,14 +117,8 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
     }
   };
 
-  const render = year => {
-    console.log('D3Map Render Function', year);
-    electionYear = year;
-    $map
-      .selectAll('path.zone')
-      .data(topojson.feature(geo, geo.objects[year]).features)
-      .enter()
-      .append('path')
+  function drawMap($zone) {
+    $zone
       .attr(
         'class',
         d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
@@ -98,55 +130,76 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
           ? push(`/${electionYear}`)
           : push(`/${electionYear}/${province_name}`)
       );
+  }
 
-    // Prepare for border drawing
-    const $border = d3.select('#border');
-
-    // Country border
-    const $border_country = $border
-      .append('path')
-      .datum(
-        topojson.mesh(geo, geo.objects[year], function(a, b) {
-          return a === b;
-        })
-      )
+  function updateBorderCountry($country) {
+    $country
       .attr('class', 'country-border')
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '1.2')
       .attr('stroke', 'white');
+  }
 
-    // Province borders
-    const $border_province = $border
-      .append('path')
-      .datum(
-        topojson.mesh(geo, geo.objects[year], function(a, b) {
-          return (
-            a !== b && a.properties.province_id !== b.properties.province_id
-          );
-        })
-      )
+  function updateBorderProvince($province) {
+    $province
+
       .attr('class', 'province-border')
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '0.6')
       .attr('stroke', 'white');
+  }
 
-    // Zone borders
-    const $border_zone = $border
-      .append('path')
-      .datum(
-        topojson.mesh(geo, geo.objects[year], function(a, b) {
-          return (
-            a !== b && a.properties.province_id === b.properties.province_id
-          );
-        })
-      )
+  function updateBorderZone($zone) {
+    $zone
       .attr('class', 'zone-border')
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '0.1')
       .attr('stroke', 'white');
+  }
+
+  const render = year => {
+    console.log('D3Map Render Function', year);
+    electionYear = year;
+    $zone = $map
+      .selectAll('path.zone')
+      .data(topojson.feature(geo, geo.objects[year]).features)
+      .enter()
+      .append('path');
+
+    $zone.call(drawMap);
+
+    // Prepare for border drawing
+    const $border = d3.select('#border');
+
+    // Country border
+    $border_country = $border.append('path').datum(
+      topojson.mesh(geo, geo.objects[year], function(a, b) {
+        return a === b;
+      })
+    );
+
+    $border_country.call(updateBorderCountry);
+
+    // Province borders
+    $border_province = $border.append('path').datum(
+      topojson.mesh(geo, geo.objects[year], function(a, b) {
+        return a !== b && a.properties.province_id !== b.properties.province_id;
+      })
+    );
+
+    $border_province.call(updateBorderProvince);
+
+    // Zone borders
+    $border_zone = $border.append('path').datum(
+      topojson.mesh(geo, geo.objects[year], function(a, b) {
+        return a !== b && a.properties.province_id === b.properties.province_id;
+      })
+    );
+
+    $border_zone.call(updateBorderZone);
   };
 
   return { render, setVis, setElectionYear, setProvince };
