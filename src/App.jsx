@@ -14,7 +14,7 @@ const App = () => {
   console.log('APP');
   const [province, setProvince] = useState('ประเทศไทย');
   const [electionYear, setElectionYear] = useState('election-2562');
-  const [CountryTopoJson] = useFetch();
+  const [CountryTopoJson, results] = useFetch();
 
   return (
     <>
