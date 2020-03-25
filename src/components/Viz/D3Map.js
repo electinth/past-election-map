@@ -131,7 +131,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
         const winner = result.reduce(function(prev, current) {
           return prev.score > current.score ? prev : current;
         });
-        return party62(winner.party);
+        return party62(winner.party) || 'purple';
       })
       .on('click', ({ properties: { province_name } }) =>
         province_name === province
@@ -146,7 +146,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '1.2')
-      .attr('stroke', 'white');
+      .attr('stroke', 'black');
   }
 
   function updateBorderProvince($province) {
@@ -156,7 +156,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '0.6')
-      .attr('stroke', 'white');
+      .attr('stroke', 'black');
   }
 
   function updateBorderZone($zone) {
@@ -165,7 +165,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '0.1')
-      .attr('stroke', 'white');
+      .attr('stroke', 'black');
   }
 
   const render = year => {
