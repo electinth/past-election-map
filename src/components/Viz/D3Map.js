@@ -42,6 +42,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
     // TODOs update MAP;
     $zone
       .data(topojson.feature(geo, geo.objects[electionYear]).features)
+      .join('path')
       .call(drawMap);
 
     console.log(topojson.feature(geo, geo.objects[electionYear]).features);
