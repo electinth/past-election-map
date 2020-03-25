@@ -15,7 +15,7 @@ const App = () => {
   const [province, setProvince] = useState('ประเทศไทย');
   const [electionYear, setElectionYear] = useState('election-2562');
   const [CountryTopoJson, results] = useFetch();
-
+  console.log(CountryTopoJson, results);
   return (
     <>
       <MapContext.Provider
@@ -24,7 +24,8 @@ const App = () => {
           setElectionYear,
           province,
           setProvince,
-          CountryTopoJson
+          CountryTopoJson,
+          results
         }}
       >
         <BrowserRouter>
