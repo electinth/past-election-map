@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
+import { party62 } from '../../map/color';
 
 function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
   let $vis,
@@ -40,17 +41,18 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
   const setElectionYear = year => {
     electionYear = year;
     // TODOs update MAP;
-    $zone
-      .data(topojson.feature(geo, geo.objects[electionYear]).features)
+    console.log($zone);
+    $zone = $zone
+      .data(
+        topojson.feature(geo, geo.objects[electionYear]).features,
+        ({ properties: { id } }) => `${electionYear} ${id}`
+      )
       .join('path')
       .call(drawMap);
 
-    console.log(topojson.feature(geo, geo.objects[electionYear]).features);
-    console.log($zone);
-
     $border_country
       .datum(
-        topojson.mesh(geo, geo.objects[year], function(a, b) {
+        topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
           return a === b;
         })
       )
@@ -58,7 +60,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
 
     $border_province
       .datum(
-        topojson.mesh(geo, geo.objects[year], function(a, b) {
+        topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
           return (
             a !== b && a.properties.province_id !== b.properties.province_id
           );
@@ -68,14 +70,13 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
 
     $border_zone
       .datum(
-        topojson.mesh(geo, geo.objects[year], function(a, b) {
+        topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
           return (
             a !== b && a.properties.province_id === b.properties.province_id
           );
         })
       )
       .call(updateBorderZone);
-    console.log('set Election Year', electionYear);
   };
 
   const setProvince = newProvince => {
@@ -125,7 +126,13 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
         d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
       )
       .attr('d', path)
-      .attr('fill', d => color(d.properties.province_id % 9))
+      .attr('fill', ({ properties: { result } }) => {
+        if (!result) return 'white';
+        const winner = result.reduce(function(prev, current) {
+          return prev.score > current.score ? prev : current;
+        });
+        return party62(winner.party);
+      })
       .on('click', ({ properties: { province_name } }) =>
         province_name === province
           ? push(`/${electionYear}`)
@@ -166,7 +173,10 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
     electionYear = year;
     $zone = $map
       .selectAll('path.zone')
-      .data(topojson.feature(geo, geo.objects[year]).features)
+      .data(
+        topojson.feature(geo, geo.objects[electionYear]).features,
+        ({ properties: { id } }) => `${electionYear} ${id}`
+      )
       .enter()
       .append('path');
 
@@ -177,7 +187,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
 
     // Country border
     $border_country = $border.append('path').datum(
-      topojson.mesh(geo, geo.objects[year], function(a, b) {
+      topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
         return a === b;
       })
     );
@@ -186,7 +196,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
 
     // Province borders
     $border_province = $border.append('path').datum(
-      topojson.mesh(geo, geo.objects[year], function(a, b) {
+      topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
         return a !== b && a.properties.province_id !== b.properties.province_id;
       })
     );
@@ -195,7 +205,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
 
     // Zone borders
     $border_zone = $border.append('path').datum(
-      topojson.mesh(geo, geo.objects[year], function(a, b) {
+      topojson.mesh(geo, geo.objects[electionYear], function(a, b) {
         return a !== b && a.properties.province_id === b.properties.province_id;
       })
     );

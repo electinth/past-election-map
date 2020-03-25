@@ -44,6 +44,7 @@ const Map = props => {
   return (
     <svg width={w} height={h}>
       <g id="vis" ref={visRef}>
+        {console.log('rerender')}
         <g id="map"></g>
         <g id="border" style={{ pointerEvents: 'none' }}></g>
       </g>
