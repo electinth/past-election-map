@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
+import _ from 'lodash';
+
 import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
 
@@ -39,6 +41,7 @@ const ProvincialRight = () => {
       <h1>จำนวน {numDistricts}</h1>
       <button>set view</button>
       <Winner provincialProps={provincialProps} />
+      <Party provincialProps={provincialProps} />
     </>
   );
 };
@@ -62,6 +65,31 @@ const Winner = ({ provincialProps }) => {
           <div>
             {winner.title} {winner.first_name} {winner.last_name}
           </div>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const Party = ({ provincialProps }) => {
+  const byParty = _.groupBy(provincialProps, ({ result }) => {
+    if (!result) return 'การเลือกตั้งเป็นโมฆะ';
+    const winner = result.reduce(function(prev, current) {
+      return prev.score > current.score ? prev : current;
+    });
+    return winner.party;
+  });
+  let byPartySorted = [];
+  for (let [party, winnerResult] of Object.entries(byParty)) {
+    byPartySorted.push({ party, candidate: winnerResult.length });
+  }
+  byPartySorted.sort((a, b) => b.candidate - a.candidate);
+  console.log(byPartySorted);
+  return (
+    <ul>
+      {byPartySorted.map(({ party, candidate }) => (
+        <li key={party} className="national-view--candidate-list-item">
+          {party}: {candidate}
         </li>
       ))}
     </ul>
