@@ -12,7 +12,7 @@
     font-weight: bold;
     background-color: var(--color-white);
     border: 1px solid var(--color-black);
-    border-radius: 1.5rem;
+    border-radius: var(--border-radius);
     outline: none;
     display: flex;
     justify-content: space-between;

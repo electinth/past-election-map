@@ -15,7 +15,6 @@ const App = () => {
   const [province, setProvince] = useState('ประเทศไทย');
   const [electionYear, setElectionYear] = useState('election-2562');
   const [CountryTopoJson] = useFetch();
-  console.log(CountryTopoJson);
   return (
     <>
       <MapContext.Provider

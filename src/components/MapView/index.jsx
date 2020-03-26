@@ -23,7 +23,7 @@ const MapView = () => {
       </aside>
       <aside className="bar bar__right">
         <Dropdown>{province}</Dropdown>
-        <div className="bar--lower__right">
+        <div className="bar--lower bar--lower__right">
           <Switch>
             <Route path="/:year?" exact component={NationalRight} />
             <Route path="/:year/:province" component={ProvincialRight} />

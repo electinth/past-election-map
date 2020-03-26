@@ -10,4 +10,11 @@
   & > * {
     width: 100%;
   }
+
+  &--lower {
+    margin-top: 1.5rem;
+    border-radius: var(--border-radius);
+    background-color: var(--color-white);
+    color: var(--color-black);
+  }
 }
