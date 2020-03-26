@@ -117,7 +117,22 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
         .duration(750)
         .attr('transform', '');
     }
+
+    $zone
+      .transition()
+      .delay(500)
+      .attr('fill', fill);
   };
+
+  function fill({ properties: { result, province_name } }) {
+    if (!result) return 'white';
+    const winner = result.reduce(function(prev, current) {
+      return prev.score > current.score ? prev : current;
+    });
+    return province === province_name || province === 'ประเทศไทย'
+      ? party62(winner.party) || 'purple'
+      : 'gainsboro';
+  }
 
   function drawMap($zone) {
     $zone
@@ -126,18 +141,12 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
         d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
       )
       .attr('d', path)
-      .attr('fill', ({ properties: { result } }) => {
-        if (!result) return 'white';
-        const winner = result.reduce(function(prev, current) {
-          return prev.score > current.score ? prev : current;
-        });
-        return party62(winner.party) || 'purple';
-      })
       .on('click', ({ properties: { province_name } }) =>
         province_name === province
           ? push(`/${electionYear}`)
           : push(`/${electionYear}/${province_name}`)
-      );
+      )
+      .attr('fill', fill);
   }
 
   function updateBorderCountry($country) {
