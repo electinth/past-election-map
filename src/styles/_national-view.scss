@@ -1,0 +1,16 @@
+.national-view {
+  padding: var(--bar-padding);
+
+  &--header {
+    font-size: 2.5rem;
+  }
+
+  &--candidate-list {
+    list-style: none;
+
+    &-item {
+      font-size: 1.6rem;
+      margin: 0.5rem 0;
+    }
+  }
+}

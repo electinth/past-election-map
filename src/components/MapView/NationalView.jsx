@@ -39,16 +39,16 @@ const NationalRight = () => {
   }
   byPartySorted.sort((a, b) => b.candidate - a.candidate);
   return (
-    <>
-      <h1>จำนวน {numCandidate} เขต</h1>
-      <ul>
+    <div className="national-view">
+      <h1 className="national-view--header">จำนวน {numCandidate} เขต</h1>
+      <ul className="national-view--candidate-list">
         {byPartySorted.map(({ party, candidate }) => (
-          <li key={party}>
+          <li key={party} className="national-view--candidate-list-item">
             {party}: {candidate}
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 };
 
