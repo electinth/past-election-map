@@ -2,19 +2,17 @@ import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
 
+import ProvinceAllCompare from './ProvincialViewDetail/ProvinceAllCompare.jsx';
+
 const ProvincialLeft = () => {
-  const { province: paramProvince } = useParams();
+  const { province: paramProvince, year: paramYear } = useParams();
   const { setProvince } = useContext(MapContext);
 
   useEffect(() => {
     console.log('paramProvince', paramProvince);
     setProvince(paramProvince);
   }, [paramProvince]);
-  return (
-    <>
-      <h1>This is Provincial Left</h1>
-    </>
-  );
+  return <ProvinceAllCompare />;
 };
 const ProvincialRight = () => {
   return (
