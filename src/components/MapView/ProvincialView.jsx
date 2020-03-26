@@ -22,6 +22,7 @@ const ProvincialLeft = () => {
 const ProvincialRight = () => {
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
   const [provincialProps, setProvincialProps] = useState([]);
+  const [partyView, setPartyView] = useState(true);
   const numDistricts = provincialProps.length;
 
   useEffect(() => {
@@ -39,9 +40,15 @@ const ProvincialRight = () => {
   return (
     <>
       <h1>จำนวน {numDistricts}</h1>
-      <button>set view</button>
-      <Winner provincialProps={provincialProps} />
-      <Party provincialProps={provincialProps} />
+      <div>
+        <button onClick={() => setPartyView(true)}>ดูพรรค</button>
+        <button onClick={() => setPartyView(false)}>ดูผู้ชนะ</button>
+      </div>
+      {partyView ? (
+        <Party provincialProps={provincialProps} />
+      ) : (
+        <Winner provincialProps={provincialProps} />
+      )}
     </>
   );
 };
