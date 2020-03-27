@@ -54,6 +54,7 @@
     height: 40vh;
     overflow-y: scroll;
     cursor: pointer;
+    z-index: 100;
   }
 
   &--item {
