@@ -39,7 +39,7 @@ const ProvincialRight = () => {
 
   return (
     <div className="provincial-view">
-      <h1 className="provincial-view--header">จำนวน {numDistricts}</h1>
+      <h1 className="provincial-view--header">จำนวน {numDistricts} เขต</h1>
       <div className="provincial-view--toggle">
         <button
           className={`provincial-view--toggle-button ${partyView && 'active'}`}
