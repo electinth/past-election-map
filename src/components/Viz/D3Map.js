@@ -3,7 +3,15 @@ import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 import { party62 } from '../../map/color';
 
-function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
+function D3Map(
+  CountryTopoJson,
+  w,
+  h,
+  push,
+  initElectionYear,
+  initProvince,
+  setTooltips
+) {
   let $vis,
     $map,
     $zone,
@@ -21,11 +29,6 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
     .center([100.5, 13.8]);
 
   const path = d3.geoPath(projection);
-
-  const color = d3
-    .scaleThreshold()
-    .domain(d3.range(0, 10))
-    .range(d3.schemeDark2);
 
   const simplifyMinWeight = 1e-5;
   const CountryTopo = tps.presimplify(CountryTopoJson);
@@ -134,6 +137,18 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
       : 'gainsboro';
   }
 
+  function setTooltipContent({ properties }) {
+    if (province !== properties.province_name) {
+      setTooltips(properties.province_name);
+    } else {
+      if (!properties.result) return setTooltips('การเลือกตั้งเป็นโมฆะ');
+      const winner = properties.result.reduce(function(prev, current) {
+        return prev.score > current.score ? prev : current;
+      });
+      setTooltips(winner.party);
+    }
+  }
+
   function drawMap($zone) {
     $zone
       .attr(
@@ -146,6 +161,7 @@ function D3Map(CountryTopoJson, w, h, push, initElectionYear, initProvince) {
           ? push(`/${electionYear}`)
           : push(`/${electionYear}/${province_name}`)
       )
+      .on('mouseenter', setTooltipContent)
       .attr('fill', fill);
   }
 

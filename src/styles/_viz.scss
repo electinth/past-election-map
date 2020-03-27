@@ -1,3 +1,39 @@
 #map {
   cursor: pointer;
 }
+
+.tooltips {
+  position: absolute;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  font-size: 1.5rem;
+  padding: 0.3rem 2.5rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 7.5px;
+    height: 7.5px;
+    transform-origin: 50% 50%;
+    transform: rotate(45deg) translateX(-50%);
+    background-color: #fff;
+    left: 50%;
+    top: calc(100% - 1.6px);
+    z-index: 0;
+  }
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 7.5px;
+    height: 7.5px;
+    transform-origin: 50% 50%;
+    transform: rotate(45deg) translateX(-50%) translateZ(-1px);
+    background-color: #fff;
+    left: 50%;
+    top: calc(100% - 1.6px);
+    z-index: -1;
+    // box-shadow: -1px -1px 20px;
+  }
+}
