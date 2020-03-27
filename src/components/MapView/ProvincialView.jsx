@@ -38,18 +38,32 @@ const ProvincialRight = () => {
   }, [CountryTopoJson, province, electionYear]);
 
   return (
-    <>
-      <h1>จำนวน {numDistricts}</h1>
-      <div>
-        <button onClick={() => setPartyView(true)}>ดูพรรค</button>
-        <button onClick={() => setPartyView(false)}>ดูผู้ชนะ</button>
+    <div className="provincial-view">
+      <h1 className="provincial-view--header">จำนวน {numDistricts}</h1>
+      <div className="provincial-view--toggle">
+        <button
+          className={`provincial-view--toggle-button ${partyView && 'active'}`}
+          onClick={() => setPartyView(true)}
+        >
+          ดูพรรค
+        </button>
+        <button
+          className={`provincial-view--toggle-button ${!partyView && 'active'}`}
+          onClick={() => setPartyView(false)}
+        >
+          ดูผู้ชนะ
+        </button>
+        <span
+          className="provincial-view--toggle-active"
+          style={{ left: !partyView && '50%' }}
+        ></span>
       </div>
       {partyView ? (
         <Party provincialProps={provincialProps} />
       ) : (
         <Winner provincialProps={provincialProps} />
       )}
-    </>
+    </div>
   );
 };
 
@@ -63,9 +77,9 @@ const Winner = ({ provincialProps }) => {
   });
 
   return (
-    <ul>
+    <ul className="provincial-view--list">
       {districtWinners.map(({ zone_id, ...winner }) => (
-        <li key={zone_id}>
+        <li key={zone_id} className="provincial-view--list-item">
           <div>
             เขต {zone_id}: {winner.party}
           </div>
@@ -93,9 +107,9 @@ const Party = ({ provincialProps }) => {
   byPartySorted.sort((a, b) => b.candidate - a.candidate);
   console.log(byPartySorted);
   return (
-    <ul>
+    <ul className="provincial-view--list">
       {byPartySorted.map(({ party, candidate }) => (
-        <li key={party} className="national-view--candidate-list-item">
+        <li key={party} className="provincial-view--list-item">
           {party}: {candidate}
         </li>
       ))}

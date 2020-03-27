@@ -1,0 +1,52 @@
+.provincial-view {
+  padding: var(--bar-padding);
+
+  &--header {
+    font-size: 2.5rem;
+  }
+
+  &--list {
+    list-style: none;
+
+    &-item {
+      font-size: 1.6rem;
+      margin: 0.5rem 0;
+    }
+  }
+
+  &--toggle {
+    display: flex;
+    border: 1px solid var(--color-black);
+    border-radius: 1rem;
+    background-color: var(--color-black);
+    overflow: hidden;
+    position: relative;
+
+    &-button {
+      flex: 0 0 50%;
+      padding: 0.5rem 0.5rem;
+      background-color: transparent;
+      color: var(--color-white);
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1.8rem;
+      z-index: 10;
+
+      &.active {
+        color: var(--color-black);
+      }
+    }
+    &-active {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      background-color: var(--color-white);
+      border-radius: 1rem;
+      transition: left 0.25s;
+    }
+  }
+}
