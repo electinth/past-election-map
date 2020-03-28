@@ -104,26 +104,28 @@ const Winner = ({ provincialProps }) => {
 
   return (
     <ul className="provincial-view--list">
-      {districtWinners.map(({ zone_id, winner, summary }) => (
-        <li key={zone_id} className="provincial-view--list-item">
-          <div>
-            <span
-              style={{
-                display: 'inline-block',
-                width: '1rem',
-                height: '1rem',
-                marginRight: '0.5rem',
-                backgroundColor: partyColor(electionYear)(winner.party)
-              }}
-            ></span>
-            <b>เขต {zone_id}</b> {winner.party}
-          </div>
-          <div>
-            {winner.title} {winner.first_name} {winner.last_name}
-          </div>
-          <StackedBar data={summary} />
-        </li>
-      ))}
+      {electionYear === 'election-2557'
+        ? null
+        : districtWinners.map(({ zone_id, winner, summary }) => (
+            <li key={zone_id} className="provincial-view--list-item">
+              <div>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '1rem',
+                    height: '1rem',
+                    marginRight: '0.5rem',
+                    backgroundColor: partyColor(electionYear)(winner.party)
+                  }}
+                ></span>
+                <b>เขต {zone_id}</b> {winner.party}
+              </div>
+              <div>
+                {winner.title} {winner.first_name} {winner.last_name}
+              </div>
+              <StackedBar data={summary} />
+            </li>
+          ))}
     </ul>
   );
 };
