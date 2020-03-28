@@ -6,6 +6,7 @@ import MapContext from '../../map/context';
 import Overview from './Overview';
 import partyColor from '../../map/color';
 import PartyList from './PartyList';
+import StackedBar from './StackedBar';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
@@ -86,15 +87,24 @@ const Winner = ({ provincialProps }) => {
   const { electionYear } = useContext(MapContext);
   const districtWinners = provincialProps.map(({ zone_id, result }) => {
     if (!result) return 'การเลือกตั้งเป็นโมฆะ';
-    const winner = result.reduce(function(prev, current) {
-      return prev.score > current.score ? prev : current;
-    });
-    return { zone_id, ...winner };
+    result.sort((a, b) => b.score - a.score);
+    const [winner, runnerUp] = result;
+    const totalScore = result.reduce((total, cur) => (total += cur.score), 0);
+    const restScore = totalScore - winner.score - runnerUp.score;
+    const summary = {
+      winner: { party: winner.party, ratio: winner.score / totalScore },
+      runnerUp: {
+        party: runnerUp.party,
+        ratio: runnerUp.score / totalScore
+      },
+      rest: { party: 'rest', ratio: restScore / totalScore }
+    };
+    return { zone_id, winner, summary };
   });
 
   return (
     <ul className="provincial-view--list">
-      {districtWinners.map(({ zone_id, ...winner }) => (
+      {districtWinners.map(({ zone_id, winner, summary }) => (
         <li key={zone_id} className="provincial-view--list-item">
           <div>
             <span
@@ -111,6 +121,7 @@ const Winner = ({ provincialProps }) => {
           <div>
             {winner.title} {winner.first_name} {winner.last_name}
           </div>
+          <StackedBar data={summary} />
         </li>
       ))}
     </ul>
