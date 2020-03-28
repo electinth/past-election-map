@@ -18,7 +18,6 @@ function D3Map(
     $zoneLabel,
     $label,
     $zone,
-    $currentZoneLabel,
     $border_country,
     $border_province,
     $border_zone,
@@ -41,14 +40,12 @@ function D3Map(
 
   const setVis = vis => {
     $vis = vis;
-    console.log('setVis', $vis);
     $map = $vis.select('#map');
     $zoneLabel = $vis.select('#zone-label');
   };
 
   const setElectionYear = year => {
     electionYear = year;
-    // TODOs update MAP;
     $zone = $zone
       .data(
         topojson.feature(geo, geo.objects[electionYear]).features,
@@ -57,21 +54,7 @@ function D3Map(
       .join('path')
       .call(drawMap);
 
-    $label = $label
-      .data(
-        topojson
-          .feature(geo, geo.objects[electionYear])
-          .features.filter(
-            ({ properties: { province_name } }) => province_name === province
-          ),
-        ({ properties: { id } }) => `${electionYear} ${id}`
-      )
-      .join('text');
-    $label.call(addLabel, false);
-
-    // $currentZoneLabel = $label.filter(
-    //   ({ properties: { province_name } }) => province_name === province
-    // );
+    labelJoin(false);
 
     $border_country
       .datum(
@@ -102,8 +85,7 @@ function D3Map(
       .call(updateBorderZone);
   };
 
-  const setProvince = newProvince => {
-    province = newProvince;
+  function labelJoin(delay = true) {
     $label = $label
       .data(
         topojson
@@ -114,7 +96,12 @@ function D3Map(
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
       .join('text');
-    $label.call(addLabel);
+    $label.call(addLabel, delay);
+  }
+
+  const setProvince = newProvince => {
+    province = newProvince;
+    labelJoin();
     if (province !== 'ประเทศไทย') {
       const selection = {
         type: 'FeatureCollection',
@@ -249,7 +236,6 @@ function D3Map(
   }
 
   const render = year => {
-    console.log('D3Map Render Function', year);
     electionYear = year;
     $zone = $map
       .selectAll('path.zone')
@@ -276,7 +262,6 @@ function D3Map(
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
       .join('text');
-    console.log('render Label', $label);
 
     // Prepare for border drawing
     const $border = d3.select('#border');
