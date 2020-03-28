@@ -69,7 +69,7 @@ function D3Map(
       ({ properties: { province_name } }) => province_name === province
     );
 
-    $currentZoneLabel.call(addLabel);
+    $currentZoneLabel.call(addLabel, false);
 
     $border_country
       .datum(
@@ -194,7 +194,7 @@ function D3Map(
       .attr('fill', fill);
   }
 
-  function addLabel($currentZoneLabel) {
+  function addLabel($currentZoneLabel, delay = true) {
     const $label = $currentZoneLabel
       .selectAll('text')
       .data(d => [d])
@@ -206,7 +206,7 @@ function D3Map(
       .attr('font-size', fontSize)
       .attr('opacity', 0)
       .transition()
-      .delay(500)
+      .delay(delay ? 500 : 0)
       .attr('opacity', 1);
     function polylabelPosition(axis) {
       return ({ geometry: { coordinates } }) => {
