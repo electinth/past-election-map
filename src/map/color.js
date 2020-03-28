@@ -44,7 +44,8 @@ const partyColor = electionYear => {
   const yearColor = {
     'election-2562': party62,
     'election-2554': party54,
-    'election-2550': party50
+    'election-2550': party50,
+    'election-2557': () => 'white'
   };
   return yearColor[electionYear];
 };

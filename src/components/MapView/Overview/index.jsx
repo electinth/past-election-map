@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './styles.scss';
-import { party62 } from '../../../map/color';
+import partyColor from '../../../map/color';
+import MapContext from '../../../map/context';
 
 const Overview = ({ waffleData }) => {
   console.log('waffleData', waffleData);
+  const { electionYear } = useContext(MapContext);
   return (
     <div className="overview">
       <h2 className="overview--header">Overview</h2>
@@ -14,7 +16,7 @@ const Overview = ({ waffleData }) => {
             <div
               key={party + i}
               className="waffle--waffle"
-              style={{ backgroundColor: party62(party) }}
+              style={{ backgroundColor: partyColor(electionYear)(party) }}
             ></div>
           ));
         })}

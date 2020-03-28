@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
-import { party62 } from '../../map/color';
+import partyColor from '../../map/color';
 import polylabel from 'polylabel';
 
 function D3Map(
@@ -146,7 +146,7 @@ function D3Map(
       return prev.score > current.score ? prev : current;
     });
     return province === province_name || province === 'ประเทศไทย'
-      ? party62(winner.party) || 'purple'
+      ? partyColor(electionYear)(winner.party) || 'purple' // = color not found
       : 'gainsboro';
   }
 
