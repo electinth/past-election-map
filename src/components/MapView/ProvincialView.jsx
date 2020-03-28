@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
+import Overview from './Overview';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
@@ -37,6 +38,19 @@ const ProvincialRight = () => {
     setProvincialProps(provincialProps);
   }, [CountryTopoJson, province, electionYear]);
 
+  const byParty = _.groupBy(provincialProps, ({ result }) => {
+    if (!result) return 'การเลือกตั้งเป็นโมฆะ';
+    const winner = result.reduce(function(prev, current) {
+      return prev.score > current.score ? prev : current;
+    });
+    return winner.party;
+  });
+  let byPartySorted = [];
+  for (let [party, winnerResult] of Object.entries(byParty)) {
+    byPartySorted.push({ party, candidate: winnerResult.length });
+  }
+  byPartySorted.sort((a, b) => b.candidate - a.candidate);
+
   return (
     <div className="provincial-view">
       <h1 className="provincial-view--header">จำนวน {numDistricts} เขต</h1>
@@ -59,10 +73,11 @@ const ProvincialRight = () => {
         ></span>
       </div>
       {partyView ? (
-        <Party provincialProps={provincialProps} />
+        <Party byPartySorted={byPartySorted} />
       ) : (
         <Winner provincialProps={provincialProps} />
       )}
+      <Overview waffleData={byPartySorted} />
     </div>
   );
 };
@@ -92,20 +107,7 @@ const Winner = ({ provincialProps }) => {
   );
 };
 
-const Party = ({ provincialProps }) => {
-  const byParty = _.groupBy(provincialProps, ({ result }) => {
-    if (!result) return 'การเลือกตั้งเป็นโมฆะ';
-    const winner = result.reduce(function(prev, current) {
-      return prev.score > current.score ? prev : current;
-    });
-    return winner.party;
-  });
-  let byPartySorted = [];
-  for (let [party, winnerResult] of Object.entries(byParty)) {
-    byPartySorted.push({ party, candidate: winnerResult.length });
-  }
-  byPartySorted.sort((a, b) => b.candidate - a.candidate);
-  console.log(byPartySorted);
+const Party = ({ byPartySorted }) => {
   return (
     <ul className="provincial-view--list">
       {byPartySorted.map(({ party, candidate }) => (
