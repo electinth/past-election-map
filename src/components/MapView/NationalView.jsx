@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import MapContext from '../../map/context';
 import _ from 'lodash';
 import Overview from './Overview';
+import PartyList from './PartyList';
 
 const NationalLeft = () => {
   return <></>;
@@ -42,13 +43,7 @@ const NationalRight = () => {
   return (
     <div className="national-view">
       <h1 className="national-view--header">จำนวน {numCandidate} เขต</h1>
-      <ul className="national-view--candidate-list">
-        {byPartySorted.map(({ party, candidate }) => (
-          <li key={party} className="national-view--candidate-list-item">
-            {party}: {candidate}
-          </li>
-        ))}
-      </ul>
+      <PartyList byPartySorted={byPartySorted} />
       <Overview waffleData={byPartySorted} />
     </div>
   );

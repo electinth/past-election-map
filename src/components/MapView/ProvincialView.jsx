@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
 import Overview from './Overview';
 import partyColor from '../../map/color';
+import PartyList from './PartyList';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
@@ -72,20 +73,13 @@ const ProvincialRight = () => {
         ></span>
       </div>
       {partyView ? (
-        <Party byPartySorted={byPartySorted} />
+        <PartyList byPartySorted={byPartySorted} />
       ) : (
         <Winner provincialProps={provincialProps} />
       )}
       <Overview waffleData={byPartySorted} />
     </div>
   );
-};
-
-const partyBoxStyle = {
-  display: 'inline-block',
-  width: '1rem',
-  height: '1rem',
-  marginRight: '0.5rem'
 };
 
 const Winner = ({ provincialProps }) => {
@@ -105,7 +99,10 @@ const Winner = ({ provincialProps }) => {
           <div>
             <span
               style={{
-                ...partyBoxStyle,
+                display: 'inline-block',
+                width: '1rem',
+                height: '1rem',
+                marginRight: '0.5rem',
                 backgroundColor: partyColor(electionYear)(winner.party)
               }}
             ></span>
@@ -114,25 +111,6 @@ const Winner = ({ provincialProps }) => {
           <div>
             {winner.title} {winner.first_name} {winner.last_name}
           </div>
-        </li>
-      ))}
-    </ul>
-  );
-};
-
-const Party = ({ byPartySorted }) => {
-  const { electionYear } = useContext(MapContext);
-  return (
-    <ul className="provincial-view--list">
-      {byPartySorted.map(({ party, candidate }) => (
-        <li key={party} className="provincial-view--list-item">
-          <span
-            style={{
-              ...partyBoxStyle,
-              backgroundColor: partyColor(electionYear)(party)
-            }}
-          ></span>
-          {party}: {candidate}
         </li>
       ))}
     </ul>
