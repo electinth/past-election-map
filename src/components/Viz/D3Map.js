@@ -15,7 +15,11 @@ function D3Map(
 ) {
   let $vis,
     $map,
+    $zoneLabel,
+    $gZone,
+    $gLabel,
     $zone,
+    $currentZoneLabel,
     $border_country,
     $border_province,
     $border_zone,
@@ -40,19 +44,32 @@ function D3Map(
     $vis = vis;
     console.log('setVis', $vis);
     $map = $vis.select('#map');
+    $zoneLabel = $vis.select('#zone-label');
   };
 
   const setElectionYear = year => {
     electionYear = year;
     // TODOs update MAP;
-    console.log($zone);
-    $zone = $zone
+    $gZone = $gZone
       .data(
         topojson.feature(geo, geo.objects[electionYear]).features,
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('path')
+      .join('g')
       .call(drawMap);
+
+    $gLabel = $gLabel
+      .data(
+        topojson.feature(geo, geo.objects[electionYear]).features,
+        ({ properties: { id } }) => `${electionYear} ${id}`
+      )
+      .join('g');
+
+    $currentZoneLabel = $gLabel.filter(
+      ({ properties: { province_name } }) => province_name === province
+    );
+
+    $currentZoneLabel.call(addLabel);
 
     $border_country
       .datum(
@@ -83,35 +100,9 @@ function D3Map(
       .call(updateBorderZone);
   };
 
-  const addZoneLabel = function(geo) {
-    const {
-      properties: { zone_id },
-      geometry: { coordinates }
-    } = geo;
-    const [lon, lat] = polylabel(coordinates);
-    const [x, y] = projection([lon, lat]);
-
-    const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
-    const yRange = y1 - y0;
-    const xRange = x1 - x0;
-    const fontSize = d3.min([yRange, xRange]) / 2.5;
-
-    $map
-      .append('text')
-      .text(zone_id)
-      .attr('x', x)
-      .attr('y', y)
-      .attr('class', 'zone-label')
-      .attr('font-size', fontSize)
-      .attr('opacity', 0)
-      .transition()
-      .delay(500)
-      .attr('opacity', 1);
-  };
-
   const setProvince = newProvince => {
     province = newProvince;
-    $map.selectAll('text').remove();
+    $currentZoneLabel.selectAll('text').remove();
     if (province !== 'ประเทศไทย') {
       const selection = {
         type: 'FeatureCollection',
@@ -138,10 +129,12 @@ function D3Map(
         .duration(750)
         .attr('transform', transform);
 
-      const $selection = $zone.filter(
+      console.log('setProvince', $currentZoneLabel);
+      $currentZoneLabel = $gLabel.filter(
         ({ properties: { province_name } }) => province_name === province
       );
-      $selection.each(addZoneLabel);
+
+      $currentZoneLabel.call(addLabel);
     } else {
       $vis
         .transition()
@@ -177,8 +170,11 @@ function D3Map(
     }
   }
 
-  function drawMap($zone) {
-    $zone
+  function drawMap($gZone) {
+    $zone = $gZone
+      .selectAll('path')
+      .data(d => [d])
+      .join('path')
       .attr(
         'class',
         d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
@@ -191,6 +187,34 @@ function D3Map(
       )
       .on('mouseenter', setTooltipContent)
       .attr('fill', fill);
+  }
+
+  function addLabel($currentZoneLabel) {
+    const $label = $currentZoneLabel
+      .selectAll('text')
+      .data(d => [d])
+      .join('text')
+      .attr('class', 'zone-label')
+      .text(({ properties: { zone_id } }) => zone_id)
+      .attr('x', polylabelPosition('x'))
+      .attr('y', polylabelPosition('y'))
+      .attr('font-size', fontSize);
+
+    function polylabelPosition(axis) {
+      return ({ geometry: { coordinates } }) => {
+        const [lon, lat] = polylabel(coordinates);
+        const [x, y] = projection([lon, lat]);
+
+        return axis === 'x' ? x : y;
+      };
+    }
+
+    function fontSize(geo) {
+      const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
+      const yRange = y1 - y0;
+      const xRange = x1 - x0;
+      return d3.min([yRange, xRange]) / 2.5;
+    }
   }
 
   function updateBorderCountry($country) {
@@ -224,16 +248,28 @@ function D3Map(
   const render = year => {
     console.log('D3Map Render Function', year);
     electionYear = year;
-    $zone = $map
-      .selectAll('path.zone')
+    $gZone = $map
+      .selectAll('g.zone-group')
       .data(
         topojson.feature(geo, geo.objects[electionYear]).features,
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .enter()
-      .append('path');
+      .join('g')
+      .attr('class', 'zone-group');
 
-    $zone.call(drawMap);
+    $gZone.call(drawMap);
+
+    // only draw label when needed.
+    // 1. change province
+    // 2. change election year in provincial view
+    $gLabel = $zoneLabel
+      .selectAll('g.text-group')
+      .data(
+        topojson.feature(geo, geo.objects[electionYear]).features,
+        ({ properties: { id } }) => `${electionYear} ${id}`
+      )
+      .join('g')
+      .attr('class', 'text-group');
 
     // Prepare for border drawing
     const $border = d3.select('#border');

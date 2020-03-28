@@ -73,6 +73,7 @@ const Map = props => {
               })
             }
           ></g>
+          <g id="zone-label" style={{ pointerEvents: 'none' }}></g>
           <g id="border" style={{ pointerEvents: 'none' }}></g>
         </g>
       </svg>
