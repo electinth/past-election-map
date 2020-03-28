@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 import { party62 } from '../../map/color';
+import polylabel from 'polylabel';
 
 function D3Map(
   CountryTopoJson,
@@ -82,13 +83,36 @@ function D3Map(
       .call(updateBorderZone);
   };
 
+  const addZoneLabel = function(geo) {
+    const {
+      properties: { zone_id },
+      geometry: { coordinates }
+    } = geo;
+    const [lon, lat] = polylabel(coordinates);
+    const [x, y] = projection([lon, lat]);
+
+    const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
+    const yRange = y1 - y0;
+    const xRange = x1 - x0;
+    const fontSize = d3.min([yRange, xRange]) / 2.5;
+
+    $map
+      .append('text')
+      .text(zone_id)
+      .attr('x', x)
+      .attr('y', y)
+      .attr('class', 'zone-label')
+      .attr('font-size', fontSize)
+      .attr('opacity', 0)
+      .transition()
+      .delay(500)
+      .attr('opacity', 1);
+  };
+
   const setProvince = newProvince => {
     province = newProvince;
-    console.log($vis);
+    $map.selectAll('text').remove();
     if (province !== 'ประเทศไทย') {
-      // Reset
-      console.log('setProvince', electionYear);
-
       const selection = {
         type: 'FeatureCollection',
         features: topojson
@@ -113,8 +137,12 @@ function D3Map(
         .transition()
         .duration(750)
         .attr('transform', transform);
+
+      const $selection = $zone.filter(
+        ({ properties: { province_name } }) => province_name === province
+      );
+      $selection.each(addZoneLabel);
     } else {
-      // Zoom that province
       $vis
         .transition()
         .duration(750)

@@ -2,6 +2,12 @@
   cursor: pointer;
 }
 
+.zone-label {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
 .tooltips {
   position: absolute;
   background-color: var(--color-white);
