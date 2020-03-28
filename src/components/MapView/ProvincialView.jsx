@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
 import Overview from './Overview';
+import partyColor from '../../map/color';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
@@ -28,12 +29,10 @@ const ProvincialRight = () => {
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
-    console.log('Provincial');
     const provincialProps = CountryTopoJson.objects[electionYear].geometries
       .filter(geo => geo.properties.province_name === province)
       .map(geo => geo.properties);
 
-    console.log(provincialProps);
     provincialProps.sort((a, b) => a.zone_id - b.zone_id);
     setProvincialProps(provincialProps);
   }, [CountryTopoJson, province, electionYear]);
@@ -82,7 +81,15 @@ const ProvincialRight = () => {
   );
 };
 
+const partyBoxStyle = {
+  display: 'inline-block',
+  width: '1rem',
+  height: '1rem',
+  marginRight: '0.5rem'
+};
+
 const Winner = ({ provincialProps }) => {
+  const { electionYear } = useContext(MapContext);
   const districtWinners = provincialProps.map(({ zone_id, result }) => {
     if (!result) return 'การเลือกตั้งเป็นโมฆะ';
     const winner = result.reduce(function(prev, current) {
@@ -96,7 +103,13 @@ const Winner = ({ provincialProps }) => {
       {districtWinners.map(({ zone_id, ...winner }) => (
         <li key={zone_id} className="provincial-view--list-item">
           <div>
-            เขต {zone_id}: {winner.party}
+            <span
+              style={{
+                ...partyBoxStyle,
+                backgroundColor: partyColor(electionYear)(winner.party)
+              }}
+            ></span>
+            <b>เขต {zone_id}</b> {winner.party}
           </div>
           <div>
             {winner.title} {winner.first_name} {winner.last_name}
@@ -108,10 +121,17 @@ const Winner = ({ provincialProps }) => {
 };
 
 const Party = ({ byPartySorted }) => {
+  const { electionYear } = useContext(MapContext);
   return (
     <ul className="provincial-view--list">
       {byPartySorted.map(({ party, candidate }) => (
         <li key={party} className="provincial-view--list-item">
+          <span
+            style={{
+              ...partyBoxStyle,
+              backgroundColor: partyColor(electionYear)(party)
+            }}
+          ></span>
           {party}: {candidate}
         </li>
       ))}
