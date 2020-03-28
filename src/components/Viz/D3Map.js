@@ -16,8 +16,7 @@ function D3Map(
   let $vis,
     $map,
     $zoneLabel,
-    $gZone,
-    $gLabel,
+    $label,
     $zone,
     $currentZoneLabel,
     $border_country,
@@ -50,26 +49,29 @@ function D3Map(
   const setElectionYear = year => {
     electionYear = year;
     // TODOs update MAP;
-    $gZone = $gZone
+    $zone = $zone
       .data(
         topojson.feature(geo, geo.objects[electionYear]).features,
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('g')
+      .join('path')
       .call(drawMap);
 
-    $gLabel = $gLabel
+    $label = $label
       .data(
-        topojson.feature(geo, geo.objects[electionYear]).features,
+        topojson
+          .feature(geo, geo.objects[electionYear])
+          .features.filter(
+            ({ properties: { province_name } }) => province_name === province
+          ),
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('g');
+      .join('text');
+    $label.call(addLabel, false);
 
-    $currentZoneLabel = $gLabel.filter(
-      ({ properties: { province_name } }) => province_name === province
-    );
-
-    $currentZoneLabel.call(addLabel, false);
+    // $currentZoneLabel = $label.filter(
+    //   ({ properties: { province_name } }) => province_name === province
+    // );
 
     $border_country
       .datum(
@@ -102,12 +104,17 @@ function D3Map(
 
   const setProvince = newProvince => {
     province = newProvince;
-    $currentZoneLabel
-      .selectAll('text')
-      .transition()
-      .delay(500)
-      .attr('opacity', 0)
-      .remove();
+    $label = $label
+      .data(
+        topojson
+          .feature(geo, geo.objects[electionYear])
+          .features.filter(
+            ({ properties: { province_name } }) => province_name === province
+          ),
+        ({ properties: { id } }) => `${electionYear} ${id}`
+      )
+      .join('text');
+    $label.call(addLabel);
     if (province !== 'ประเทศไทย') {
       const selection = {
         type: 'FeatureCollection',
@@ -133,13 +140,6 @@ function D3Map(
         .transition()
         .duration(750)
         .attr('transform', transform);
-
-      console.log('setProvince', $currentZoneLabel);
-      $currentZoneLabel = $gLabel.filter(
-        ({ properties: { province_name } }) => province_name === province
-      );
-
-      $currentZoneLabel.call(addLabel);
     } else {
       $vis
         .transition()
@@ -175,11 +175,8 @@ function D3Map(
     }
   }
 
-  function drawMap($gZone) {
-    $zone = $gZone
-      .selectAll('path')
-      .data(d => [d])
-      .join('path')
+  function drawMap($zone) {
+    $zone = $zone
       .attr(
         'class',
         d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
@@ -194,11 +191,8 @@ function D3Map(
       .attr('fill', fill);
   }
 
-  function addLabel($currentZoneLabel, delay = true) {
-    const $label = $currentZoneLabel
-      .selectAll('text')
-      .data(d => [d])
-      .join('text')
+  function addLabel($label, delay = true) {
+    $label
       .attr('class', 'zone-label')
       .text(({ properties: { zone_id } }) => zone_id)
       .attr('x', polylabelPosition('x'))
@@ -208,6 +202,7 @@ function D3Map(
       .transition()
       .delay(delay ? 500 : 0)
       .attr('opacity', 1);
+
     function polylabelPosition(axis) {
       return ({ geometry: { coordinates } }) => {
         const [lon, lat] = polylabel(coordinates);
@@ -256,28 +251,32 @@ function D3Map(
   const render = year => {
     console.log('D3Map Render Function', year);
     electionYear = year;
-    $gZone = $map
-      .selectAll('g.zone-group')
+    $zone = $map
+      .selectAll('path.zone')
       .data(
-        topojson.feature(geo, geo.objects[electionYear]).features,
+        topojson
+          .feature(geo, geo.objects[electionYear])
+          .features.filter(
+            ({ properties: { province_name } }) => province_name === province
+          ),
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('g')
+      .join('path')
       .attr('class', 'zone-group');
 
-    $gZone.call(drawMap);
+    $zone.call(drawMap);
 
     // only draw label when needed.
     // 1. change province
     // 2. change election year in provincial view
-    $gLabel = $zoneLabel
-      .selectAll('g.text-group')
+    $label = $zoneLabel
+      .selectAll('text')
       .data(
         topojson.feature(geo, geo.objects[electionYear]).features,
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('g')
-      .attr('class', 'text-group');
+      .join('text');
+    console.log('render Label', $label);
 
     // Prepare for border drawing
     const $border = d3.select('#border');
