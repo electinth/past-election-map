@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import MapContext from '../../map/context';
 import _ from 'lodash';
+import Overview from './Overview';
 
 const NationalLeft = () => {
   return <></>;
@@ -48,6 +49,7 @@ const NationalRight = () => {
           </li>
         ))}
       </ul>
+      <Overview waffleData={byPartySorted} />
     </div>
   );
 };
