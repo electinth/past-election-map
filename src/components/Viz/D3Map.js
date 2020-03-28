@@ -102,7 +102,12 @@ function D3Map(
 
   const setProvince = newProvince => {
     province = newProvince;
-    $currentZoneLabel.selectAll('text').remove();
+    $currentZoneLabel
+      .selectAll('text')
+      .transition()
+      .delay(500)
+      .attr('opacity', 0)
+      .remove();
     if (province !== 'ประเทศไทย') {
       const selection = {
         type: 'FeatureCollection',
@@ -198,8 +203,11 @@ function D3Map(
       .text(({ properties: { zone_id } }) => zone_id)
       .attr('x', polylabelPosition('x'))
       .attr('y', polylabelPosition('y'))
-      .attr('font-size', fontSize);
-
+      .attr('font-size', fontSize)
+      .attr('opacity', 0)
+      .transition()
+      .delay(500)
+      .attr('opacity', 1);
     function polylabelPosition(axis) {
       return ({ geometry: { coordinates } }) => {
         const [lon, lat] = polylabel(coordinates);
