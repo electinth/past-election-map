@@ -67,4 +67,16 @@
       color: var(--color-primary);
     }
   }
+
+  &--search {
+    width: 100%;
+
+    &-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      font-size: 1.75rem;
+      font-family: inherit;
+      outline: none;
+    }
+  }
 }

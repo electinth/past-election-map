@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
-import MapContext from '../../map/context';
+import MapContext from '../../../map/context';
+
+import './styles.scss';
 
 let allProvinces = [];
 const Dropdown = props => {
@@ -12,6 +14,8 @@ const Dropdown = props => {
     isComponentVisible: showItems,
     setIsComponentVisible: setShowItems
   } = useComponentVisible(false);
+  const searchRef = useRef(null);
+
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
     allProvinces = Array.from(
@@ -36,6 +40,7 @@ const Dropdown = props => {
 
   useEffect(() => {
     setFilter('');
+    if (showItems) searchRef.current.focus();
   }, [showItems]);
 
   return (
@@ -49,11 +54,15 @@ const Dropdown = props => {
       </button>
       {showItems && (
         <div className="dropdown--items">
-          <input
-            type="text"
-            className="dropdown--search"
-            onChange={e => setFilter(e.target.value)}
-          />
+          <div className="dropdown--search">
+            <input
+              type="text"
+              className="dropdown--search-input"
+              onChange={e => setFilter(e.target.value)}
+              placeholder="พิมพ์จังหวัด"
+              ref={searchRef}
+            />
+          </div>
           {dropdownProvinces.map(province => (
             <div
               className="dropdown--item"
