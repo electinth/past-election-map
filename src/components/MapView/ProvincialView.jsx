@@ -85,47 +85,63 @@ const ProvincialRight = () => {
 
 const Winner = ({ provincialProps }) => {
   const { electionYear } = useContext(MapContext);
-  const districtWinners = provincialProps.map(({ zone_id, result }) => {
-    if (!result) return 'การเลือกตั้งเป็นโมฆะ';
-    result.sort((a, b) => b.score - a.score);
-    const [winner, runnerUp] = result;
-    const totalScore = result.reduce((total, cur) => (total += cur.score), 0);
-    const restScore = totalScore - winner.score - runnerUp.score;
-    const summary = {
-      winner: { party: winner.party, ratio: winner.score / totalScore },
-      runnerUp: {
-        party: runnerUp.party,
-        ratio: runnerUp.score / totalScore
-      },
-      rest: { party: 'rest', ratio: restScore / totalScore }
-    };
-    return { zone_id, winner, summary };
-  });
+  const [winners, setWinners] = useState([]);
+  console.log('propdelay', electionYear, provincialProps);
+
+  useEffect(() => {
+    const districtWinners = provincialProps.map(({ zone_id, result }) => {
+      if (!result)
+        return {
+          zone_id,
+          winner: 'การเลือกตั้งเป็นโมฆะ',
+          summary: {
+            winner: { party: 'การเลือกตั้งเป็นโมฆะ', ratio: 0 },
+            runnerUp: {
+              party: 'การเลือกตั้งเป็นโมฆะ',
+              ratio: 0
+            },
+            rest: { party: 'rest', ratio: 0 }
+          }
+        };
+      result.sort((a, b) => b.score - a.score);
+      const [winner, runnerUp] = result;
+      const totalScore = result.reduce((total, cur) => (total += cur.score), 0);
+      const restScore = totalScore - winner.score - runnerUp.score;
+      const summary = {
+        winner: { party: winner.party, ratio: winner.score / totalScore },
+        runnerUp: {
+          party: runnerUp.party,
+          ratio: runnerUp.score / totalScore
+        },
+        rest: { party: 'rest', ratio: restScore / totalScore }
+      };
+      return { zone_id, winner, summary };
+    });
+    setWinners(districtWinners);
+  }, [electionYear, provincialProps]);
 
   return (
     <ul className="provincial-view--list">
-      {electionYear === 'election-2557'
-        ? null
-        : districtWinners.map(({ zone_id, winner, summary }) => (
-            <li key={zone_id} className="provincial-view--list-item">
-              <div>
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '1rem',
-                    height: '1rem',
-                    marginRight: '0.5rem',
-                    backgroundColor: partyColor(electionYear)(winner.party)
-                  }}
-                ></span>
-                <b>เขต {zone_id}</b> {winner.party}
-              </div>
-              <div>
-                {winner.title} {winner.first_name} {winner.last_name}
-              </div>
-              <StackedBar data={summary} />
-            </li>
-          ))}
+      {winners.map(({ zone_id, winner, summary }) => (
+        <li key={zone_id + electionYear} className="provincial-view--list-item">
+          <div>
+            <span
+              style={{
+                display: 'inline-block',
+                width: '1rem',
+                height: '1rem',
+                marginRight: '0.5rem',
+                backgroundColor: partyColor(electionYear)(winner.party)
+              }}
+            ></span>
+            <b>เขต {zone_id}</b> {winner.party}
+          </div>
+          <div>
+            {winner.title} {winner.first_name} {winner.last_name}
+          </div>
+          <StackedBar data={summary} />
+        </li>
+      ))}
     </ul>
   );
 };
