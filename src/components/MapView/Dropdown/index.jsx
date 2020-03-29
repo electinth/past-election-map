@@ -54,30 +54,32 @@ const Dropdown = props => {
       </button>
       {showItems && (
         <div className="dropdown--items">
-          <div className="dropdown--search">
-            <input
-              type="text"
-              className="dropdown--search-input"
-              onChange={e => setFilter(e.target.value)}
-              placeholder="พิมพ์จังหวัด"
-              ref={searchRef}
-            />
-          </div>
-          {dropdownProvinces.map(province => (
-            <div
-              className="dropdown--item"
-              key={province}
-              onClick={() => {
-                setProvince(province);
-                setShowItems(prev => !prev);
-                province === 'ประเทศไทย'
-                  ? props.history.push(`/${electionYear}`)
-                  : props.history.push(`/${electionYear}/${province}`);
-              }}
-            >
-              {province}
+          <div className="dropdown--items-wrapper">
+            <div className="dropdown--search">
+              <input
+                type="text"
+                className="dropdown--search-input"
+                onChange={e => setFilter(e.target.value)}
+                placeholder="พิมพ์จังหวัด"
+                ref={searchRef}
+              />
             </div>
-          ))}
+            {dropdownProvinces.map(province => (
+              <div
+                className="dropdown--item"
+                key={province}
+                onClick={() => {
+                  setProvince(province);
+                  setShowItems(prev => !prev);
+                  province === 'ประเทศไทย'
+                    ? props.history.push(`/${electionYear}`)
+                    : props.history.push(`/${electionYear}/${province}`);
+                }}
+              >
+                {province}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
