@@ -41,6 +41,8 @@
   },
   "dependencies": {
     "d3": "^5.15.0",
+    "lodash": "^4.17.15",
+    "polylabel": "^1.0.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-is": "^16.13.0",

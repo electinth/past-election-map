@@ -118,6 +118,15 @@ Election zone data is stored in `src/data/thailand-election.topojson` with multi
 }
 ```
 
+Winners of election zones are stored yearly in `src/data/candidate_result_*.csv`:
+
+```csv
+id,province,zone,candidate_no,title,first_name,last_name,party,score
+1,กระบี่,1,10,นาย,สาคร,เกี่ยวข้อง,ประชาธิปัตย์,58895
+2,กระบี่,1,1,นาย,ชัยณรงค์,ช่างเรือ,เพื่อไทย,16420
+3,กระบี่,1,12,นาย,ชูวงศ์,มณีกุล,รักษ์สันติ,752
+```
+
 ## Help Wanted
 
 ### Contribute

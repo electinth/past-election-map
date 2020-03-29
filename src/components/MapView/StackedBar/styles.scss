@@ -1,0 +1,16 @@
+.stacked-bar {
+  display: flex;
+  height: 0.5rem;
+  width: 80%;
+  align-items: center;
+  margin-top: 0.5rem;
+
+  &--bar {
+    height: 100%;
+  }
+
+  &--winner-percentage {
+    font-size: 1rem;
+    margin-left: 1rem;
+  }
+}
