@@ -2,9 +2,11 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import MapContext from '../../map/context';
 
-let provinces = [];
+let allProvinces = [];
 const Dropdown = props => {
   const { electionYear, setProvince, CountryTopoJson } = useContext(MapContext);
+  const [filter, setFilter] = useState('');
+  const [dropdownProvinces, setDropdownProvinces] = useState([]);
   const {
     ref,
     isComponentVisible: showItems,
@@ -12,7 +14,7 @@ const Dropdown = props => {
   } = useComponentVisible(false);
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
-    provinces = Array.from(
+    allProvinces = Array.from(
       new Set(
         CountryTopoJson.objects[electionYear].geometries.map(
           d => d.properties.province_name
@@ -20,8 +22,22 @@ const Dropdown = props => {
       )
     ).sort();
 
-    provinces.unshift('ประเทศไทย');
+    allProvinces.unshift('ประเทศไทย');
+
+    setDropdownProvinces(allProvinces);
   }, [electionYear, CountryTopoJson]);
+
+  useEffect(() => {
+    const filteredProvince = allProvinces.filter(province =>
+      province.includes(filter)
+    );
+    setDropdownProvinces(filteredProvince);
+  }, [filter]);
+
+  useEffect(() => {
+    setFilter('');
+  }, [showItems]);
+
   return (
     <div className="dropdown--container" ref={ref}>
       <button
@@ -33,7 +49,12 @@ const Dropdown = props => {
       </button>
       {showItems && (
         <div className="dropdown--items">
-          {provinces.map(province => (
+          <input
+            type="text"
+            className="dropdown--search"
+            onChange={e => setFilter(e.target.value)}
+          />
+          {dropdownProvinces.map(province => (
             <div
               className="dropdown--item"
               key={province}
@@ -53,8 +74,6 @@ const Dropdown = props => {
     </div>
   );
 };
-
-export default withRouter(Dropdown);
 
 function useComponentVisible(initialIsVisible) {
   const [isComponentVisible, setIsComponentVisible] = useState(
@@ -77,3 +96,5 @@ function useComponentVisible(initialIsVisible) {
 
   return { ref, isComponentVisible, setIsComponentVisible };
 }
+
+export default withRouter(Dropdown);
