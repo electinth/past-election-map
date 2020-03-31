@@ -8,6 +8,8 @@ import partyColor from '../../map/color';
 import PartyList from './PartyList';
 import StackedBar from './StackedBar';
 
+import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx';
+
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
   const { setProvince } = useContext(MapContext);
@@ -16,11 +18,7 @@ const ProvincialLeft = () => {
     console.log('paramProvince', paramProvince);
     setProvince(paramProvince);
   }, [paramProvince]);
-  return (
-    <>
-      <h1>This is Provincial Left</h1>
-    </>
-  );
+  return <ProvinceAreaCompare />;
 };
 
 const ProvincialRight = () => {
