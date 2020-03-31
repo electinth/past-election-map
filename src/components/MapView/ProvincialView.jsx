@@ -11,7 +11,7 @@ import StackedBar from './StackedBar';
 import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx';
 
 const ProvincialLeft = () => {
-  const { province: paramProvince, year: paramYear } = useParams();
+  const { province: paramProvince } = useParams();
   const { setProvince } = useContext(MapContext);
 
   useEffect(() => {
