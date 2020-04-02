@@ -1,5 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import _ from 'lodash';
+import * as d3 from 'd3';
+import * as topojson from 'topojson-client';
+import * as tps from 'topojson-simplify';
 
 import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
@@ -12,13 +15,93 @@ import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx'
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
-  const { setProvince } = useContext(MapContext);
+  const { province, setProvince, electionYear, CountryTopoJson } = useContext(
+    MapContext
+  );
+  const compareRef = useRef(null);
 
   useEffect(() => {
     console.log('paramProvince', paramProvince);
     setProvince(paramProvince);
   }, [paramProvince]);
-  return <ProvinceAreaCompare />;
+
+  useEffect(() => {
+    if (CountryTopoJson.length === 0) return;
+
+    const simplifyMinWeight = 1e-5;
+    const CountryTopo = tps.presimplify(CountryTopoJson);
+    const geo = tps.simplify(CountryTopo, simplifyMinWeight);
+
+    const $compare = d3.select(compareRef.current);
+    console.log($compare);
+
+    const data = Object.entries(geo.objects)
+      .map(([_, g]) => {
+        const { type, geometries } = g;
+        const provinceGeometries = geometries.filter(
+          geometry => geometry.properties.province_name === province
+        );
+        return {
+          type,
+          geometries: provinceGeometries
+        };
+      })
+      .map(d => topojson.feature(geo, d));
+    console.log(data);
+    function fill({ properties: { result, province_name } }) {
+      if (!result) return 'white';
+      const winner = result.reduce(function(prev, current) {
+        return prev.score > current.score ? prev : current;
+      });
+      return province === province_name || province === 'ประเทศไทย'
+        ? partyColor(electionYear)(winner.party) || 'purple' // = color not found
+        : 'gainsboro';
+    }
+    const w = $compare.node().parentElement.parentElement.offsetWidth,
+      h = $compare.node().parentElement.parentElement.offsetHeight;
+    const SCALE = 5000;
+    const center = d3.geoCentroid(data[0]);
+    const projection = d3
+      .geoMercator()
+      .translate([75, 75])
+      .scale([SCALE])
+      .center(center);
+    const path = d3.geoPath(projection);
+
+    const $gElection = $compare
+      .selectAll('g')
+      .data(data)
+      .join('g')
+      .attr('transform', (d, i) => {
+        const x = ((i % 2) * w) / 2;
+        const y = i >= 2 ? h / 2 : 0;
+        return `translate(${x}, ${y})`;
+      });
+
+    const $path = $gElection
+      .selectAll('path')
+      .data(d => d.features)
+      .join('path')
+      .attr('class', 'zone')
+      .attr('d', path)
+      .attr('fill', fill)
+      .attr('stroke-width', '1')
+      .attr('stroke', 'black');
+    console.log($path);
+  }, [compareRef, CountryTopoJson, province]);
+  // return <ProvinceAreaCompare />;
+  return (
+    <div className="compare">
+      <svg width="100%" height="60vh">
+        <g className="compare-province" ref={compareRef}>
+          <g className="election-2550"></g>
+          <g className="election-2554"></g>
+          <g className="election-2557"></g>
+          <g className="election-2562"></g>
+        </g>
+      </svg>
+    </div>
+  );
 };
 
 const ProvincialRight = () => {
