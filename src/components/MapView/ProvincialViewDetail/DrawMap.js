@@ -205,7 +205,7 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
       .attr('class', 'zone-border')
       .attr('d', path)
       .attr('fill', 'transparent')
-      .attr('stroke-width', '0.1')
+      .attr('stroke-width', '0.6')
       .attr('stroke', 'black');
   }
 

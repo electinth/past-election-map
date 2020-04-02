@@ -46,7 +46,11 @@ const SeeMore = styled.button`
   color: black;
   display: block;
   margin: auto;
-  text-declaration: none;
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ContainerCard = styled.div`
@@ -134,7 +138,7 @@ const ProvinceAreaCompare = () => {
   ];
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
 
-  useEffect(() => {}, [province]);
+  useEffect(() => {}, []);
 
   return (
     <Container>
@@ -143,12 +147,13 @@ const ProvinceAreaCompare = () => {
         {CountryTopoJson.length === 0 ? (
           <div></div>
         ) : (
-          year.map(val => {
-            return createCard(val);
-          })
+          // year.map(val => {
+          //   return createCard(val);
+          // })
+          <div></div>
         )}
       </MapContainer>
-      <Link to={`/compare/${province}`}>
+      <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
         <SeeMore>ดูเพิ่มเติม</SeeMore>
       </Link>
     </Container>
