@@ -33,7 +33,6 @@ const ProvincialLeft = () => {
     const geo = tps.simplify(CountryTopo, simplifyMinWeight);
 
     const $compare = d3.select(compareRef.current);
-    console.log($compare);
 
     const data = Object.entries(geo.objects)
       .map(([_, g]) => {
@@ -58,12 +57,15 @@ const ProvincialLeft = () => {
         : 'gainsboro';
     }
     const w = $compare.node().parentElement.parentElement.offsetWidth,
-      h = $compare.node().parentElement.parentElement.offsetHeight;
-    const SCALE = 5000;
+      h = 0.75 * $compare.node().parentElement.parentElement.offsetHeight;
+    const b = d3.geoBounds(data[0]);
+    const longest = Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]);
+
+    const SCALE = 6500 / longest;
     const center = d3.geoCentroid(data[0]);
     const projection = d3
       .geoMercator()
-      .translate([75, 75])
+      .translate([w / 4, h / 4])
       .scale([SCALE])
       .center(center);
     const path = d3.geoPath(projection);
@@ -87,7 +89,6 @@ const ProvincialLeft = () => {
       .attr('fill', fill)
       .attr('stroke-width', '1')
       .attr('stroke', 'black');
-    console.log($path);
   }, [compareRef, CountryTopoJson, province]);
   // return <ProvinceAreaCompare />;
   return (
