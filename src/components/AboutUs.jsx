@@ -1,24 +1,30 @@
 import React from 'react';
+import styled from 'styled-components';
 
 const DISTRICT_SOURCE = [
   {
     year: 'ปี 2550',
+    site: 'ratchakitcha.soc.go.th',
     link: 'http://www.ratchakitcha.soc.go.th/DATA/PDF/2550/A/076/15.PDF'
   },
   {
     year: 'ปี 2554',
+    site: 'ratchakitcha.soc.go.th',
     link: 'http://www.ratchakitcha.soc.go.th/DATA/PDF/2554/A/019/29.PDF'
   },
   {
     year: 'ปี 2554 (แก้ไขเพิ่มจังหวัดบึงกาฬ)',
+    site: 'ratchakitcha.soc.go.th',
     link: 'http://www.ratchakitcha.soc.go.th/DATA/PDF/2554/A/030/38.PDF'
   },
   {
     year: 'ปี 2557',
+    site: 'ratchakitcha.soc.go.th',
     link: 'http://www.ratchakitcha.soc.go.th/DATA/PDF/2556/A/122/1.PDF'
   },
   {
     year: 'ปี 2562',
+    site: 'ratchakitcha.soc.go.th',
     link: 'http://www.ratchakitcha.soc.go.th/DATA/PDF/2562/A/010/T_0002.PDF'
   }
 ];
@@ -26,18 +32,68 @@ const DISTRICT_SOURCE = [
 const ELECTION_RESULT = [
   {
     year: 'ปี 2550',
+    site: 'ect.go.th',
     link: 'https://www.ect.go.th/ewt/ewt/ect_th/ewt_dl_link.php?nid=2395f'
   },
   {
     year: 'ปี 2554',
+    site: 'ect.go.th',
     link: 'https://www.ect.go.th/ewt/ewt/ect_th/ewt_dl_link.php?nid=2394'
   },
   {
     year: 'ปี 2562',
+    site: 'ect.go.th',
     link:
       'https://www.ect.go.th/ect_th/download/article/article_20190507142930.pd'
   }
 ];
+
+const Table = styled.table`
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+
+  & caption span {
+    display: block;
+    font-size: 1rem;
+  }
+
+  & thead tr th {
+    border-bottom: 1px solid var(--color-black);
+  }
+
+  & a {
+    text-decoration: none;
+    color: var(--color-black);
+    border-bottom: 1px dotted var(--color-black);
+  }
+
+  & td,
+  & th {
+    padding: 0.25rem 2rem;
+  }
+`;
+
+const GithubButton = styled.button`
+  display: block;
+  background-color: var(--color-black);
+  font-family: inherit;
+  font-size: 2.5rem;
+  margin: 0 auto;
+  border-radius: 1rem;
+
+  & a {
+    display: block;
+    text-decoration: none;
+    color: var(--color-white);
+    padding: 1rem 10rem;
+  }
+`;
+
+const Copyright = styled.div`
+  display: block;
+  text-align: center;
+`;
 
 const AboutUs = props => {
   return (
@@ -48,7 +104,7 @@ const AboutUs = props => {
 
         <ul className="about-us--source-list">
           <li className="about-us--source-list-item">
-            <table className="about-us--source-table">
+            <Table>
               <caption>ข้อมูลการแบ่งเขตการเลือกตั้ง</caption>
               <thead>
                 <tr>
@@ -57,23 +113,25 @@ const AboutUs = props => {
                 </tr>
               </thead>
               <tbody>
-                {DISTRICT_SOURCE.map(({ year, link }) => (
+                {DISTRICT_SOURCE.map(({ year, link, site }) => (
                   <tr key={year}>
                     <td>{year}</td>
                     <td>
-                      <a href={link}>{link}</a>
+                      <a href={link}>{site}</a>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </Table>
           </li>
           <li className="about-us--source-list-item">
-            <table className="about-us--source-table">
+            <Table>
               <caption>
-                ข้อมูลผลการเลือกตั้ง (ยึดเอาข้อมูลอย่างเป็นทางการที่รับรองโดย
-                กกต. สำหรับการแสดงผล โดยไม่รวมการเปลี่ยนแปลงจากการลาออก พ้นสภาพ
-                หรือเลือกตั้งซ่อม)
+                ข้อมูลผลการเลือกตั้ง{' '}
+                <span>
+                  (ยึดเอาข้อมูลอย่างเป็นทางการที่รับรองโดย กกต. สำหรับการแสดงผล
+                  โดยไม่รวมการเปลี่ยนแปลงจากการลาออก พ้นสภาพ หรือเลือกตั้งซ่อม)
+                </span>
               </caption>
               <thead>
                 <tr>
@@ -82,16 +140,16 @@ const AboutUs = props => {
                 </tr>
               </thead>
               <tbody>
-                {ELECTION_RESULT.map(({ year, link }) => (
+                {ELECTION_RESULT.map(({ year, link, site }) => (
                   <tr key={year}>
                     <td>{year}</td>
                     <td>
-                      <a href={link}>{link}</a>
+                      <a href={link}>{site}</a>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </Table>
           </li>
         </ul>
       </section>
@@ -106,6 +164,9 @@ const AboutUs = props => {
         </span>
         <span>
           <a href="https://github.com/phoneee/">phoneee</a>
+        </span>
+        <span>
+          <a href="https://github.com/tesol2y090">tesol2y090</a>
         </span>
       </section>
 
@@ -127,6 +188,15 @@ const AboutUs = props => {
           กองทุนพัฒนาสื่อปลอดภัยและสร้างสรรค์
         </article>
       </section>
+      <GithubButton>
+        <a
+          href="https://github.com/codeforthailand/past-election-map"
+          target="_blank"
+        >
+          View This Project on Github
+        </a>
+      </GithubButton>
+      <Copyright>&copy; 2019 ELECT - All Rights Reserved</Copyright>
     </div>
   );
 };

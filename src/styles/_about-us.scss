@@ -6,6 +6,8 @@
   padding: 2rem 5rem;
   border-radius: 2.5rem;
   font-size: 1.8rem;
+  padding-bottom: 10rem;
+  margin-bottom: 10rem;
 
   &--header {
     font-size: 4rem;
@@ -14,8 +16,10 @@
   }
 
   &--section {
+    margin-bottom: 3rem;
     & + & {
-      margin-top: 3rem;
+      padding-top: 3rem;
+      border-top: 4px solid var(--color-black);
     }
 
     &__program,
@@ -39,17 +43,11 @@
 
   &--source {
     &-list-item + &-list-item {
-      margin-top: 2rem;
+      margin-top: 3rem;
     }
 
     &-list {
       list-style: none;
-    }
-
-    &-table {
-      & tr > td {
-        width: 100%;
-      }
     }
   }
 }

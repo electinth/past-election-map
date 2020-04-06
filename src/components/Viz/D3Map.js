@@ -95,7 +95,7 @@ function D3Map(
           ),
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('text');
+      .join('g');
     $label.call(addLabel, delay);
   }
 
@@ -179,12 +179,32 @@ function D3Map(
   }
 
   function addLabel($label, delay = true) {
+    $label.selectAll('circle').remove();
+    $label.selectAll('text').remove();
+
+    $label.attr('class', 'zone-label');
+
     $label
-      .attr('class', 'zone-label')
+      .append('circle')
+      .attr('cx', polylabelPosition('x'))
+      .attr('cy', polylabelPosition('y'))
+      .attr('r', geo => {
+        const size = fontSize(geo);
+        return size / 9;
+      })
+      .attr('fill', 'var(--color-white)')
+      .attr('opacity', 0)
+      .transition()
+      .delay(delay ? 500 : 0)
+      .attr('opacity', 1);
+
+    $label
+      .append('text')
       .text(({ properties: { zone_id } }) => zone_id)
       .attr('x', polylabelPosition('x'))
       .attr('y', polylabelPosition('y'))
-      .attr('font-size', fontSize)
+      .attr('font-size', geo => fontSize(geo) / 9)
+      .attr('dominant-baseline', 'middle')
       .attr('opacity', 0)
       .transition()
       .delay(delay ? 500 : 0)
@@ -203,7 +223,7 @@ function D3Map(
       const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
       const yRange = y1 - y0;
       const xRange = x1 - x0;
-      return d3.min([yRange, xRange]) / 2.5;
+      return d3.min([yRange, xRange]);
     }
   }
 
@@ -256,12 +276,12 @@ function D3Map(
     // 1. change province
     // 2. change election year in provincial view
     $label = $zoneLabel
-      .selectAll('text')
+      .selectAll('g')
       .data(
         topojson.feature(geo, geo.objects[electionYear]).features,
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('text');
+      .join('g');
 
     // Prepare for border drawing
     const $border = d3.select('#border');
