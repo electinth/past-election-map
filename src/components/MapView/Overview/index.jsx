@@ -17,7 +17,21 @@ const Overview = ({ waffleData }) => {
               key={party + i}
               className="waffle--waffle"
               style={{ backgroundColor: partyColor(electionYear)(party) }}
-            ></div>
+            >
+              <span className="waffle--waffle__tooltiptext">
+                <span
+                  className="waffle--waffle__tooltipcolor"
+                  style={{
+                    display: 'inline-block',
+                    backgroundColor: partyColor(electionYear)(party),
+                    width: '1rem',
+                    height: '1rem',
+                    marginRight: '.5rem'
+                  }}
+                ></span>
+                {party}
+              </span>
+            </div>
           ));
         })}
       </div>

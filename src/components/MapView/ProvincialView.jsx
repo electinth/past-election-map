@@ -19,7 +19,8 @@ const ProvincialLeft = () => {
     console.log('paramProvince', paramProvince);
     setProvince(paramProvince);
   }, [paramProvince]);
-  return <ProvinceAreaCompare />;
+  // return <ProvinceAreaCompare />;
+  return <></>;
 };
 
 const ProvincialRight = () => {

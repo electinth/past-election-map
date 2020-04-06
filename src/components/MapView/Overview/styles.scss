@@ -16,5 +16,35 @@
     height: 1rem;
     margin-left: 0.25rem;
     margin-bottom: 0.25rem;
+
+    position: relative;
+
+    &:hover &__tooltiptext {
+      visibility: visible;
+    }
+
+    &__tooltiptext {
+      position: absolute;
+      bottom: 0.75rem;
+      width: 10rem;
+      background-color: var(--color-white);
+      transform: translate(-50%, -50%);
+      padding: 0.5rem 1rem;
+      box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.5);
+      left: 50%;
+
+      &::before {
+        content: ' ';
+        position: absolute;
+        top: 100%; /* At the bottom of the tooltip */
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: var(--color-white) transparent transparent transparent;
+      }
+
+      visibility: hidden;
+    }
   }
 }
