@@ -24,21 +24,63 @@ const StackedBar = ({ data: { winner, runnerUp, rest } }) => {
           backgroundColor: color(winner.party),
           width: `${winner.ratio * 100}%`
         }}
-      ></div>
+      >
+        <span className="stacked-bar--bar__tooltiptext">
+          <span
+            className="stacked-bar--bar__tooltipcolor"
+            style={{
+              display: 'inline-block',
+              backgroundColor: partyColor(electionYear)(winner.party),
+              width: '1rem',
+              height: '1rem',
+              marginRight: '.5rem'
+            }}
+          ></span>
+          {winner.party} {percentageFormat(winner.ratio)}
+        </span>
+      </div>
       <div
         className="stacked-bar--bar stacked-bar--bar__runner-up"
         style={{
           backgroundColor: 'lightgrey',
           width: `${runnerUp.ratio * 100}%`
         }}
-      ></div>
+      >
+        <span className="stacked-bar--bar__tooltiptext">
+          <span
+            className="stacked-bar--bar__tooltipcolor"
+            style={{
+              display: 'inline-block',
+              backgroundColor: partyColor(electionYear)(runnerUp.party),
+              width: '1rem',
+              height: '1rem',
+              marginRight: '.5rem'
+            }}
+          ></span>
+          {runnerUp.party} {percentageFormat(runnerUp.ratio)}
+        </span>
+      </div>
       <div
         className="stacked-bar--bar stacked-bar--bar__rest"
         style={{
           backgroundColor: 'var(--color-black)',
           width: `${rest.ratio * 100}%`
         }}
-      ></div>
+      >
+        <span className="stacked-bar--bar__tooltiptext">
+          <span
+            className="stacked-bar--bar__tooltipcolor"
+            style={{
+              display: 'inline-block',
+              backgroundColor: 'var(--color-black)',
+              width: '1rem',
+              height: '1rem',
+              marginRight: '.5rem'
+            }}
+          ></span>
+          {rest.party} {percentageFormat(rest.ratio)}
+        </span>
+      </div>
     </div>
   );
 };

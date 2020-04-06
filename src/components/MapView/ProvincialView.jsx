@@ -19,8 +19,7 @@ const ProvincialLeft = () => {
     console.log('paramProvince', paramProvince);
     setProvince(paramProvince);
   }, [paramProvince]);
-  // return <ProvinceAreaCompare />;
-  return <></>;
+  return <ProvinceAreaCompare />;
 };
 
 const ProvincialRight = () => {
@@ -100,7 +99,7 @@ const Winner = ({ provincialProps }) => {
               party: 'การเลือกตั้งเป็นโมฆะ',
               ratio: 0
             },
-            rest: { party: 'rest', ratio: 0 }
+            rest: { party: 'อื่นๆ', ratio: 0 }
           }
         };
       result.sort((a, b) => b.score - a.score);
@@ -113,7 +112,7 @@ const Winner = ({ provincialProps }) => {
           party: runnerUp.party,
           ratio: runnerUp.score / totalScore
         },
-        rest: { party: 'rest', ratio: restScore / totalScore }
+        rest: { party: 'อื่นๆ', ratio: restScore / totalScore }
       };
       return { zone_id, winner, summary };
     });
