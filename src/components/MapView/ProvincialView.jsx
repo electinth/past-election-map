@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import _ from 'lodash';
+import * as d3 from 'd3';
 
 import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
@@ -52,7 +53,7 @@ const ProvincialRight = () => {
 
   return (
     <div className="provincial-view">
-      <h1 className="provincial-view--header">จำนวน {numDistricts} เขต</h1>
+      <h1 className="provincial-view--header">{numDistricts} เขต</h1>
       <div className="provincial-view--toggle">
         <button
           className={`provincial-view--toggle-button ${partyView && 'active'}`}
@@ -118,11 +119,16 @@ const Winner = ({ provincialProps }) => {
     setWinners(districtWinners);
   }, [electionYear, provincialProps]);
 
+  const percentageFormat = d3.format('.2%');
   return (
     <ul className="provincial-view--list">
       {winners.map(({ zone_id, winner, summary }) => (
         <li key={zone_id + electionYear} className="provincial-view--list-item">
           <div>
+            {' '}
+            <b>เขต {zone_id}</b>
+          </div>
+          <div className="provincial-view--list-item__winner">
             <span
               style={{
                 display: 'inline-block',
@@ -132,10 +138,8 @@ const Winner = ({ provincialProps }) => {
                 backgroundColor: partyColor(electionYear)(winner.party)
               }}
             ></span>
-            <b>เขต {zone_id}</b> {winner.party}
-          </div>
-          <div>
-            {winner.title} {winner.first_name} {winner.last_name}
+            {winner.title} {winner.first_name} {winner.last_name},{' '}
+            {winner.party}, {percentageFormat(summary.winner.ratio)}
           </div>
           <StackedBar data={summary} />
         </li>

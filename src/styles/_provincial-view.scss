@@ -37,6 +37,10 @@
       &:first-child {
         border-top: 1px solid black;
       }
+
+      &__winner {
+        font-size: 1.4rem;
+      }
     }
   }
 

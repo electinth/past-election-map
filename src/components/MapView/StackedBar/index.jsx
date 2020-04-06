@@ -39,9 +39,6 @@ const StackedBar = ({ data: { winner, runnerUp, rest } }) => {
           width: `${rest.ratio * 100}%`
         }}
       ></div>
-      <div className="stacked-bar--winner-percentage">
-        ({percentageFormat(winner.ratio)})
-      </div>
     </div>
   );
 };
