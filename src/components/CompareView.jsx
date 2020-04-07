@@ -55,31 +55,94 @@ const YearTilte = styled.h1`
   font-family: 'The MATTER';
   font-size: 3rem;
 `;
+
+const Card = styled.div`
+  height: 240px;
+  width: 200px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  margin: 0 auto;
+  padding: 10px;
+`;
+
+const DistricExplain = styled.h2`
+  color: #484848;
+  font-family: 'The MATTER';
+  font-size: 1.5rem;
+  text-align: left;
+  line-height: 21px;
+`;
+
+const Quota = styled.h1`
+  color: #484848;
+  font-family: 'The MATTER';
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 21px;
+  text-align: left;
+  margin-top: 15px;
+`;
+
+const LineHr = styled.hr`
+  margin-top: 21px;
+  border: 0.5px solid #000000;
+`;
+
+const UlPartyList = styled.ul`
+  list-style: none;
+  max-height: 35vh;
+  overflow-y: scroll;
+  margin: 1rem 0;
+  padding: 1rem 1rem 0 0;
+  border-bottom: 1px solid black;
+`;
+
+const LiPartyList = styled.li`
+  font-size: 1.6rem;
+  padding: 0.5rem 0;
+`;
 const PartyList = partyData => {
   const year = [2562, 2557, 2554, 2550];
 
   return (
     <ViewParty>
       <PartyUL>
-        {year.map(year => {
+        {year.map((year, index) => {
           return (
             <Year key={year}>
               <CardList>
                 <YearTilte>ปี {year}</YearTilte>
-                <ul className="party-list--list">
-                  {partyData[0].map(({ party, candidate }) => (
-                    <li key={party} className="party-list--list-item">
-                      <span
-                        className="party-lisst--party-box"
-                        style={{
-                          backgroundColor: partyColor('election-2562')(party)
-                        }}
-                      ></span>
-                      {party}{' '}
-                      <span className="party-list--count">{candidate} เขต</span>
-                    </li>
-                  ))}
-                </ul>
+                <Card>
+                  <DistricExplain>
+                    เขตเลือกตั้ง
+                    <br />
+                    จังหวัด{partyData[index].province}
+                  </DistricExplain>
+                  <Quota>
+                    {partyData[index].zone} เขต / {partyData[index].zone} คน
+                  </Quota>
+                  <LineHr />
+                  <UlPartyList>
+                    {partyData[index].data.map(({ party, candidate }) => (
+                      <LiPartyList key={party}>
+                        <span
+                          className="party-list--party-box"
+                          style={{
+                            backgroundColor: partyColor(partyData[index].year)(
+                              party
+                            )
+                          }}
+                        ></span>
+                        {party}{' '}
+                        <span className="party-list--count">
+                          {candidate} เขต
+                        </span>
+                      </LiPartyList>
+                    ))}
+                  </UlPartyList>
+                </Card>
               </CardList>
             </Year>
           );
@@ -132,8 +195,18 @@ const CompareView = () => {
         currentByPartySorted.push({ party, candidate: winnerResult.length });
       }
       currentByPartySorted.sort((a, b) => b.candidate - a.candidate);
-      byPartySorted.push(currentByPartySorted);
+      byPartySorted.push({
+        data: currentByPartySorted
+      });
     });
+    electionYear.forEach((year, index) => {
+      byPartySorted[index].year = year;
+      byPartySorted[index].province = paramProvince;
+      byPartySorted[index].zone = provincialZone[index].length;
+    });
+
+    console.log('data');
+    console.log(byPartySorted);
 
     setPartyData(byPartySorted);
   }, []);
