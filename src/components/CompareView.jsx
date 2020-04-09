@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import _ from 'lodash';
+import * as d3 from 'd3';
 
 import styled from 'styled-components';
 import MapContext from '../map/context';
 import partyColor from '../map/color';
+import DrawMap from './MapView/ProvincialViewDetail/DrawMap';
 
 import './MapView/PartyList/styles.scss';
 
@@ -94,15 +96,53 @@ const UlPartyList = styled.ul`
   list-style: none;
   max-height: 35vh;
   overflow-y: scroll;
-  margin: 1rem 0;
-  padding: 1rem 1rem 0 0;
-  border-bottom: 1px solid black;
 `;
 
 const LiPartyList = styled.li`
   font-size: 1.6rem;
   padding: 0.5rem 0;
+  text-align: left;
+  font-family: 'Noto Sans';
 `;
+
+const createMap = partyData => {
+  const width = 220,
+    height = 240;
+  let map = DrawMap(
+    partyData.provinceTopoJson,
+    width,
+    height,
+    partyData.year,
+    partyData.province
+  );
+  const $gVis = d3.select(`#idMapVis-${partyData.year}`);
+  map.setVis($gVis);
+  map.render(partyData.year);
+  map.setProvince(partyData.province);
+
+  return (
+    <div>
+      <svg width={width} height={height}>
+        <g id={`idMapVis-${partyData.year}`}>
+          <g id={`map-province-${partyData.year}`}></g>
+          <g
+            id={`zone-label-province-${partyData.year}`}
+            style={{ pointerEvents: 'none' }}
+          ></g>
+          <g
+            id={`border-province-${partyData.year}`}
+            style={{ pointerEvents: 'none' }}
+          ></g>
+        </g>
+      </svg>
+    </div>
+  );
+};
+
+const PersonList = personData => {
+  console.log(personData);
+};
+
 const PartyList = partyData => {
   const year = [2562, 2557, 2554, 2550];
 
@@ -114,6 +154,7 @@ const PartyList = partyData => {
             <Year key={year}>
               <CardList>
                 <YearTilte>ปี {year}</YearTilte>
+                {createMap(partyData[index])}
                 <Card>
                   <DistricExplain>
                     เขตเลือกตั้ง
@@ -137,7 +178,7 @@ const PartyList = partyData => {
                         ></span>
                         {party}{' '}
                         <span className="party-list--count">
-                          {candidate} เขต
+                          {candidate} คน
                         </span>
                       </LiPartyList>
                     ))}
@@ -155,6 +196,7 @@ const PartyList = partyData => {
 const CompareView = () => {
   const [partyView, setPartyView] = useState(true);
   const [partyData, setPartyData] = useState([]);
+  const [personData, setPersonData] = useState([]);
   const { CountryTopoJson } = useContext(MapContext);
   const { province: paramProvince } = useParams();
 
@@ -169,6 +211,7 @@ const CompareView = () => {
     let provincialZone = [];
     let byParty = [];
     let byPartySorted = [];
+    let provinceTopoJsonData = [];
 
     electionYear.map(val => {
       let currentProvince = CountryTopoJson.objects[val].geometries
@@ -177,6 +220,7 @@ const CompareView = () => {
       currentProvince.sort((a, b) => a.zone_id - b.zone_id);
       provincialZone.push(currentProvince);
     });
+    setPersonData(provincialZone);
 
     provincialZone.map(val => {
       let currentByParty = _.groupBy(val, ({ result }) => {
@@ -199,15 +243,35 @@ const CompareView = () => {
         data: currentByPartySorted
       });
     });
+
+    electionYear.map(year => {
+      const ProviceGeomatires = CountryTopoJson.objects[year].geometries.filter(
+        val => {
+          return val.properties.province_name === paramProvince;
+        }
+      );
+
+      let ProvinceTopoJson = JSON.parse(JSON.stringify(CountryTopoJson));
+
+      const allowed = [year];
+
+      const ProvinceTopoJsonFilter = Object.keys(ProvinceTopoJson.objects)
+        .filter(key => allowed.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = ProvinceTopoJson.objects[key];
+          return obj;
+        }, {});
+
+      ProvinceTopoJson.objects = ProvinceTopoJsonFilter;
+      ProvinceTopoJson.objects[year].geometries = ProviceGeomatires;
+      provinceTopoJsonData.push(ProvinceTopoJson);
+    });
     electionYear.forEach((year, index) => {
       byPartySorted[index].year = year;
       byPartySorted[index].province = paramProvince;
       byPartySorted[index].zone = provincialZone[index].length;
+      byPartySorted[index].provinceTopoJson = provinceTopoJsonData[index];
     });
-
-    console.log('data');
-    console.log(byPartySorted);
-
     setPartyData(byPartySorted);
   }, []);
 
@@ -235,7 +299,7 @@ const CompareView = () => {
           ></span>
         </div>
       </Header>
-      {partyData.length !== 0 ? PartyList(partyData) : <div>Loading...</div>}
+      {partyData.length === 0 ? <div>Loading...</div> : PersonList(personData)}
     </Container>
   );
 };

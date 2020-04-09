@@ -46,7 +46,7 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
       .join('path')
       .call(drawMap);
 
-    // labelJoin(false);
+    labelJoin(false);
 
     $border_country
       .datum(
@@ -87,7 +87,7 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
           ),
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('text');
+      .join('g');
     $label.call(addLabel, delay);
   }
 
@@ -153,12 +153,32 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
   }
 
   function addLabel($label, delay = true) {
+    $label.selectAll('circle').remove();
+    $label.selectAll('text').remove();
+
+    $label.attr('class', 'zone-label');
+
     $label
-      .attr('class', `#zone-label-province-${electionYear}`)
+      .append('circle')
+      .attr('cx', polylabelPosition('x'))
+      .attr('cy', polylabelPosition('y'))
+      .attr('r', geo => {
+        const size = fontSize(geo);
+        return size / 9;
+      })
+      .attr('fill', 'var(--color-white)')
+      .attr('opacity', 0)
+      .transition()
+      .delay(delay ? 500 : 0)
+      .attr('opacity', 1);
+
+    $label
+      .append('text')
       .text(({ properties: { zone_id } }) => zone_id)
       .attr('x', polylabelPosition('x'))
       .attr('y', polylabelPosition('y'))
-      .attr('font-size', fontSize)
+      .attr('font-size', geo => fontSize(geo) / 9)
+      .attr('dominant-baseline', 'middle')
       .attr('opacity', 0)
       .transition()
       .delay(delay ? 500 : 0)
@@ -177,7 +197,7 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
       const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
       const yRange = y1 - y0;
       const xRange = x1 - x0;
-      return d3.min([yRange, xRange]) / 2.5;
+      return d3.min([yRange, xRange]);
     }
   }
 
@@ -230,12 +250,12 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
     // 1. change province
     // 2. change election year in provincial view
     $label = $zoneLabel
-      .selectAll('text')
+      .selectAll('g')
       .data(
         topojson.feature(geo, geo.objects[electionYear]).features,
         ({ properties: { id } }) => `${electionYear} ${id}`
       )
-      .join('text');
+      .join('g');
 
     // Prepare for border drawing
     const $border = d3.select(`#border-province-${electionYear}`);
@@ -266,8 +286,6 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
     );
 
     $border_zone.call(updateBorderZone);
-
-    setElectionYear(electionYear);
   };
 
   return { render, setVis, setElectionYear, setProvince };
