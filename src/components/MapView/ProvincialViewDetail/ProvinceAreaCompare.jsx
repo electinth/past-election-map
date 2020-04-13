@@ -70,10 +70,10 @@ const MapCard = styled.div`
   height: 140px;
 `;
 
-const createCard = obj => {
+const CreateCard = ({ obj }) => {
   const width = 120,
     height = 140;
-  const { province, electionYear, CountryTopoJson } = useContext(MapContext);
+  const { province, CountryTopoJson } = useContext(MapContext);
   const ProviceGeomatires = CountryTopoJson.objects[
     obj.electionYear
   ].geometries.filter(val => {
@@ -102,10 +102,12 @@ const createCard = obj => {
     province
   );
 
-  const $gVis = d3.select(`#idMapVis-${obj.electionYear}`);
-  map.setVis($gVis);
-  map.render(obj.electionYear);
-  map.setProvince(province);
+  useEffect(() => {
+    const $gVis = d3.select(`#idMapVis-${obj.electionYear}`);
+    map.setVis($gVis);
+    map.render(obj.electionYear);
+    map.setProvince(province);
+  });
 
   return (
     <ContainerCard key={obj.electionYear}>
@@ -130,25 +132,26 @@ const createCard = obj => {
 };
 
 const ProvinceAreaCompare = () => {
+  console.log('provinceAreaComapre');
   const year = [
     { year: 2562, electionYear: 'election-2562' },
     { year: 2557, electionYear: 'election-2557' },
     { year: 2554, electionYear: 'election-2554' },
     { year: 2550, electionYear: 'election-2550' }
   ];
-  const { province, electionYear, CountryTopoJson } = useContext(MapContext);
+  const { province, CountryTopoJson } = useContext(MapContext);
 
-  useEffect(() => {}, []);
+  useEffect(() => {}, [province]);
 
   return (
     <Container>
       <Title>เปรียบเทียบ 4 ปี</Title>
       <MapContainer>
         {CountryTopoJson.length === 0 ? (
-          <div></div>
+          <div>Loading ....</div>
         ) : (
-          year.map(val => {
-            return createCard(val);
+          year.map(obj => {
+            return <CreateCard obj={obj} key={obj.year} />;
           })
         )}
       </MapContainer>

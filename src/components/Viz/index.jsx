@@ -32,7 +32,6 @@ const Map = props => {
       setTooltips
     );
     const $gVis = d3.select(visRef.current);
-    console.log($gVis);
     map.setVis($gVis);
     map.render(electionYear);
   }, [CountryTopoJson]);

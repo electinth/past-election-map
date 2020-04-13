@@ -4,7 +4,14 @@ import * as tps from 'topojson-simplify';
 import partyColor from '../../../map/color';
 import polylabel from 'polylabel';
 
-function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
+function DrawMap(
+  CountryTopoJson,
+  w,
+  h,
+  initElectionYear,
+  initProvince,
+  setTooltips
+) {
   let $vis,
     $map,
     $zoneLabel,
@@ -35,6 +42,18 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
     $map = $vis.select(`#map-province-${electionYear}`);
     $zoneLabel = $vis.select(`#zone-label-province-${electionYear}`);
   };
+
+  function setTooltipContent({ properties }) {
+    if (province !== properties.province_name) {
+      setTooltips(properties.province_name);
+    } else {
+      if (!properties.result) return setTooltips('การเลือกตั้งเป็นโมฆะ');
+      const winner = properties.result.reduce(function(prev, current) {
+        return prev.score > current.score ? prev : current;
+      });
+      setTooltips(winner.party);
+    }
+  }
 
   const setElectionYear = year => {
     electionYear = year;
@@ -149,6 +168,7 @@ function DrawMap(CountryTopoJson, w, h, initElectionYear, initProvince) {
           ? push(`/${electionYear}`)
           : push(`/${electionYear}/${province_name}`)
       )
+      .on('mouseenter', setTooltipContent)
       .attr('fill', fill);
   }
 
