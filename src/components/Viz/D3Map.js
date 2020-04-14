@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
-import partyColor from '../../map/color';
+import partyColor, { partyFill } from '../../map/color';
 import polylabel from 'polylabel';
 
 function D3Map(
@@ -15,6 +15,7 @@ function D3Map(
 ) {
   let $vis,
     $map,
+    $defs,
     $zoneLabel,
     $label,
     $zone,
@@ -41,6 +42,7 @@ function D3Map(
   const setVis = vis => {
     $vis = vis;
     $map = $vis.select('#map');
+    $defs = $vis.select(`#map-defs`);
     $zoneLabel = $vis.select('#zone-label');
   };
 
@@ -126,7 +128,8 @@ function D3Map(
       $vis
         .transition()
         .duration(750)
-        .attr('transform', transform);
+        .attr('transform', transform)
+        .on("end", updatePatternTransform);
     } else {
       $vis
         .transition()
@@ -140,13 +143,55 @@ function D3Map(
       .attr('fill', fill);
   };
 
+  function getTransform(transform) {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttributeNS(null, "transform", transform);
+    const matrix = g.transform.baseVal.consolidate().matrix;
+    let {a, b, c, d, e, f} = matrix;
+    let scaleX, scaleY, skewX;
+    if (scaleX = Math.sqrt(a * a + b * b)) a /= scaleX, b /= scaleX;
+    if (skewX = a * c + b * d) c -= a * skewX, d -= b * skewX;
+    if (scaleY = Math.sqrt(c * c + d * d)) c /= scaleY, d /= scaleY, skewX /= scaleY;
+    if (a * d < b * c) a = -a, b = -b, skewX = -skewX, scaleX = -scaleX;
+    return {
+      translateX: e,
+      translateY: f,
+      rotate: Math.atan2(b, a) * 180 / Math.PI,
+      skewX: Math.atan(skewX) * 180 / Math.PI,
+      scaleX: scaleX,
+      scaleY: scaleY
+    };
+  }
+
+  // Adapt pattern transform to $vis's to make
+  // the pattern looks as if it's fixed size
+  function updatePatternTransform() {
+    const $$vis = this;
+    const t = d3.select($$vis).attr('transform')
+    const tt = getTransform(t);
+    const tInverse = [
+      // `translate(${-tt.translateX},${-tt.translateY})`,
+      `scale(${1/tt.scaleX},${1/tt.scaleY})`,
+    ].join(',');
+    $defs.selectAll('pattern')
+      .attr('patternTransform', tInverse);
+  }
+
   function fill({ properties: { result, province_name } }) {
     if (!result) return 'white';
     const winner = result.reduce(function(prev, current) {
       return prev.score > current.score ? prev : current;
     });
+    // load fill definitions
+    // TODO: use winner party seats and zone quota for partyFill()();
+    const fillOptions = electionYear === 'election-2550'
+      ? partyFill(electionYear)(winner.party, 2, 3)
+      : partyFill(electionYear)(winner.party, 1, 1);
+    if (fillOptions.type === 'pattern') {
+      $defs.call(fillOptions.createPattern);
+    }
     return province === province_name || province === 'ประเทศไทย'
-      ? partyColor(electionYear)(winner.party) || 'purple' // = color not found
+      ? fillOptions.fill || 'purple' // = color not found
       : 'gainsboro';
   }
 

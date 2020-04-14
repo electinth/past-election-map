@@ -55,6 +55,7 @@ const Map = props => {
       </div>
       <svg width={w} height={h}>
         <g id="vis" ref={visRef}>
+          <defs id={`map-defs`}></defs>
           <g
             id="map"
             onMouseMove={e =>
