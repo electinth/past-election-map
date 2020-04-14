@@ -2,7 +2,6 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 import partyColor from '../../map/color';
-import polylabel from 'polylabel';
 
 function D3Map(
   CountryTopoJson,
@@ -211,8 +210,7 @@ function D3Map(
       .attr('opacity', 1);
 
     function polylabelPosition(axis) {
-      return ({ geometry: { coordinates } }) => {
-        const [lon, lat] = polylabel(coordinates);
+      return ({ properties: { labelLat: lat, labelLon: lon } }) => {
         const [x, y] = projection([lon, lat]);
 
         return axis === 'x' ? x : y;
