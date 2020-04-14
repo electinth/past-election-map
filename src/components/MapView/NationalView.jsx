@@ -11,9 +11,19 @@ const NationalLeft = () => {
   return <></>;
 };
 const NationalRight = () => {
-  const { setProvince, CountryTopoJson, electionYear } = useContext(MapContext);
+  const { setProvince, CountryTopoJson, electionYear, quotaData } = useContext(
+    MapContext
+  );
   const [nationalProps, setNationalProps] = useState([]);
+  const is2550Year = electionYear === 'election-2550';
   let isNoVote;
+
+  let quotaPerson;
+  if (is2550Year) {
+    quotaPerson = quotaData.reduce((acc, cur) => {
+      return acc + cur.quota;
+    }, 0);
+  }
   console.log('national view');
   console.log(electionYear);
 
@@ -49,10 +59,12 @@ const NationalRight = () => {
   byPartySorted.sort((a, b) => b.candidate - a.candidate);
   return (
     <div className="national-view">
-      <h1 className="national-view--header">จำนวน {numCandidate} เขต</h1>
+      <h1 className="national-view--header">
+        {numCandidate} เขต {is2550Year ? quotaPerson : numCandidate} คน
+      </h1>
 
       {isNoVote ? (
-        <NovoteDisplay>gang</NovoteDisplay>
+        <NovoteDisplay />
       ) : (
         <div>
           <PartyList byPartySorted={byPartySorted} />
@@ -89,6 +101,7 @@ const ExplainText = styled.p`
   line-height: 2.5rem;
   text-align: left;
 `;
+
 const NovoteDisplay = () => {
   return (
     <Container>
