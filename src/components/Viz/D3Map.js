@@ -321,4 +321,5 @@ function fontSizeFactory(path) {
   };
 }
 
+export { polylabelPositionFactory, fontSizeFactory };
 export default D3Map;

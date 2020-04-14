@@ -7,7 +7,7 @@ import * as tps from 'topojson-simplify';
 
 import partyColor from '../../../map/color';
 import MapContext from '../../../map/context';
-import DrawMap from './DrawMap';
+import { polylabelPositionFactory, fontSizeFactory } from '../../Viz/D3Map';
 
 const Container = styled.div`
   height: 520px;
@@ -120,11 +120,33 @@ const ProvinceAreaCompare = () => {
       .attr('stroke-width', '1')
       .attr('stroke', 'black');
 
+    const polylabelPosition = polylabelPositionFactory(projection);
+    const fontSize = fontSizeFactory(path);
+    const $circle = $gElection
+      .selectAll('circle')
+      .data(d => d.features)
+      .join('circle')
+      .attr('class', 'label-bg')
+      .attr('cx', polylabelPosition('x'))
+      .attr('cy', polylabelPosition('y'))
+      .attr('r', geo => {
+        const size = fontSize(geo);
+        return size / 5;
+      })
+      .attr('fill', 'var(--color-white)')
+      .raise();
+
     const $label = $gElection
       .selectAll('text')
       .data(d => d.features)
       .join('text')
-      .attr('class', 'label');
+      .attr('class', 'zone-label')
+      .text(({ properties: { zone_id } }) => zone_id)
+      .attr('x', polylabelPosition('x'))
+      .attr('y', polylabelPosition('y'))
+      .attr('font-size', geo => fontSize(geo) / 5)
+      .attr('dominant-baseline', 'middle')
+      .raise();
   }, [compareRef, CountryTopoJson, province]);
 
   return (
