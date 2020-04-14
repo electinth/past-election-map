@@ -119,6 +119,12 @@ const ProvinceAreaCompare = () => {
       .attr('fill', fill)
       .attr('stroke-width', '1')
       .attr('stroke', 'black');
+
+    const $label = $gElection
+      .selectAll('text')
+      .data(d => d.features)
+      .join('text')
+      .attr('class', 'label');
   }, [compareRef, CountryTopoJson, province]);
 
   return (

@@ -183,6 +183,8 @@ function D3Map(
 
     $label.attr('class', 'zone-label');
 
+    const polylabelPosition = polylabelPositionFactory(projection);
+    const fontSize = fontSizeFactory(path);
     $label
       .append('circle')
       .attr('cx', polylabelPosition('x'))
@@ -208,21 +210,6 @@ function D3Map(
       .transition()
       .delay(delay ? 500 : 0)
       .attr('opacity', 1);
-
-    function polylabelPosition(axis) {
-      return ({ properties: { labelLat: lat, labelLon: lon } }) => {
-        const [x, y] = projection([lon, lat]);
-
-        return axis === 'x' ? x : y;
-      };
-    }
-
-    function fontSize(geo) {
-      const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
-      const yRange = y1 - y0;
-      const xRange = x1 - x0;
-      return d3.min([yRange, xRange]);
-    }
   }
 
   function updateBorderCountry($country) {
@@ -313,6 +300,25 @@ function D3Map(
   };
 
   return { render, setVis, setElectionYear, setProvince };
+}
+
+function polylabelPositionFactory(projection) {
+  return axis => {
+    return ({ properties: { labelLat: lat, labelLon: lon } }) => {
+      const [x, y] = projection([lon, lat]);
+
+      return axis === 'x' ? x : y;
+    };
+  };
+}
+
+function fontSizeFactory(path) {
+  return geo => {
+    const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
+    const yRange = y1 - y0;
+    const xRange = x1 - x0;
+    return d3.min([yRange, xRange]);
+  };
 }
 
 export default D3Map;
