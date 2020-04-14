@@ -150,9 +150,10 @@ const ProvinceAreaCompare = () => {
         {CountryTopoJson.length === 0 ? (
           <div>Loading ....</div>
         ) : (
-          year.map(obj => {
-            return <CreateCard obj={obj} key={obj.year} />;
-          })
+          // year.map(obj => {
+          //   return <CreateCard obj={obj} key={obj.year} />;
+          // })
+          <div></div>
         )}
       </MapContainer>
       <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>

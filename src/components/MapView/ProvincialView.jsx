@@ -60,7 +60,9 @@ const ProvincialRight = () => {
 
   return (
     <div className="provincial-view">
-      <h1 className="provincial-view--header">จำนวน {numDistricts} เขต</h1>
+      <h1 className="provincial-view--header">
+        จำนวน {numDistricts} เขต {numDistricts} คน
+      </h1>
       {isNovote ? (
         <NovoteDisplay />
       ) : (
