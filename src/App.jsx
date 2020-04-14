@@ -31,9 +31,9 @@ const App = () => {
           <main>
             <article className="detail-layer">
               <Switch>
+                <Route path="/compare/:province" component={CompareView} />
                 <Route path="/about-us" component={AboutUs} />
                 <Route path="/:year?" component={MapView} />
-                <Route path="/compare/:province" component={CompareView} />
               </Switch>
             </article>
             <Viz />
