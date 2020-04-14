@@ -131,8 +131,10 @@ const LiPersonList = styled.li`
 `;
 
 const CreateMap = ({ partyData }) => {
+  let map;
   const width = 220,
     height = 240;
+  const [tooltips, setTooltips] = useState('');
   const [tooltipsStyles, setTooltipStyles] = useState({
     left: null,
     top: null,
@@ -140,26 +142,29 @@ const CreateMap = ({ partyData }) => {
   });
 
   useEffect(() => {
-    let map = DrawMap(
+    map = DrawMap(
       partyData.provinceTopoJson,
       width,
       height,
       partyData.year,
       partyData.province,
-      tooltipsStyles
+      setTooltips
     );
     const $gVis = d3.select(`#idMapVis-${partyData.year}`);
     map.setVis($gVis);
     map.render(partyData.year);
     map.setProvince(partyData.province);
-  });
+  }, []);
 
   return (
     <div>
+      <div className="tooltips" style={tooltipsStyles}>
+        {tooltips}
+      </div>
       <svg width={width} height={height}>
         <g id={`idMapVis-${partyData.year}`}>
           <g
-            id="map"
+            id={`map-province-${partyData.year}`}
             onMouseMove={e =>
               setTooltipStyles({
                 top: e.clientY - 100,
@@ -176,7 +181,6 @@ const CreateMap = ({ partyData }) => {
               })
             }
           ></g>
-          <g id={`map-province-${partyData.year}`}></g>
           <g
             id={`zone-label-province-${partyData.year}`}
             style={{ pointerEvents: 'none' }}
@@ -304,6 +308,7 @@ const PersonList = ({ personData }) => {
 const PartyList = ({ partyData }) => {
   const year = [2562, 2557, 2554, 2550];
 
+  console.log(partyData);
   return (
     <ViewParty>
       <PartyUL>

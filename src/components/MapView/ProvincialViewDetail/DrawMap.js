@@ -43,18 +43,6 @@ function DrawMap(
     $zoneLabel = $vis.select(`#zone-label-province-${electionYear}`);
   };
 
-  function setTooltipContent({ properties }) {
-    if (province !== properties.province_name) {
-      setTooltips(properties.province_name);
-    } else {
-      if (!properties.result) return setTooltips('การเลือกตั้งเป็นโมฆะ');
-      const winner = properties.result.reduce(function(prev, current) {
-        return prev.score > current.score ? prev : current;
-      });
-      setTooltips(winner.party);
-    }
-  }
-
   const setElectionYear = year => {
     electionYear = year;
     $zone = $zone
@@ -125,7 +113,7 @@ function DrawMap(
 
       const b = path.bounds(selection);
       const zoomScale =
-        0.875 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h);
+        0.8 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h);
       const centroid = path.centroid(selection);
       const translate = [
         zoomScale * -centroid[0] + w / 2,
@@ -156,18 +144,23 @@ function DrawMap(
       : 'gainsboro';
   }
 
+  function setTooltipContent({ properties }) {
+    if (province !== properties.province_name) {
+      setTooltips(properties.province_name);
+    } else {
+      if (!properties.result) return setTooltips('การเลือกตั้งเป็นโมฆะ');
+      setTooltips(properties.province_name);
+    }
+  }
+
   function drawMap($zone) {
+    console.log('drawMap');
     $zone = $zone
       .attr(
         'class',
         d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
       )
       .attr('d', path)
-      .on('click', ({ properties: { province_name } }) =>
-        province_name === province
-          ? push(`/${electionYear}`)
-          : push(`/${electionYear}/${province_name}`)
-      )
       .on('mouseenter', setTooltipContent)
       .attr('fill', fill);
   }
