@@ -9,7 +9,9 @@ const Nav = () => {
         <img src={siteLogoImage} className="nav--logo-image"></img>
       </a>
       <Link className="nav--header__link" to="/">
-        <h1 className="nav--header">ย้อนดู 'แบ่งเขตเลือกตั้ง' ในอดีต</h1>
+        <h1 className="nav--header">
+          ย้อนดู 'แบ่งเขตเลือกตั้ง' ในอดีตของประเทศไทย
+        </h1>
       </Link>
       <Link to="/about-us" className="nav--about-us__link">
         <span className="nav--about-us">About Us</span>
