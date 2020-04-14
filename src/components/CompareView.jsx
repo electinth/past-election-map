@@ -131,8 +131,10 @@ const LiPersonList = styled.li`
 `;
 
 const CreateMap = ({ partyData }) => {
+  let map;
   const width = 220,
     height = 240;
+  const [tooltips, setTooltips] = useState('');
   const [tooltipsStyles, setTooltipStyles] = useState({
     left: null,
     top: null,
@@ -140,26 +142,29 @@ const CreateMap = ({ partyData }) => {
   });
 
   useEffect(() => {
-    let map = DrawMap(
+    map = DrawMap(
       partyData.provinceTopoJson,
       width,
       height,
       partyData.year,
       partyData.province,
-      tooltipsStyles
+      setTooltips
     );
     const $gVis = d3.select(`#idMapVis-${partyData.year}`);
     map.setVis($gVis);
     map.render(partyData.year);
     map.setProvince(partyData.province);
-  });
+  }, []);
 
   return (
     <div>
+      <div className="tooltips" style={tooltipsStyles}>
+        {tooltips}
+      </div>
       <svg width={width} height={height}>
         <g id={`idMapVis-${partyData.year}`}>
           <g
-            id="map"
+            id={`map-province-${partyData.year}`}
             onMouseMove={e =>
               setTooltipStyles({
                 top: e.clientY - 100,
@@ -176,7 +181,6 @@ const CreateMap = ({ partyData }) => {
               })
             }
           ></g>
-          <g id={`map-province-${partyData.year}`}></g>
           <g
             id={`border-province-${partyData.year}`}
             style={{ pointerEvents: 'none' }}
@@ -191,7 +195,7 @@ const CreateMap = ({ partyData }) => {
   );
 };
 
-const YearList = ({ view = "party", party = [], person = [] }) => {
+const YearList = ({ view = 'party', party = [], person = [] }) => {
   const year = [2562, 2557, 2554, 2550];
 
   return (
@@ -203,15 +207,15 @@ const YearList = ({ view = "party", party = [], person = [] }) => {
               <CardList>
                 <YearTilte>ปี {year}</YearTilte>
                 <CreateMap partyData={party[index]} />
-                {view === "party" ?
-                  (<PartyCard data={party[index]} />)
-                  : (<PersonCard data={person[index]} />)
-                }
+                {view === 'party' ? (
+                  <PartyCard data={party[index]} />
+                ) : (
+                  <PersonCard data={person[index]} />
+                )}
               </CardList>
             </Year>
-            );
-          })
-        }
+          );
+        })}
       </PartyUL>
     </ViewParty>
   );
@@ -235,21 +239,16 @@ const PartyCard = ({ data = {} }) => {
             <span
               className="party-list--party-box"
               style={{
-                backgroundColor: partyColor(data.year)(
-                  party
-                )
+                backgroundColor: partyColor(data.year)(party)
               }}
             ></span>
-            {party}{' '}
-            <span className="party-list--count">
-              {candidate} คน
-            </span>
+            {party} <span className="party-list--count">{candidate} คน</span>
           </LiPartyList>
         ))}
       </UlPartyList>
     </PartyCardContainer>
   );
-}
+};
 
 const PersonCard = ({ data = {} }) => {
   const districtWinners = data.data.map(({ zone_id, result }) => {
@@ -268,10 +267,7 @@ const PersonCard = ({ data = {} }) => {
       };
     result.sort((a, b) => b.score - a.score);
     const [winner, runnerUp] = result;
-    const totalScore = result.reduce(
-      (total, cur) => (total += cur.score),
-      0
-    );
+    const totalScore = result.reduce((total, cur) => (total += cur.score), 0);
     const restScore = totalScore - winner.score - runnerUp.score;
     const summary = {
       winner: { party: winner.party, ratio: winner.score / totalScore },
@@ -286,6 +282,7 @@ const PersonCard = ({ data = {} }) => {
 
   const percentageFormat = d3.format('.2%');
 
+  console.log(partyData);
   return (
     <PersonCardContainer>
       <DistricExplain>
@@ -300,37 +297,28 @@ const PersonCard = ({ data = {} }) => {
       <UlPersonList>
         {districtWinners.length !== 0 ? (
           <div>
-            {districtWinners.map(
-              ({ zone_id, winner, summary }) => (
-                <LiPersonList
-                  key={zone_id + data.year}
-                >
-                  <div>
-                    {' '}
-                    <b style={{ fontSize: '1.2rem' }}>
-                      เขต {zone_id}
-                    </b>
-                  </div>
-                  <div>
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        width: '1rem',
-                        height: '1rem',
-                        marginRight: '0.5rem',
-                        backgroundColor: partyColor(
-                          data.year
-                        )(winner.party)
-                      }}
-                    ></span>
-                    {winner.title} {winner.first_name}{' '}
-                    {winner.last_name}, {winner.party},{' '}
-                    {percentageFormat(summary.winner.ratio)}
-                  </div>
-                  <StackedBar data={summary} />
-                </LiPersonList>
-              )
-            )}
+            {districtWinners.map(({ zone_id, winner, summary }) => (
+              <LiPersonList key={zone_id + data.year}>
+                <div>
+                  {' '}
+                  <b style={{ fontSize: '1.2rem' }}>เขต {zone_id}</b>
+                </div>
+                <div>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: '1rem',
+                      height: '1rem',
+                      marginRight: '0.5rem',
+                      backgroundColor: partyColor(data.year)(winner.party)
+                    }}
+                  ></span>
+                  {winner.title} {winner.first_name} {winner.last_name},{' '}
+                  {winner.party}, {percentageFormat(summary.winner.ratio)}
+                </div>
+                <StackedBar data={summary} />
+              </LiPersonList>
+            ))}
           </div>
         ) : (
           <div>Loading...</div>
@@ -338,7 +326,7 @@ const PersonCard = ({ data = {} }) => {
       </UlPersonList>
     </PersonCardContainer>
   );
-}
+};
 
 const CompareView = () => {
   const [partyView, setPartyView] = useState(true);
@@ -458,7 +446,7 @@ const CompareView = () => {
         <div>Loading...</div>
       ) : (
         <YearList
-          view={partyView ? "party" : "person"}
+          view={partyView ? 'party' : 'person'}
           party={partyData}
           person={personData}
         />

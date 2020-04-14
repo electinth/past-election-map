@@ -9,6 +9,7 @@ import partyColor from '../../map/color';
 import PartyList from './PartyList';
 import StackedBar from './StackedBar';
 
+import { NovoteDisplay } from './NationalView';
 import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx';
 
 const ProvincialLeft = () => {
@@ -27,6 +28,9 @@ const ProvincialRight = () => {
   const [provincialProps, setProvincialProps] = useState([]);
   const [partyView, setPartyView] = useState(true);
   const numDistricts = provincialProps.length;
+  let isNovote;
+  console.log('ProvincialRight');
+  console.log(electionYear);
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
@@ -39,7 +43,10 @@ const ProvincialRight = () => {
   }, [CountryTopoJson, province, electionYear]);
 
   const byParty = _.groupBy(provincialProps, ({ result }) => {
-    if (!result) return 'การเลือกตั้งเป็นโมฆะ';
+    if (!result) {
+      isNovote = true;
+      return 'การเลือกตั้งเป็นโมฆะ';
+    }
     const winner = result.reduce(function(prev, current) {
       return prev.score > current.score ? prev : current;
     });
@@ -53,31 +60,39 @@ const ProvincialRight = () => {
 
   return (
     <div className="provincial-view">
-      <h1 className="provincial-view--header">{numDistricts} เขต</h1>
-      <div className="provincial-view--toggle">
-        <button
-          className={`provincial-view--toggle-button ${partyView && 'active'}`}
-          onClick={() => setPartyView(true)}
-        >
-          ดูพรรค
-        </button>
-        <button
-          className={`provincial-view--toggle-button ${!partyView && 'active'}`}
-          onClick={() => setPartyView(false)}
-        >
-          ดูผู้ชนะ
-        </button>
-        <span
-          className="provincial-view--toggle-active"
-          style={{ left: !partyView && '50%' }}
-        ></span>
-      </div>
-      {partyView ? (
-        <PartyList byPartySorted={byPartySorted} />
+      <h1 className="provincial-view--header">จำนวน {numDistricts} เขต</h1>
+      {isNovote ? (
+        <NovoteDisplay />
       ) : (
-        <Winner provincialProps={provincialProps} />
+        <>
+          <div className="provincial-view--toggle">
+            <button
+              className={`provincial-view--toggle-button ${partyView &&
+                'active'}`}
+              onClick={() => setPartyView(true)}
+            >
+              ดูพรรค
+            </button>
+            <button
+              className={`provincial-view--toggle-button ${!partyView &&
+                'active'}`}
+              onClick={() => setPartyView(false)}
+            >
+              ดูผู้ชนะ
+            </button>
+            <span
+              className="provincial-view--toggle-active"
+              style={{ left: !partyView && '50%' }}
+            ></span>
+          </div>
+          {partyView ? (
+            <PartyList byPartySorted={byPartySorted} />
+          ) : (
+            <Winner provincialProps={provincialProps} />
+          )}
+          <Overview waffleData={byPartySorted} />
+        </>
       )}
-      <Overview waffleData={byPartySorted} />
     </div>
   );
 };
