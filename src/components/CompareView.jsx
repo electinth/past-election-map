@@ -59,7 +59,7 @@ const YearTilte = styled.h1`
   font-size: 3rem;
 `;
 
-const Card = styled.div`
+const PartyCardContainer = styled.div`
   height: 240px;
   width: 200px;
   border-radius: 10px;
@@ -69,7 +69,7 @@ const Card = styled.div`
   padding: 10px;
 `;
 
-const PersonCard = styled.div`
+const PersonCardContainer = styled.div`
   height: 350px;
   width: 200px;
   border-radius: 10px;
@@ -182,11 +182,11 @@ const CreateMap = ({ partyData }) => {
             }
           ></g>
           <g
-            id={`zone-label-province-${partyData.year}`}
+            id={`border-province-${partyData.year}`}
             style={{ pointerEvents: 'none' }}
           ></g>
           <g
-            id={`border-province-${partyData.year}`}
+            id={`zone-label-province-${partyData.year}`}
             style={{ pointerEvents: 'none' }}
           ></g>
         </g>
@@ -195,47 +195,8 @@ const CreateMap = ({ partyData }) => {
   );
 };
 
-const PersonList = ({ personData }) => {
+const YearList = ({ view = 'party', party = [], person = [] }) => {
   const year = [2562, 2557, 2554, 2550];
-  const [winnerResult, setWinnerResult] = useState([]);
-  useEffect(() => {
-    personData.map(val => {
-      const districtWinners = val.data.map(({ zone_id, result }) => {
-        if (!result)
-          return {
-            zone_id,
-            winner: 'การเลือกตั้งเป็นโมฆะ',
-            summary: {
-              winner: { party: 'การเลือกตั้งเป็นโมฆะ', ratio: 0 },
-              runnerUp: {
-                party: 'การเลือกตั้งเป็นโมฆะ',
-                ratio: 0
-              },
-              rest: { party: 'อื่นๆ', ratio: 0 }
-            }
-          };
-        result.sort((a, b) => b.score - a.score);
-        const [winner, runnerUp] = result;
-        const totalScore = result.reduce(
-          (total, cur) => (total += cur.score),
-          0
-        );
-        const restScore = totalScore - winner.score - runnerUp.score;
-        const summary = {
-          winner: { party: winner.party, ratio: winner.score / totalScore },
-          runnerUp: {
-            party: runnerUp.party,
-            ratio: runnerUp.score / totalScore
-          },
-          rest: { party: 'อื่นๆ', ratio: restScore / totalScore }
-        };
-        return { zone_id, winner, summary };
-      });
-      setWinnerResult(winnerResult => [...winnerResult, districtWinners]);
-    });
-  }, []);
-
-  const percentageFormat = d3.format('.2%');
 
   return (
     <ViewParty>
@@ -245,57 +206,12 @@ const PersonList = ({ personData }) => {
             <Year key={year}>
               <CardList>
                 <YearTilte>ปี {year}</YearTilte>
-                <CreateMap partyData={personData[index]} />
-                <PersonCard>
-                  <DistricExplain>
-                    เขตเลือกตั้ง
-                    <br />
-                    จังหวัด{personData[index].province}
-                  </DistricExplain>
-                  <Quota>
-                    {personData[index].zone} เขต / {personData[index].zone} คน
-                  </Quota>
-                  <LineHr />
-                  <UlPersonList>
-                    {winnerResult.length !== 0 ? (
-                      <div>
-                        {winnerResult[index].map(
-                          ({ zone_id, winner, summary }) => (
-                            <LiPersonList
-                              key={zone_id + personData[index].year}
-                            >
-                              <div>
-                                {' '}
-                                <b style={{ fontSize: '1.2rem' }}>
-                                  เขต {zone_id}
-                                </b>
-                              </div>
-                              <div>
-                                <span
-                                  style={{
-                                    display: 'inline-block',
-                                    width: '1rem',
-                                    height: '1rem',
-                                    marginRight: '0.5rem',
-                                    backgroundColor: partyColor(
-                                      personData[index].year
-                                    )(winner.party)
-                                  }}
-                                ></span>
-                                {winner.title} {winner.first_name}{' '}
-                                {winner.last_name}, {winner.party},{' '}
-                                {percentageFormat(summary.winner.ratio)}
-                              </div>
-                              <StackedBar data={summary} />
-                            </LiPersonList>
-                          )
-                        )}
-                      </div>
-                    ) : (
-                      <div>Loading...</div>
-                    )}
-                  </UlPersonList>
-                </PersonCard>
+                <CreateMap partyData={party[index]} />
+                {view === 'party' ? (
+                  <PartyCard data={party[index]} />
+                ) : (
+                  <PersonCard data={person[index]} />
+                )}
               </CardList>
             </Year>
           );
@@ -305,54 +221,110 @@ const PersonList = ({ personData }) => {
   );
 };
 
-const PartyList = ({ partyData }) => {
-  const year = [2562, 2557, 2554, 2550];
+const PartyCard = ({ data = {} }) => {
+  return (
+    <PartyCardContainer>
+      <DistricExplain>
+        เขตเลือกตั้ง
+        <br />
+        จังหวัด{data.province}
+      </DistricExplain>
+      <Quota>
+        {data.zone} เขต / {data.zone} คน
+      </Quota>
+      <LineHr />
+      <UlPartyList>
+        {data.data.map(({ party, candidate }) => (
+          <LiPartyList key={party}>
+            <span
+              className="party-list--party-box"
+              style={{
+                backgroundColor: partyColor(data.year)(party)
+              }}
+            ></span>
+            {party} <span className="party-list--count">{candidate} คน</span>
+          </LiPartyList>
+        ))}
+      </UlPartyList>
+    </PartyCardContainer>
+  );
+};
+
+const PersonCard = ({ data = {} }) => {
+  const districtWinners = data.data.map(({ zone_id, result }) => {
+    if (!result)
+      return {
+        zone_id,
+        winner: 'การเลือกตั้งเป็นโมฆะ',
+        summary: {
+          winner: { party: 'การเลือกตั้งเป็นโมฆะ', ratio: 0 },
+          runnerUp: {
+            party: 'การเลือกตั้งเป็นโมฆะ',
+            ratio: 0
+          },
+          rest: { party: 'อื่นๆ', ratio: 0 }
+        }
+      };
+    result.sort((a, b) => b.score - a.score);
+    const [winner, runnerUp] = result;
+    const totalScore = result.reduce((total, cur) => (total += cur.score), 0);
+    const restScore = totalScore - winner.score - runnerUp.score;
+    const summary = {
+      winner: { party: winner.party, ratio: winner.score / totalScore },
+      runnerUp: {
+        party: runnerUp.party,
+        ratio: runnerUp.score / totalScore
+      },
+      rest: { party: 'อื่นๆ', ratio: restScore / totalScore }
+    };
+    return { zone_id, winner, summary };
+  });
+
+  const percentageFormat = d3.format('.2%');
 
   console.log(partyData);
   return (
-    <ViewParty>
-      <PartyUL>
-        {year.map((year, index) => {
-          return (
-            <Year key={year}>
-              <CardList>
-                <YearTilte>ปี {year}</YearTilte>
-                <CreateMap partyData={partyData[index]} />
-                <Card>
-                  <DistricExplain>
-                    เขตเลือกตั้ง
-                    <br />
-                    จังหวัด{partyData[index].province}
-                  </DistricExplain>
-                  <Quota>
-                    {partyData[index].zone} เขต / {partyData[index].zone} คน
-                  </Quota>
-                  <LineHr />
-                  <UlPartyList>
-                    {partyData[index].data.map(({ party, candidate }) => (
-                      <LiPartyList key={party}>
-                        <span
-                          className="party-list--party-box"
-                          style={{
-                            backgroundColor: partyColor(partyData[index].year)(
-                              party
-                            )
-                          }}
-                        ></span>
-                        {party}{' '}
-                        <span className="party-list--count">
-                          {candidate} คน
-                        </span>
-                      </LiPartyList>
-                    ))}
-                  </UlPartyList>
-                </Card>
-              </CardList>
-            </Year>
-          );
-        })}
-      </PartyUL>
-    </ViewParty>
+    <PersonCardContainer>
+      <DistricExplain>
+        เขตเลือกตั้ง
+        <br />
+        จังหวัด{data.province}
+      </DistricExplain>
+      <Quota>
+        {data.zone} เขต / {data.zone} คน
+      </Quota>
+      <LineHr />
+      <UlPersonList>
+        {districtWinners.length !== 0 ? (
+          <div>
+            {districtWinners.map(({ zone_id, winner, summary }) => (
+              <LiPersonList key={zone_id + data.year}>
+                <div>
+                  {' '}
+                  <b style={{ fontSize: '1.2rem' }}>เขต {zone_id}</b>
+                </div>
+                <div>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: '1rem',
+                      height: '1rem',
+                      marginRight: '0.5rem',
+                      backgroundColor: partyColor(data.year)(winner.party)
+                    }}
+                  ></span>
+                  {winner.title} {winner.first_name} {winner.last_name},{' '}
+                  {winner.party}, {percentageFormat(summary.winner.ratio)}
+                </div>
+                <StackedBar data={summary} />
+              </LiPersonList>
+            ))}
+          </div>
+        ) : (
+          <div>Loading...</div>
+        )}
+      </UlPersonList>
+    </PersonCardContainer>
   );
 };
 
@@ -472,10 +444,12 @@ const CompareView = () => {
       </Header>
       {!partyData ? (
         <div>Loading...</div>
-      ) : partyView ? (
-        <PartyList partyData={partyData} />
       ) : (
-        <PersonList personData={personData} />
+        <YearList
+          view={partyView ? 'party' : 'person'}
+          party={partyData}
+          person={personData}
+        />
       )}
     </Container>
   );

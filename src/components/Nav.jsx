@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import siteLogoImage from '../images/site-logo.png';
 
 const Nav = () => {
   return (
     <nav className="nav">
       <a href="https://elect.in.th" className="nav--logo nav--logo__elect">
-        ELECT
+        <img src={siteLogoImage} className="nav--logo-image"></img>
       </a>
       <Link className="nav--header__link" to="/">
         <h1 className="nav--header">
