@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
+import * as tps from 'topojson-simplify';
 
+import partyColor from '../../../map/color';
 import MapContext from '../../../map/context';
 import DrawMap from './DrawMap';
 
@@ -21,16 +23,6 @@ const Title = styled.h1`
   font-size: 3rem;
   text-align: center;
   color: #000000;
-`;
-
-const MapContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  height: 390px;
-  width: 350px;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
 `;
 
 const SeeMore = styled.button`
@@ -53,108 +45,93 @@ const SeeMore = styled.button`
   }
 `;
 
-const ContainerCard = styled.div`
-  width: 120px;
-  height: 160px;
-  margin: 5px;
-`;
+let geo;
+const ProvinceAreaCompare = () => {
+  const { province, electionYear, CountryTopoJson } = useContext(MapContext);
 
-const TitleCard = styled.h1`
-  color: black;
-  font-family: 'The MATTER';
-  font-size: 2rem;
-`;
-
-const MapCard = styled.div`
-  width: 120px;
-  height: 140px;
-`;
-
-const CreateCard = ({ obj }) => {
-  const width = 120,
-    height = 140;
-  const { province, CountryTopoJson } = useContext(MapContext);
-  const ProviceGeomatires = CountryTopoJson.objects[
-    obj.electionYear
-  ].geometries.filter(val => {
-    return val.properties.province_name === province;
-  });
-
-  let ProvinceTopoJson = JSON.parse(JSON.stringify(CountryTopoJson));
-
-  const allowed = [obj.electionYear];
-
-  const ProvinceTopoJsonFilter = Object.keys(ProvinceTopoJson.objects)
-    .filter(key => allowed.includes(key))
-    .reduce((obj, key) => {
-      obj[key] = ProvinceTopoJson.objects[key];
-      return obj;
-    }, {});
-
-  ProvinceTopoJson.objects = ProvinceTopoJsonFilter;
-  ProvinceTopoJson.objects[obj.electionYear].geometries = ProviceGeomatires;
-
-  let map = DrawMap(
-    ProvinceTopoJson,
-    width,
-    height,
-    obj.electionYear,
-    province
-  );
+  const compareRef = useRef(null);
 
   useEffect(() => {
-    const $gVis = d3.select(`#idMapVis-${obj.electionYear}`);
-    map.setVis($gVis);
-    map.render(obj.electionYear);
-    map.setProvince(province);
-  });
+    if (CountryTopoJson.length === 0) return;
 
-  return (
-    <ContainerCard key={obj.electionYear}>
-      <TitleCard>{obj.year}</TitleCard>
-      <MapCard>
-        <svg width={width} height={height}>
-          <g id={`idMapVis-${obj.electionYear}`}>
-            <g id={`map-province-${obj.electionYear}`}></g>
-            <g
-              id={`zone-label-province-${obj.electionYear}`}
-              style={{ pointerEvents: 'none' }}
-            ></g>
-            <g
-              id={`border-province-${obj.electionYear}`}
-              style={{ pointerEvents: 'none' }}
-            ></g>
-          </g>
-        </svg>
-      </MapCard>
-    </ContainerCard>
-  );
-};
+    const simplifyMinWeight = 1e-5;
+    const CountryTopo = tps.presimplify(CountryTopoJson);
+    geo = tps.simplify(CountryTopo, simplifyMinWeight);
+  }, [CountryTopoJson]);
 
-const ProvinceAreaCompare = () => {
-  console.log('provinceAreaComapre');
-  const year = [
-    { year: 2562, electionYear: 'election-2562' },
-    { year: 2557, electionYear: 'election-2557' },
-    { year: 2554, electionYear: 'election-2554' },
-    { year: 2550, electionYear: 'election-2550' }
-  ];
-  const { province, CountryTopoJson } = useContext(MapContext);
+  useEffect(() => {
+    if (CountryTopoJson.length === 0) return;
 
-  useEffect(() => {}, [province]);
+    const $compare = d3.select(compareRef.current);
+
+    const data = Object.entries(geo.objects)
+      .map(([_, g]) => {
+        const { type, geometries } = g;
+        const provinceGeometries = geometries.filter(
+          geometry => geometry.properties.province_name === province
+        );
+        return {
+          type,
+          geometries: provinceGeometries
+        };
+      })
+      .map(d => topojson.feature(geo, d));
+
+    function fill({ properties: { result, province_name } }) {
+      if (!result) return 'white';
+      const winner = result.reduce(function(prev, current) {
+        return prev.score > current.score ? prev : current;
+      });
+      return province === province_name || province === 'ประเทศไทย'
+        ? partyColor(electionYear)(winner.party) || 'purple' // = color not found
+        : 'gainsboro';
+    }
+    const w = $compare.node().parentElement.parentElement.offsetWidth,
+      h = 0.75 * $compare.node().parentElement.parentElement.offsetHeight;
+    const b = d3.geoBounds(data[0]);
+    const longest = Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]);
+
+    const SCALE = 6500 / longest;
+    const center = d3.geoCentroid(data[0]);
+    const projection = d3
+      .geoMercator()
+      .translate([w / 4, h / 4])
+      .scale([SCALE])
+      .center(center);
+    const path = d3.geoPath(projection);
+
+    const $gElection = $compare
+      .selectAll('g')
+      .data(data)
+      .join('g')
+      .attr('transform', (d, i) => {
+        const x = ((i % 2) * w) / 2;
+        const y = i >= 2 ? h / 2 : 0;
+        return `translate(${x}, ${y})`;
+      });
+
+    const $path = $gElection
+      .selectAll('path')
+      .data(d => d.features)
+      .join('path')
+      .attr('class', 'zone')
+      .attr('d', path)
+      .attr('fill', fill)
+      .attr('stroke-width', '1')
+      .attr('stroke', 'black');
+  }, [compareRef, CountryTopoJson, province]);
 
   return (
     <Container>
       <Title>เปรียบเทียบ 4 ปี</Title>
-      <MapContainer>
-        {CountryTopoJson.length === 0 ? (
-          <div>Loading ....</div>
-        ) : (
-          year.map(obj => {
-            return <CreateCard obj={obj} key={obj.year} />;
-          })
-        )}
-      </MapContainer>
+      <svg width="100%" height="calc(100% - 130px)">
+        <g className="compare-province" ref={compareRef}>
+          <g className="election-2550"></g>
+          <g className="election-2554"></g>
+          <g className="election-2557"></g>
+          <g className="election-2562"></g>
+        </g>
+      </svg>
       <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
         <SeeMore>ดูเพิ่มเติม</SeeMore>
       </Link>
