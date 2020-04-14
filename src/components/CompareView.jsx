@@ -163,6 +163,7 @@ const CreateMap = ({ partyData }) => {
       </div>
       <svg width={width} height={height}>
         <g id={`idMapVis-${partyData.year}`}>
+          <defs id={`map-defs`}></defs>
           <g
             id={`map-province-${partyData.year}`}
             onMouseMove={e =>
