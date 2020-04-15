@@ -116,7 +116,10 @@ const ProvinceAreaCompare = () => {
       .each(function(d) {
         const year = this.parentElement.className.baseVal;
 
-        d3.select(this).attr('fill', fillFactory($defs)(year)(province));
+        d3.select(this).attr(
+          'fill',
+          fillFactory($defs, 'compare')(year)(province)
+        );
       });
 
     const polylabelPosition = polylabelPositionFactory(projection);

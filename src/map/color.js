@@ -53,9 +53,10 @@ const partyColor = electionYear => {
 /**
  * Return fill defintions for selected year
  * @param {*} electionYear
+ * @param {str} uid make pattern id unique
  * @return {function} Fill defintion resolver. See below.
  */
-export const partyFill = electionYear => {
+export const partyFill = (electionYear, uid = '') => {
   const yearColor = {
     'election-2562': party62,
     'election-2554': party54,
@@ -76,7 +77,7 @@ export const partyFill = electionYear => {
     const partyColor = yearColor[electionYear](partyName) || 'purple';
     // Dots paint when winning party doesn't earn all seats in this zone
     if (partyWinnerCount < quotaCount) {
-      const patternId = `fill--${partyName}--${partyWinnerCount}-${quotaCount}`;
+      const patternId = `fill--${uid}--${partyName}--${partyWinnerCount}-${quotaCount}`;
       // control pattern styles
       const winningStyle = {
         '1-3': 4.67,

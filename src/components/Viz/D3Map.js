@@ -387,7 +387,7 @@ function D3Map(
   return { render, setVis, setElectionYear, setProvince, setViewport };
 }
 
-function fillFactory($defs) {
+function fillFactory($defs, uid = '') {
   return electionYear => {
     return province =>
       function({ properties: { result, province_name } }) {
@@ -399,8 +399,8 @@ function fillFactory($defs) {
         // TODO: use winner party seats and zone quota for partyFill()();
         const fillOptions =
           electionYear === 'election-2550'
-            ? partyFill(electionYear)(winner.party, 2, 3)
-            : partyFill(electionYear)(winner.party, 1, 1);
+            ? partyFill(electionYear, uid)(winner.party, 2, 3)
+            : partyFill(electionYear, uid)(winner.party, 1, 1);
         if (fillOptions.type === 'pattern') {
           $defs.call(fillOptions.createPattern);
         }
