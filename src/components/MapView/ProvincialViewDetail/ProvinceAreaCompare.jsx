@@ -66,7 +66,6 @@ const ProvinceAreaCompare = () => {
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
-
     const $compare = d3.select(compareRef.current);
 
     const data = Object.entries(geo.objects)
@@ -112,13 +111,11 @@ const ProvinceAreaCompare = () => {
       .join('path')
       .attr('class', 'zone')
       .attr('d', path)
-      .attr('s', console.log)
-      // .attr('fill', fillFactory($defs)(electionYear)(province))
       .attr('stroke-width', '1')
       .attr('stroke', 'black')
       .each(function(d) {
         const year = this.parentElement.className.baseVal;
-        console.log(year, d3.select(this));
+
         d3.select(this).attr('fill', fillFactory($defs)(year)(province));
       });
 
@@ -155,8 +152,8 @@ const ProvinceAreaCompare = () => {
     <Container>
       <Title>เปรียบเทียบ 4 ปี</Title>
       <svg width="100%" height="calc(100% - 130px)">
-        <defs id={`map-defs-compare`}></defs>
         <g className="compare-province" ref={compareRef}>
+          <defs id={`map-defs-compare`}></defs>
           <g className="election-2562"></g>
           <g className="election-2557"></g>
           <g className="election-2554"></g>

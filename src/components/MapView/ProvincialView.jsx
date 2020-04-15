@@ -10,6 +10,7 @@ import StackedBar from './StackedBar';
 
 import { NovoteDisplay } from './NationalView';
 import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx';
+import partyColor from '../../map/color';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
