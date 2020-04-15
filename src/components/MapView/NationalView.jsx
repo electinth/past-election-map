@@ -13,75 +13,50 @@ const NationalLeft = () => {
 const NationalRight = () => {
   const { setProvince, CountryTopoJson, electionYear } = useContext(MapContext);
   const [nationalProps, setNationalProps] = useState([]);
-  const is2550Year = electionYear === 'election-2550';
-  const numCandidate = nationalProps.length;
-  const winnerQuota = is2550Year
-    ? quotaData.reduce((acc, cur) => acc + cur.quota, 0)
-    : numCandidate;
-  let isNoVote;
-
+  const isNoVote = electionYear === 'election-2557';
   useEffect(() => {
     setProvince('ประเทศไทย');
   }, []);
-
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
-
     const nationalProps = CountryTopoJson.objects[electionYear].geometries.map(
       geo => geo.properties
     );
     console.log(nationalProps);
     setNationalProps(nationalProps);
   }, [CountryTopoJson, electionYear]);
-
   const numZone = nationalProps.length;
   const numCandidate = nationalProps.reduce((acc, cur) => {
     return acc + cur.quota;
   }, 0);
-
-  const byParty = _.groupBy(nationalProps, ({ result }) => {
-    if (!result) {
-      isNoVote = true;
-      return 'การเลือกตั้งเป็นโมฆะ';
+  let byParty = {};
+  nationalProps.map(cur => {
+    if (!cur.result) {
+      byParty['noresult'] = 'No vote';
+      return;
     }
-    const winner = result.reduce(function(prev, current) {
-      return prev.score > current.score ? prev : current;
-    });
-    return winner.party;
-  });
-  let byPartySorted = [];
-  if (electionYear === 'election-2550') {
-  } else {
-    const byParty = _.groupBy(nationalProps, ({ result }) => {
-      if (!result) {
-        isNoVote = true;
-        return 'การเลือกตั้งเป็นโมฆะ';
-      }
-      const winner = result.reduce(function(prev, current) {
-        return prev.score > current.score ? prev : current;
+    cur.result
+      .sort((a, b) => b.score - a.score)
+      .slice(0, cur.quota)
+      .map(person => {
+        if (!(person.party in byParty)) {
+          byParty[person.party] = [person];
+        } else {
+          byParty[person.party] = [...byParty[person.party], person];
+        }
       });
-      return winner.party;
-    });
+  });
 
-    for (let [party, winnerResult] of Object.entries(byParty)) {
-      byPartySorted.push({ party, candidate: winnerResult.length });
-    }
-    byPartySorted.sort((a, b) => b.candidate - a.candidate);
+  let byPartySorted = [];
+  for (let [party, winnerResult] of Object.entries(byParty)) {
+    byPartySorted.push({ party, candidate: winnerResult.length });
   }
-
-  // {party: "พลังประชาชน", candidate: 72}
-  // 1: {party: "ประชาธิปัตย์", candidate: 54}
-  // 2: {party: "ชาติไทย", candidate: 16}
-  // 3: {party: "เพื่อแผ่นดิน", candidate: 10}
-  // 4: {party: "รวมใจไทยชาติพัฒนา", candidate: 2}
-  // 5: {party: "มัชฌิมาธิปไตย", candidate: 2}
-  // 6: {party: "ประชาราช", candidate: 1}
+  byPartySorted.sort((a, b) => b.candidate - a.candidate);
   return (
     <div className="national-view">
       <h1 className="national-view--header">
         {numZone} เขต {numCandidate} คน
       </h1>
-
       {isNoVote ? (
         <NovoteDisplay />
       ) : (
@@ -93,7 +68,6 @@ const NationalRight = () => {
     </div>
   );
 };
-
 const Container = styled.div`
   width: 258px;
   height: 400px;
@@ -102,7 +76,6 @@ const Container = styled.div`
   margin-top: 20px;
   padding-top: 27px;
 `;
-
 const WarnText = styled.h1`
   color: #da3731;
   font-family: 'The MATTER';
@@ -111,7 +84,6 @@ const WarnText = styled.h1`
   line-height: 36px;
   text-align: center;
 `;
-
 const ExplainText = styled.p`
   color: #000000;
   font-family: 'Noto Sans Thai';
@@ -120,7 +92,6 @@ const ExplainText = styled.p`
   line-height: 2.5rem;
   text-align: left;
 `;
-
 const NovoteDisplay = () => {
   return (
     <Container>
@@ -134,5 +105,4 @@ const NovoteDisplay = () => {
     </Container>
   );
 };
-
 export { NationalLeft, NationalRight, NovoteDisplay };

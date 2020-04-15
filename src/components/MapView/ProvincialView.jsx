@@ -24,19 +24,11 @@ const ProvincialLeft = () => {
 };
 
 const ProvincialRight = () => {
-  const { province, electionYear, CountryTopoJson, quotaData } = useContext(
-    MapContext
-  );
+  const { province, electionYear, CountryTopoJson } = useContext(MapContext);
   const [provincialProps, setProvincialProps] = useState([]);
   const [partyView, setPartyView] = useState(true);
   const numDistricts = provincialProps.length;
-  const is2550Year = electionYear === 'election-2550';
-  let isNovote;
-  const winnerQuota = is2550Year
-    ? quotaData
-        .filter(val => val.province_name === province)
-        .reduce((acc, cur) => acc + cur.quota, 0)
-    : numDistricts;
+  const isNovote = electionYear === 'election-2557';
   console.log('ProvincialRight');
   console.log(electionYear);
 
@@ -49,17 +41,27 @@ const ProvincialRight = () => {
     provincialProps.sort((a, b) => a.zone_id - b.zone_id);
     setProvincialProps(provincialProps);
   }, [CountryTopoJson, province, electionYear]);
-
-  const byParty = _.groupBy(provincialProps, ({ result }) => {
-    if (!result) {
-      isNovote = true;
-      return 'การเลือกตั้งเป็นโมฆะ';
+  const numCandidate = provincialProps.reduce((acc, cur) => {
+    return acc + cur.quota;
+  }, 0);
+  let byParty = {};
+  provincialProps.map(cur => {
+    if (!cur.result) {
+      byParty['noresult'] = 'No vote';
+      return;
     }
-    const winner = result.reduce(function(prev, current) {
-      return prev.score > current.score ? prev : current;
-    });
-    return winner.party;
+    cur.result
+      .sort((a, b) => b.score - a.score)
+      .slice(0, cur.quota)
+      .map(person => {
+        if (!(person.party in byParty)) {
+          byParty[person.party] = [person];
+        } else {
+          byParty[person.party] = [...byParty[person.party], person];
+        }
+      });
   });
+
   let byPartySorted = [];
   for (let [party, winnerResult] of Object.entries(byParty)) {
     byPartySorted.push({ party, candidate: winnerResult.length });
@@ -69,7 +71,7 @@ const ProvincialRight = () => {
   return (
     <div className="provincial-view">
       <h1 className="provincial-view--header">
-        จำนวน {numDistricts} เขต {winnerQuota} คน
+        จำนวน {numDistricts} เขต {numCandidate} คน
       </h1>
       {isNovote ? (
         <NovoteDisplay />
@@ -114,19 +116,6 @@ const Winner = ({ provincialProps }) => {
 
   useEffect(() => {
     const districtWinners = provincialProps.map(({ zone_id, result }) => {
-      if (!result)
-        return {
-          zone_id,
-          winner: 'การเลือกตั้งเป็นโมฆะ',
-          summary: {
-            winner: { party: 'การเลือกตั้งเป็นโมฆะ', ratio: 0 },
-            runnerUp: {
-              party: 'การเลือกตั้งเป็นโมฆะ',
-              ratio: 0
-            },
-            rest: { party: 'อื่นๆ', ratio: 0 }
-          }
-        };
       result.sort((a, b) => b.score - a.score);
       const [winner, runnerUp] = result;
       const totalScore = result.reduce((total, cur) => (total += cur.score), 0);
@@ -141,6 +130,7 @@ const Winner = ({ provincialProps }) => {
       };
       return { zone_id, winner, summary };
     });
+    console.log(districtWinners);
     setWinners(districtWinners);
   }, [electionYear, provincialProps]);
 
