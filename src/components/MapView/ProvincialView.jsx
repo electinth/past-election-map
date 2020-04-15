@@ -24,11 +24,19 @@ const ProvincialLeft = () => {
 };
 
 const ProvincialRight = () => {
-  const { province, electionYear, CountryTopoJson } = useContext(MapContext);
+  const { province, electionYear, CountryTopoJson, quotaData } = useContext(
+    MapContext
+  );
   const [provincialProps, setProvincialProps] = useState([]);
   const [partyView, setPartyView] = useState(true);
   const numDistricts = provincialProps.length;
+  const is2550Year = electionYear === 'election-2550';
   let isNovote;
+  const winnerQuota = is2550Year
+    ? quotaData
+        .filter(val => val.province_name === province)
+        .reduce((acc, cur) => acc + cur.quota, 0)
+    : numDistricts;
   console.log('ProvincialRight');
   console.log(electionYear);
 
@@ -61,7 +69,7 @@ const ProvincialRight = () => {
   return (
     <div className="provincial-view">
       <h1 className="provincial-view--header">
-        จำนวน {numDistricts} เขต {numDistricts} คน
+        จำนวน {numDistricts} เขต {winnerQuota} คน
       </h1>
       {isNovote ? (
         <NovoteDisplay />

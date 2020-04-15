@@ -16,14 +16,11 @@ const NationalRight = () => {
   );
   const [nationalProps, setNationalProps] = useState([]);
   const is2550Year = electionYear === 'election-2550';
+  const numCandidate = nationalProps.length;
+  const winnerQuota = is2550Year
+    ? quotaData.reduce((acc, cur) => acc + cur.quota, 0)
+    : numCandidate;
   let isNoVote;
-
-  let quotaPerson;
-  if (is2550Year) {
-    quotaPerson = quotaData.reduce((acc, cur) => {
-      return acc + cur.quota;
-    }, 0);
-  }
   console.log('national view');
   console.log(electionYear);
 
@@ -41,26 +38,39 @@ const NationalRight = () => {
     setNationalProps(nationalProps);
   }, [CountryTopoJson, electionYear]);
 
-  const numCandidate = nationalProps.length;
-  const byParty = _.groupBy(nationalProps, ({ result }) => {
-    if (!result) {
-      isNoVote = true;
-      return 'การเลือกตั้งเป็นโมฆะ';
-    }
-    const winner = result.reduce(function(prev, current) {
-      return prev.score > current.score ? prev : current;
-    });
-    return winner.party;
-  });
+  console.log(quotaData);
+
   let byPartySorted = [];
-  for (let [party, winnerResult] of Object.entries(byParty)) {
-    byPartySorted.push({ party, candidate: winnerResult.length });
+  if (electionYear === 'election-2550') {
+  } else {
+    const byParty = _.groupBy(nationalProps, ({ result }) => {
+      if (!result) {
+        isNoVote = true;
+        return 'การเลือกตั้งเป็นโมฆะ';
+      }
+      const winner = result.reduce(function(prev, current) {
+        return prev.score > current.score ? prev : current;
+      });
+      return winner.party;
+    });
+
+    for (let [party, winnerResult] of Object.entries(byParty)) {
+      byPartySorted.push({ party, candidate: winnerResult.length });
+    }
+    byPartySorted.sort((a, b) => b.candidate - a.candidate);
   }
-  byPartySorted.sort((a, b) => b.candidate - a.candidate);
+
+  // {party: "พลังประชาชน", candidate: 72}
+  // 1: {party: "ประชาธิปัตย์", candidate: 54}
+  // 2: {party: "ชาติไทย", candidate: 16}
+  // 3: {party: "เพื่อแผ่นดิน", candidate: 10}
+  // 4: {party: "รวมใจไทยชาติพัฒนา", candidate: 2}
+  // 5: {party: "มัชฌิมาธิปไตย", candidate: 2}
+  // 6: {party: "ประชาราช", candidate: 1}
   return (
     <div className="national-view">
       <h1 className="national-view--header">
-        {numCandidate} เขต {is2550Year ? quotaPerson : numCandidate} คน
+        {numCandidate} เขต {winnerQuota} คน
       </h1>
 
       {isNoVote ? (

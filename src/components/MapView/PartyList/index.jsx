@@ -15,7 +15,7 @@ const PartyList = ({ byPartySorted }) => {
               backgroundColor: partyColor(electionYear)(party)
             }}
           ></span>
-          {party} <span className="party-list--count">{candidate} เขต</span>
+          {party} <span className="party-list--count">{candidate} คน</span>
         </li>
       ))}
     </ul>
