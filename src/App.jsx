@@ -7,6 +7,7 @@ import CompareView from './components/CompareView';
 import MapView from './components/MapView';
 import MapContext from './map/context';
 // import CountryTopoJson from './data/thailand-election.topo.json';
+import quotaData from './data/2550_zone_quota.json';
 import useFetch from './map/useFetch';
 import AboutUs from './components/AboutUs';
 
@@ -23,7 +24,8 @@ const App = () => {
           setElectionYear,
           province,
           setProvince,
-          CountryTopoJson
+          CountryTopoJson,
+          quotaData
         }}
       >
         <BrowserRouter>

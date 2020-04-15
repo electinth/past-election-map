@@ -5,26 +5,32 @@
   left: 0;
   min-width: 100rem;
   // width: 100%;
-  height: 5rem;
+  height: 6rem;
   padding: 0 3rem;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  font-size: 2.25rem;
+  font-size: 2.4rem;
 
   background-color: var(--color-nav);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
   color: var(--color-white);
 
   &--logo {
     color: var(--color-white);
     text-decoration: none;
   }
+  &--logo-image {
+    display: block;
+    height: 2.9rem;
+  }
 
   &--header {
     // white-space: nowrap;
     // overflow: scroll;
+    font-size: 3.6rem;
 
     &__link {
       text-decoration: none;

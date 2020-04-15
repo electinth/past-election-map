@@ -5,10 +5,19 @@ import D3Map from './D3Map';
 import MapContext from '../../map/context';
 import { withRouter } from 'react-router-dom';
 
-const w = innerWidth,
+let w = innerWidth,
   h = innerHeight;
 
 let map;
+
+function getElementWidth(selector) {
+  const selection = d3.select(selector);
+  if (selection.node()) {
+    return +selection.style('width').slice(0, -2);
+  }
+  return 0;
+}
+
 const Map = props => {
   const visRef = useRef();
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
@@ -21,11 +30,17 @@ const Map = props => {
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
-    console.log('First useEffect');
+
+    const barLeft = getElementWidth('.bar__left');
+    const barRight = getElementWidth('.bar__right');
+
+    // center map in viewport excluding left & right bars
     map = D3Map(
       CountryTopoJson,
-      w,
+      w - barLeft - barRight,
       h,
+      barLeft + (w - barLeft - barRight) / 2,
+      h / 2,
       props.history.push,
       electionYear,
       province,
@@ -35,6 +50,36 @@ const Map = props => {
     map.setVis($gVis);
     map.render(electionYear);
   }, [CountryTopoJson]);
+
+  // Auto re-layout map when window resizing
+  useEffect(() => {
+    let timeoutId = null;
+    const resizeListener = () => {
+      console.log('resize');
+      // throttle event
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (!map) return;
+
+        (w = innerWidth), (h = innerHeight);
+        const barLeft = getElementWidth('.bar__left');
+        const barRight = getElementWidth('.bar__right');
+
+        map.setViewport(
+          w - barLeft - barRight,
+          h,
+          barLeft + (w - barLeft - barRight) / 2,
+          h / 2
+        );
+      }, 150);
+    };
+    window.addEventListener('resize', resizeListener);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      window.removeEventListener('resize', resizeListener);
+    };
+  }, []);
 
   useEffect(() => {
     if (!map) return;
@@ -55,6 +100,7 @@ const Map = props => {
       </div>
       <svg width={w} height={h}>
         <g id="vis" ref={visRef}>
+          <defs id={`map-defs`}></defs>
           <g
             id="map"
             onMouseMove={e =>
