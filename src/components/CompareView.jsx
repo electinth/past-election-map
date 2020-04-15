@@ -283,7 +283,6 @@ const PersonCard = ({ data = {} }) => {
 
   const percentageFormat = d3.format('.2%');
 
-  console.log(partyData);
   return (
     <PersonCardContainer>
       <DistricExplain>

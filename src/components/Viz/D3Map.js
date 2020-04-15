@@ -8,6 +8,8 @@ function D3Map(
   CountryTopoJson,
   w,
   h,
+  cw, // horizontal center
+  ch, // vertical center
   push,
   initElectionYear,
   initProvince,
@@ -45,6 +47,14 @@ function D3Map(
     $defs = $vis.select(`#map-defs`);
     $zoneLabel = $vis.select('#zone-label');
   };
+
+  const setViewport = (_w, _h, _cw, _ch) => {
+    w = _w || w;
+    h = _h || h;
+    cw = _cw || cw;
+    ch = _ch || ch;
+    setProvince(province);
+  }
 
   const setElectionYear = year => {
     electionYear = year;
@@ -104,6 +114,12 @@ function D3Map(
   const setProvince = newProvince => {
     province = newProvince;
     labelJoin();
+
+    $zone
+      .transition()
+      .delay(500)
+      .attr('fill', fillSolid); // pre map-panning
+
     if (province !== 'ประเทศไทย') {
       const selection = {
         type: 'FeatureCollection',
@@ -114,38 +130,54 @@ function D3Map(
           )
       };
 
+      const bw = Math.max(w - 80, 200);
+      const bh = Math.max(h - 80, 200);
       const b = path.bounds(selection);
       const zoomScale =
-        0.875 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h);
+        0.875 / Math.max((b[1][0] - b[0][0]) / bw, (b[1][1] - b[0][1]) / bh);
       const centroid = path.centroid(selection);
       const translate = [
-        zoomScale * -centroid[0] + w / 2,
-        zoomScale * -centroid[1] + h / 2
+        zoomScale * -centroid[0] + cw,
+        zoomScale * -centroid[1] + ch
       ];
 
       let transform = `translate(${translate[0]}, ${translate[1]}) scale(${zoomScale})`;
 
+      // Province zoom view
       $vis
         .transition()
         .duration(750)
         .attr('transform', transform)
-        .on("end", updatePatternTransform);
+        .on("end", () => {
+          $zone.attr('fill', fill); // post map-panning
+          updatePatternTransform.call($vis.node(), 'zoom');
+        });
     } else {
+      // Thailand view
       $vis
         .transition()
         .duration(750)
-        .attr('transform', '');
+        .attr('transform', '')
+        .on("end", () => {
+          $zone.attr('fill', fill); // post map-panning
+          updatePatternTransform.call($vis.node());
+        });
     }
-
-    $zone
-      .transition()
-      .delay(500)
-      .attr('fill', fill);
   };
 
   function getTransform(transform) {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.setAttributeNS(null, "transform", transform);
+    if (!transform) {
+      return {
+        translateX: 0,
+        translateY: 0,
+        rotate: 0,
+        skewX: 0,
+        scaleX: 1,
+        scaleY: 1
+      };
+    }
     const matrix = g.transform.baseVal.consolidate().matrix;
     let {a, b, c, d, e, f} = matrix;
     let scaleX, scaleY, skewX;
@@ -165,13 +197,14 @@ function D3Map(
 
   // Adapt pattern transform to $vis's to make
   // the pattern looks as if it's fixed size
-  function updatePatternTransform() {
+  function updatePatternTransform(size = 'normal') {
     const $$vis = this;
     const t = d3.select($$vis).attr('transform')
     const tt = getTransform(t);
+    // adjust scale for zoom view (thailand view)
+    const as = size === 'normal' ? 4 : 1;
     const tInverse = [
-      // `translate(${-tt.translateX},${-tt.translateY})`,
-      `scale(${1/tt.scaleX},${1/tt.scaleY})`,
+      `scale(${1/tt.scaleX/as},${1/tt.scaleY/as})`,
     ].join(',');
     $defs.selectAll('pattern')
       .attr('patternTransform', tInverse);
@@ -192,6 +225,23 @@ function D3Map(
     }
     return province === province_name || province === 'ประเทศไทย'
       ? fillOptions.fill || 'purple' // = color not found
+      : 'gainsboro';
+  }
+
+  // when select a province, we separate fill rendering into 2 steps:
+  // (1.) pre map-panning and (2.) post map-panning.
+  // The reason is that if we do it in one step, rendering glitch is seen
+  // when we inverse transform pattern.
+  function fillSolid({ properties }) {
+    const  { result, province_name } = properties;
+    if (!result) return 'white';
+    const winner = result.reduce(function(prev, current) {
+      return prev.score > current.score ? prev : current;
+    });
+    // load fill definitions
+    const fillColor = partyColor(electionYear)(winner.party);
+    return province === province_name || province === 'ประเทศไทย'
+      ? fillColor || 'purple' // = color not found
       : 'gainsboro';
   }
 
@@ -221,6 +271,8 @@ function D3Map(
       )
       .on('mouseenter', setTooltipContent)
       .attr('fill', fill);
+
+    updatePatternTransform.call($vis.node(), province !== 'ประเทศไทย' ? 'zoom' : 'normal');
   }
 
   function addLabel($label, delay = true) {
@@ -278,7 +330,8 @@ function D3Map(
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '1.2')
-      .attr('stroke', 'black');
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke');
   }
 
   function updateBorderProvince($province) {
@@ -288,7 +341,8 @@ function D3Map(
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '0.6')
-      .attr('stroke', 'black');
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke');
   }
 
   function updateBorderZone($zone) {
@@ -297,7 +351,8 @@ function D3Map(
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '0.1')
-      .attr('stroke', 'black');
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke');
   }
 
   const render = year => {
@@ -359,7 +414,7 @@ function D3Map(
     $border_zone.call(updateBorderZone);
   };
 
-  return { render, setVis, setElectionYear, setProvince };
+  return { render, setVis, setElectionYear, setProvince, setViewport };
 }
 
 export default D3Map;

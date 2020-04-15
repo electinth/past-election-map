@@ -115,6 +115,7 @@ const CreateCard = ({ obj }) => {
       <MapCard>
         <svg width={width} height={height}>
           <g id={`idMapVis-${obj.electionYear}`}>
+            <defs id={`map-defs`}></defs>
             <g id={`map-province-${obj.electionYear}`}></g>
             <g
               id={`zone-label-province-${obj.electionYear}`}

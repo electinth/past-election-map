@@ -265,7 +265,8 @@ function DrawMap(
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '1.2')
-      .attr('stroke', 'black');
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke');
   }
 
   function updateBorderProvince($province) {
@@ -275,7 +276,8 @@ function DrawMap(
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '0.6')
-      .attr('stroke', 'black');
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke');
   }
 
   function updateBorderZone($zone) {
@@ -284,7 +286,8 @@ function DrawMap(
       .attr('d', path)
       .attr('fill', 'transparent')
       .attr('stroke-width', '0.6')
-      .attr('stroke', 'black');
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke');
   }
 
   const render = year => {
