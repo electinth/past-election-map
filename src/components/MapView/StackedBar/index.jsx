@@ -5,7 +5,7 @@ import './styles.scss';
 import MapContext from '../../../map/context';
 import partyColor from '../../../map/color';
 
-const StackedBar = ({ data: { winner, runnerUp, rest } }) => {
+const StackedBar = ({ data, zoneQuota }) => {
   /*
   data = {
     winner: { party: 'เพื่อไทย', ratio: 60 },
@@ -16,30 +16,45 @@ const StackedBar = ({ data: { winner, runnerUp, rest } }) => {
   const { electionYear } = useContext(MapContext);
   const color = partyColor(electionYear);
   const percentageFormat = d3.format('.2%');
+  const totalScore = data.reduce((total, cur) => (total += cur.score), 0);
+  let summary = [];
+  for (let index = 0; index < zoneQuota; index++) {
+    summary.push({
+      party: data[index].party,
+      ratio: data[index].score / totalScore
+    });
+  }
+  summary.push({
+    party: 'อื่นๆ',
+    ratio: 1 - summary.reduce((acc, cur) => acc + cur.ratio, 0)
+  });
   return (
-    <div className="stacked-bar">
-      <div
-        className="stacked-bar--bar stacked-bar--bar__winner"
-        style={{
-          backgroundColor: color(winner.party),
-          width: `${winner.ratio * 100}%`
-        }}
-      >
-        <span className="stacked-bar--bar__tooltiptext">
-          <span
-            className="stacked-bar--bar__tooltipcolor"
-            style={{
-              display: 'inline-block',
-              backgroundColor: partyColor(electionYear)(winner.party),
-              width: '1rem',
-              height: '1rem',
-              marginRight: '.5rem'
-            }}
-          ></span>
-          {winner.party} {percentageFormat(winner.ratio)}
-        </span>
-      </div>
-      <div
+    <ul className="stacked-bar">
+      {summary.map(winner => (
+        <li
+          className="stacked-bar--bar "
+          style={{
+            backgroundColor: color(winner.party),
+            width: `${winner.ratio * 100}%`
+          }}
+          key={winner.party + winner.ratio}
+        >
+          <span className="stacked-bar--bar__tooltiptext">
+            <span
+              className="stacked-bar--bar__tooltipcolor"
+              style={{
+                display: 'inline-block',
+                backgroundColor: partyColor(electionYear)(winner.party),
+                width: '1rem',
+                height: '1rem',
+                marginRight: '.5rem'
+              }}
+            ></span>
+            {winner.party} {percentageFormat(winner.ratio)}
+          </span>
+        </li>
+      ))}
+      {/* <div
         className="stacked-bar--bar stacked-bar--bar__runner-up"
         style={{
           backgroundColor: 'lightgrey',
@@ -80,8 +95,8 @@ const StackedBar = ({ data: { winner, runnerUp, rest } }) => {
           ></span>
           {rest.party} {percentageFormat(rest.ratio)}
         </span>
-      </div>
-    </div>
+      </div> */}
+    </ul>
   );
 };
 
