@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
@@ -128,7 +129,7 @@ function DrawMap(
         .transition()
         .duration(750)
         .attr('transform', transform)
-        .on("end", updatePatternTransform);
+        .on('end', updatePatternTransform);
     }
 
     $zone
@@ -138,20 +139,21 @@ function DrawMap(
   };
 
   function getTransform(transform) {
-    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g.setAttributeNS(null, "transform", transform);
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttributeNS(null, 'transform', transform);
     const matrix = g.transform.baseVal.consolidate().matrix;
-    let {a, b, c, d, e, f} = matrix;
+    let { a, b, c, d, e, f } = matrix;
     let scaleX, scaleY, skewX;
-    if (scaleX = Math.sqrt(a * a + b * b)) a /= scaleX, b /= scaleX;
-    if (skewX = a * c + b * d) c -= a * skewX, d -= b * skewX;
-    if (scaleY = Math.sqrt(c * c + d * d)) c /= scaleY, d /= scaleY, skewX /= scaleY;
-    if (a * d < b * c) a = -a, b = -b, skewX = -skewX, scaleX = -scaleX;
+    if ((scaleX = Math.sqrt(a * a + b * b))) (a /= scaleX), (b /= scaleX);
+    if ((skewX = a * c + b * d)) (c -= a * skewX), (d -= b * skewX);
+    if ((scaleY = Math.sqrt(c * c + d * d)))
+      (c /= scaleY), (d /= scaleY), (skewX /= scaleY);
+    if (a * d < b * c) (a = -a), (b = -b), (skewX = -skewX), (scaleX = -scaleX);
     return {
       translateX: e,
       translateY: f,
-      rotate: Math.atan2(b, a) * 180 / Math.PI,
-      skewX: Math.atan(skewX) * 180 / Math.PI,
+      rotate: (Math.atan2(b, a) * 180) / Math.PI,
+      skewX: (Math.atan(skewX) * 180) / Math.PI,
       scaleX: scaleX,
       scaleY: scaleY
     };
@@ -161,26 +163,31 @@ function DrawMap(
   // the pattern looks as if it's fixed size
   function updatePatternTransform() {
     const $$vis = this;
-    const t = d3.select($$vis).attr('transform')
+    const t = d3.select($$vis).attr('transform');
     const tt = getTransform(t);
     const tInverse = [
       // `translate(${-tt.translateX},${-tt.translateY})`,
-      `scale(${1/tt.scaleX},${1/tt.scaleY})`,
+      `scale(${1 / tt.scaleX},${1 / tt.scaleY})`
     ].join(',');
-    $defs.selectAll('pattern')
-      .attr('patternTransform', tInverse);
+    $defs.selectAll('pattern').attr('patternTransform', tInverse);
   }
 
-  function fill({ properties: { result, province_name } }) {
-    if (!result) return 'white';
-    const winner = result.reduce(function(prev, current) {
-      return prev.score > current.score ? prev : current;
-    });
+  function fill({ properties }) {
+    const { result: candidates, province_name, quota } = properties;
+    if (!candidates) return 'white';
+
+    const sortedCandidates = _.orderBy(candidates, ['score'], ['desc']);
+    const winners = sortedCandidates.slice(0, quota);
+    const winnerParty = winners[0].party;
+    const totalWinnerParty = winners.filter(w => w.party === winnerParty)
+      .length;
+
     // load fill definitions
-    // TODO: use winner party seats and zone quota for partyFill()();
-    const fillOptions = electionYear === 'election-2550'
-      ? partyFill(electionYear)(winner.party, 2, 3)
-      : partyFill(electionYear)(winner.party, 1, 1);
+    const fillOptions = partyFill(electionYear)(
+      winnerParty,
+      totalWinnerParty,
+      quota
+    );
     if (fillOptions.type === 'pattern') {
       $defs.call(fillOptions.createPattern);
     }
