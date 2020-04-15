@@ -9,7 +9,8 @@ const party62 = partyname => {
     พลังประชารัฐ: '#1f6fff',
     อนาคตใหม่: '#ef7824',
     รวมพลังประชาชาติไทย: '#303d8e',
-    ประชาชาติ: '#a35f26'
+    ประชาชาติ: '#a35f26',
+    อื่นๆ: 'black'
   };
   return colors[partyname];
 };
@@ -22,7 +23,8 @@ const party54 = partyname => {
     ภูมิใจไทย: '#209fa0',
     ชาติพัฒนาเพื่อแผ่นดิน: '#bf8331',
     พลังชล: '#51daef',
-    มาตุภูมิ: '#4a8d30'
+    มาตุภูมิ: '#4a8d30',
+    อื่นๆ: 'black'
   };
   return colors[partyname];
 };
@@ -35,7 +37,8 @@ const party50 = partyname => {
     มัชฌิมาธิปไตย: '#187778',
     รวมใจไทยชาติพัฒนา: '#ffbf67',
     เพื่อแผ่นดิน: '#0d8bb1',
-    ประชาราช: '#c6920c'
+    ประชาราช: '#c6920c',
+    อื่นๆ: 'black'
   };
   return colors[partyname];
 };
@@ -101,20 +104,20 @@ export const partyFill = electionYear => {
           // Base fill
           $pattern
             .append('rect')
-              .attr('x', 0)
-              .attr('y', 0)
-              .attr('width', 10)
-              .attr('height', 10)
-              .style('stroke', 'none')
-              .style('fill', partyColor);
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 10)
+            .attr('height', 10)
+            .style('stroke', 'none')
+            .style('fill', partyColor);
           // Paint polka dots
           $pattern
             .append('circle')
-              .attr('cx', 5)
-              .attr('cy', 5)
-              .attr('r', winningStyle[`${partyWinnerCount}-${quotaCount}`])
-              .style('stroke', 'none')
-              .style('fill', '#ffffff');
+            .attr('cx', 5)
+            .attr('cy', 5)
+            .attr('r', winningStyle[`${partyWinnerCount}-${quotaCount}`])
+            .style('stroke', 'none')
+            .style('fill', '#ffffff');
         }
       };
     }
@@ -122,7 +125,7 @@ export const partyFill = electionYear => {
       type: 'color',
       fill: partyColor
     };
-  }
+  };
 };
 
 export { party62, party54, party50 };

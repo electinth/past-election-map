@@ -3,12 +3,17 @@
   height: 0.5rem;
   width: 100%;
   align-items: center;
+  list-style-type: none;
   margin-top: 0.5rem;
 
   &--bar {
     height: 100%;
 
     position: relative;
+
+    &:not(:last-child) {
+      margin-right: 1px;
+    }
 
     &:hover &__tooltiptext {
       visibility: visible;
