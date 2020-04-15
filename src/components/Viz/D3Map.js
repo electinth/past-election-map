@@ -148,7 +148,7 @@ function D3Map(
         .duration(750)
         .attr('transform', transform)
         .on('end', () => {
-          $zone.attr('fill', fill); // post map-panning
+          $zone.attr('fill', fillFactory($defs)(electionYear)(province)); // post map-panning
           updatePatternTransform.call($vis.node(), 'zoom');
         });
     } else {
@@ -158,7 +158,7 @@ function D3Map(
         .duration(750)
         .attr('transform', '')
         .on('end', () => {
-          $zone.attr('fill', fill); // post map-panning
+          $zone.attr('fill', fillFactory($defs)(electionYear)(province)); // post map-panning
           updatePatternTransform.call($vis.node());
         });
     }
@@ -209,25 +209,6 @@ function D3Map(
     $defs.selectAll('pattern').attr('patternTransform', tInverse);
   }
 
-  function fill({ properties: { result, province_name } }) {
-    if (!result) return 'white';
-    const winner = result.reduce(function(prev, current) {
-      return prev.score > current.score ? prev : current;
-    });
-    // load fill definitions
-    // TODO: use winner party seats and zone quota for partyFill()();
-    const fillOptions =
-      electionYear === 'election-2550'
-        ? partyFill(electionYear)(winner.party, 2, 3)
-        : partyFill(electionYear)(winner.party, 1, 1);
-    if (fillOptions.type === 'pattern') {
-      $defs.call(fillOptions.createPattern);
-    }
-    return province === province_name || province === 'ประเทศไทย'
-      ? fillOptions.fill || 'purple' // = color not found
-      : 'gainsboro';
-  }
-
   // when select a province, we separate fill rendering into 2 steps:
   // (1.) pre map-panning and (2.) post map-panning.
   // The reason is that if we do it in one step, rendering glitch is seen
@@ -270,7 +251,7 @@ function D3Map(
           : push(`/${electionYear}/${province_name}`)
       )
       .on('mouseenter', setTooltipContent)
-      .attr('fill', fill);
+      .attr('fill', fillFactory($defs)(electionYear)(province));
 
     updatePatternTransform.call(
       $vis.node(),
@@ -406,6 +387,30 @@ function D3Map(
   return { render, setVis, setElectionYear, setProvince, setViewport };
 }
 
+function fillFactory($defs) {
+  return electionYear => {
+    return province =>
+      function({ properties: { result, province_name } }) {
+        if (!result) return 'white';
+        const winner = result.reduce(function(prev, current) {
+          return prev.score > current.score ? prev : current;
+        });
+        // load fill definitions
+        // TODO: use winner party seats and zone quota for partyFill()();
+        const fillOptions =
+          electionYear === 'election-2550'
+            ? partyFill(electionYear)(winner.party, 2, 3)
+            : partyFill(electionYear)(winner.party, 1, 1);
+        if (fillOptions.type === 'pattern') {
+          $defs.call(fillOptions.createPattern);
+        }
+        return province === province_name || province === 'ประเทศไทย'
+          ? fillOptions.fill || 'purple' // = color not found
+          : 'gainsboro';
+      };
+  };
+}
+
 function polylabelPositionFactory(projection) {
   return axis => {
     return ({ properties: { labelLat: lat, labelLon: lon } }) => {
@@ -425,5 +430,5 @@ function fontSizeFactory(path) {
   };
 }
 
-export { polylabelPositionFactory, fontSizeFactory };
+export { fillFactory, polylabelPositionFactory, fontSizeFactory };
 export default D3Map;
