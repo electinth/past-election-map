@@ -11,21 +11,13 @@ const NationalLeft = () => {
   return <></>;
 };
 const NationalRight = () => {
-  const { setProvince, CountryTopoJson, electionYear, quotaData } = useContext(
+  const { setProvince, CountryTopoJson, electionYear } = useContext(
     MapContext
   );
   const [nationalProps, setNationalProps] = useState([]);
   const is2550Year = electionYear === 'election-2550';
   let isNoVote;
 
-  let quotaPerson;
-  if (is2550Year) {
-    quotaPerson = quotaData.reduce((acc, cur) => {
-      return acc + cur.quota;
-    }, 0);
-  }
-  console.log('national view');
-  console.log(electionYear);
 
   useEffect(() => {
     setProvince('ประเทศไทย');
@@ -41,7 +33,11 @@ const NationalRight = () => {
     setNationalProps(nationalProps);
   }, [CountryTopoJson, electionYear]);
 
-  const numCandidate = nationalProps.length;
+  const numZone = nationalProps.length;
+  const numCandidate = nationalProps.reduce((acc, cur) => {
+    return acc + cur.quota;
+  }, 0);
+
   const byParty = _.groupBy(nationalProps, ({ result }) => {
     if (!result) {
       isNoVote = true;
@@ -60,7 +56,7 @@ const NationalRight = () => {
   return (
     <div className="national-view">
       <h1 className="national-view--header">
-        {numCandidate} เขต {is2550Year ? quotaPerson : numCandidate} คน
+        {numZone} เขต {numCandidate} คน
       </h1>
 
       {isNoVote ? (

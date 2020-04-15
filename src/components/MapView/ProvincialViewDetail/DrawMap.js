@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
@@ -171,16 +172,17 @@ function DrawMap(
       .attr('patternTransform', tInverse);
   }
 
-  function fill({ properties: { result, province_name } }) {
-    if (!result) return 'white';
-    const winner = result.reduce(function(prev, current) {
-      return prev.score > current.score ? prev : current;
-    });
+  function fill({ properties }) {
+    const { result: candidates, province_name, quota } = properties;
+    if (!candidates) return 'white';
+
+    const sortedCandidates = _.orderBy(candidates, ['score'], ['desc']);
+    const winners = sortedCandidates.slice(0, quota);
+    const winnerParty = winners[0].party;
+    const totalWinnerParty = winners.filter(w => w.party === winnerParty).length;
+
     // load fill definitions
-    // TODO: use winner party seats and zone quota for partyFill()();
-    const fillOptions = electionYear === 'election-2550'
-      ? partyFill(electionYear)(winner.party, 2, 3)
-      : partyFill(electionYear)(winner.party, 1, 1);
+    const fillOptions = partyFill(electionYear)(winnerParty, totalWinnerParty, quota);
     if (fillOptions.type === 'pattern') {
       $defs.call(fillOptions.createPattern);
     }
