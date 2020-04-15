@@ -7,7 +7,11 @@ import * as tps from 'topojson-simplify';
 
 import partyColor from '../../../map/color';
 import MapContext from '../../../map/context';
-import { polylabelPositionFactory, fontSizeFactory } from '../../Viz/D3Map';
+import {
+  fillFactory,
+  polylabelPositionFactory,
+  fontSizeFactory
+} from '../../Viz/D3Map';
 
 const Container = styled.div`
   height: 520px;
@@ -45,9 +49,9 @@ const SeeMore = styled.button`
   }
 `;
 
-let geo;
+let geo, $defs;
 const ProvinceAreaCompare = () => {
-  const { province, electionYear, CountryTopoJson } = useContext(MapContext);
+  const { province, CountryTopoJson } = useContext(MapContext);
 
   const compareRef = useRef(null);
 
@@ -57,6 +61,7 @@ const ProvinceAreaCompare = () => {
     const simplifyMinWeight = 1e-5;
     const CountryTopo = tps.presimplify(CountryTopoJson);
     geo = tps.simplify(CountryTopo, simplifyMinWeight);
+    $defs = d3.select(`#map-defs-compare`);
   }, [CountryTopoJson]);
 
   useEffect(() => {
@@ -77,15 +82,6 @@ const ProvinceAreaCompare = () => {
       })
       .map(d => topojson.feature(geo, d));
 
-    function fill({ properties: { result, province_name } }) {
-      if (!result) return 'white';
-      const winner = result.reduce(function(prev, current) {
-        return prev.score > current.score ? prev : current;
-      });
-      return province === province_name || province === 'ประเทศไทย'
-        ? partyColor(electionYear)(winner.party) || 'purple' // = color not found
-        : 'gainsboro';
-    }
     const w = $compare.node().parentElement.parentElement.offsetWidth,
       h = 0.75 * $compare.node().parentElement.parentElement.offsetHeight;
     const b = d3.geoBounds(data[0]);
@@ -116,9 +112,15 @@ const ProvinceAreaCompare = () => {
       .join('path')
       .attr('class', 'zone')
       .attr('d', path)
-      .attr('fill', fill)
+      .attr('s', console.log)
+      // .attr('fill', fillFactory($defs)(electionYear)(province))
       .attr('stroke-width', '1')
-      .attr('stroke', 'black');
+      .attr('stroke', 'black')
+      .each(function(d) {
+        const year = this.parentElement.className.baseVal;
+        console.log(year, d3.select(this));
+        d3.select(this).attr('fill', fillFactory($defs)(year)(province));
+      });
 
     const polylabelPosition = polylabelPositionFactory(projection);
     const fontSize = fontSizeFactory(path);
@@ -153,11 +155,12 @@ const ProvinceAreaCompare = () => {
     <Container>
       <Title>เปรียบเทียบ 4 ปี</Title>
       <svg width="100%" height="calc(100% - 130px)">
+        <defs id={`map-defs-compare`}></defs>
         <g className="compare-province" ref={compareRef}>
-          <g className="election-2550"></g>
-          <g className="election-2554"></g>
-          <g className="election-2557"></g>
           <g className="election-2562"></g>
+          <g className="election-2557"></g>
+          <g className="election-2554"></g>
+          <g className="election-2550"></g>
         </g>
       </svg>
       <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
