@@ -19,12 +19,13 @@ const useFetch = () => {
         geometries.forEach(({ properties }) => {
           const { province_id, zone_id } = properties;
           if (year === 'election-2550') {
-            properties.quota = _.get(_.find(quotaData, { province_id, zone_id }), 'quota') || -1;
+            properties.quota =
+              _.get(_.find(quotaData, { province_id, zone_id }), 'quota') || -1;
           } else {
             properties.quota = 1;
           }
         });
-      })
+      });
       setResponse([topoData]);
     };
 

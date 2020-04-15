@@ -55,7 +55,7 @@ function D3Map(
     cw = _cw || cw;
     ch = _ch || ch;
     setProvince(province);
-  }
+  };
 
   const setElectionYear = year => {
     electionYear = year;
@@ -149,7 +149,7 @@ function D3Map(
         .transition()
         .duration(750)
         .attr('transform', transform)
-        .on("end", () => {
+        .on('end', () => {
           $zone.attr('fill', fill); // post map-panning
           updatePatternTransform.call($vis.node(), 'zoom');
         });
@@ -159,7 +159,7 @@ function D3Map(
         .transition()
         .duration(750)
         .attr('transform', '')
-        .on("end", () => {
+        .on('end', () => {
           $zone.attr('fill', fill); // post map-panning
           updatePatternTransform.call($vis.node());
         });
@@ -167,8 +167,8 @@ function D3Map(
   };
 
   function getTransform(transform) {
-    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g.setAttributeNS(null, "transform", transform);
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttributeNS(null, 'transform', transform);
     if (!transform) {
       return {
         translateX: 0,
@@ -180,17 +180,18 @@ function D3Map(
       };
     }
     const matrix = g.transform.baseVal.consolidate().matrix;
-    let {a, b, c, d, e, f} = matrix;
+    let { a, b, c, d, e, f } = matrix;
     let scaleX, scaleY, skewX;
-    if (scaleX = Math.sqrt(a * a + b * b)) a /= scaleX, b /= scaleX;
-    if (skewX = a * c + b * d) c -= a * skewX, d -= b * skewX;
-    if (scaleY = Math.sqrt(c * c + d * d)) c /= scaleY, d /= scaleY, skewX /= scaleY;
-    if (a * d < b * c) a = -a, b = -b, skewX = -skewX, scaleX = -scaleX;
+    if ((scaleX = Math.sqrt(a * a + b * b))) (a /= scaleX), (b /= scaleX);
+    if ((skewX = a * c + b * d)) (c -= a * skewX), (d -= b * skewX);
+    if ((scaleY = Math.sqrt(c * c + d * d)))
+      (c /= scaleY), (d /= scaleY), (skewX /= scaleY);
+    if (a * d < b * c) (a = -a), (b = -b), (skewX = -skewX), (scaleX = -scaleX);
     return {
       translateX: e,
       translateY: f,
-      rotate: Math.atan2(b, a) * 180 / Math.PI,
-      skewX: Math.atan(skewX) * 180 / Math.PI,
+      rotate: (Math.atan2(b, a) * 180) / Math.PI,
+      skewX: (Math.atan(skewX) * 180) / Math.PI,
       scaleX: scaleX,
       scaleY: scaleY
     };
@@ -200,15 +201,14 @@ function D3Map(
   // the pattern looks as if it's fixed size
   function updatePatternTransform(size = 'normal') {
     const $$vis = this;
-    const t = d3.select($$vis).attr('transform')
+    const t = d3.select($$vis).attr('transform');
     const tt = getTransform(t);
     // adjust scale for zoom view (thailand view)
     const as = size === 'normal' ? 4 : 1;
     const tInverse = [
-      `scale(${1/tt.scaleX/as},${1/tt.scaleY/as})`,
+      `scale(${1 / tt.scaleX / as},${1 / tt.scaleY / as})`
     ].join(',');
-    $defs.selectAll('pattern')
-      .attr('patternTransform', tInverse);
+    $defs.selectAll('pattern').attr('patternTransform', tInverse);
   }
 
   function fill({ properties }) {
@@ -218,10 +218,15 @@ function D3Map(
     const sortedCandidates = _.orderBy(candidates, ['score'], ['desc']);
     const winners = sortedCandidates.slice(0, quota);
     const winnerParty = winners[0].party;
-    const totalWinnerParty = winners.filter(w => w.party === winnerParty).length;
+    const totalWinnerParty = winners.filter(w => w.party === winnerParty)
+      .length;
 
     // load fill definitions
-    const fillOptions = partyFill(electionYear)(winnerParty, totalWinnerParty, quota);
+    const fillOptions = partyFill(electionYear)(
+      winnerParty,
+      totalWinnerParty,
+      quota
+    );
     if (fillOptions.type === 'pattern') {
       $defs.call(fillOptions.createPattern);
     }
@@ -235,7 +240,7 @@ function D3Map(
   // The reason is that if we do it in one step, rendering glitch is seen
   // when we inverse transform pattern.
   function fillSolid({ properties }) {
-    const  { result, province_name } = properties;
+    const { result, province_name } = properties;
     if (!result) return 'white';
     const winner = result.reduce(function(prev, current) {
       return prev.score > current.score ? prev : current;
@@ -274,7 +279,10 @@ function D3Map(
       .on('mouseenter', setTooltipContent)
       .attr('fill', fill);
 
-    updatePatternTransform.call($vis.node(), province !== 'ประเทศไทย' ? 'zoom' : 'normal');
+    updatePatternTransform.call(
+      $vis.node(),
+      province !== 'ประเทศไทย' ? 'zoom' : 'normal'
+    );
   }
 
   function addLabel($label, delay = true) {
