@@ -55,7 +55,6 @@ const Map = props => {
   useEffect(() => {
     let timeoutId = null;
     const resizeListener = () => {
-      console.log('resize');
       // throttle event
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
@@ -89,7 +88,6 @@ const Map = props => {
 
   useEffect(() => {
     if (!map) return;
-    console.log('Province Changed');
     map.setProvince(province);
   }, [province, CountryTopoJson]);
 

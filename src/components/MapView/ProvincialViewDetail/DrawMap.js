@@ -34,7 +34,7 @@ function DrawMap(
 
   const path = d3.geoPath(projection);
 
-  const simplifyMinWeight = 1e-5;
+  const simplifyMinWeight = 5e-4;
   const CountryTopo = tps.presimplify(CountryTopoJson);
 
   const geo = tps.simplify(CountryTopo, simplifyMinWeight);
@@ -166,9 +166,9 @@ function DrawMap(
     const t = d3.select($$vis).attr('transform');
     const tt = getTransform(t);
     const tInverse = [
-      // `translate(${-tt.translateX},${-tt.translateY})`,
-      `scale(${1 / tt.scaleX},${1 / tt.scaleY})`
-    ].join(',');
+      `scale(${1 / tt.scaleX},${1 / tt.scaleY})`,
+      `rotate(45)`
+    ].join('');
     $defs.selectAll('pattern').attr('patternTransform', tInverse);
   }
 
@@ -206,7 +206,6 @@ function DrawMap(
   }
 
   function drawMap($zone) {
-    console.log('drawMap');
     $zone = $zone
       .attr(
         'class',
@@ -232,6 +231,9 @@ function DrawMap(
         return size / 9;
       })
       .attr('fill', 'var(--color-white)')
+      .attr('stroke-width', 0.2)
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke')
       .attr('opacity', 0)
       .transition()
       .delay(delay ? 500 : 0)

@@ -14,7 +14,7 @@ import {
 } from '../../Viz/D3Map';
 
 const Container = styled.div`
-  height: 520px;
+  height: 450px;
   width: 350px;
   box-sizing: border-box;
   background-color: #ffffff;
@@ -58,7 +58,7 @@ const ProvinceAreaCompare = () => {
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
 
-    const simplifyMinWeight = 1e-5;
+    const simplifyMinWeight = 5e-4;
     const CountryTopo = tps.presimplify(CountryTopoJson);
     geo = tps.simplify(CountryTopo, simplifyMinWeight);
     $defs = d3.select(`#map-defs-compare`);
@@ -111,8 +111,9 @@ const ProvinceAreaCompare = () => {
       .join('path')
       .attr('class', 'zone')
       .attr('d', path)
-      .attr('stroke-width', '1')
+      .attr('stroke-width', '0.6')
       .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke')
       .each(function(d) {
         const year = this.parentElement.className.baseVal;
 
@@ -136,6 +137,9 @@ const ProvinceAreaCompare = () => {
         return size / 5;
       })
       .attr('fill', 'var(--color-white)')
+      .attr('stroke-width', 0.2)
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke')
       .raise();
 
     const $label = $gElection
@@ -154,15 +158,17 @@ const ProvinceAreaCompare = () => {
   return (
     <Container>
       <Title>เปรียบเทียบ 4 ปี</Title>
-      <svg width="100%" height="calc(100% - 130px)">
-        <g className="compare-province" ref={compareRef}>
-          <defs id={`map-defs-compare`}></defs>
-          <g className="election-2562"></g>
-          <g className="election-2557"></g>
-          <g className="election-2554"></g>
-          <g className="election-2550"></g>
-        </g>
-      </svg>
+      <div>
+        <svg width="100%" height="300">
+          <g className="compare-province" ref={compareRef}>
+            <defs id={`map-defs-compare`}></defs>
+            <g className="election-2562"></g>
+            <g className="election-2557"></g>
+            <g className="election-2554"></g>
+            <g className="election-2550"></g>
+          </g>
+        </svg>
+      </div>
       <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
         <SeeMore>ดูเพิ่มเติม</SeeMore>
       </Link>

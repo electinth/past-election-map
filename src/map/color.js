@@ -82,10 +82,10 @@ export const partyFill = (electionYear, uid = '') => {
     if (partyWinnerCount < quotaCount) {
       const patternId = `fill--${uid}--${partyName}--${partyWinnerCount}-${quotaCount}`;
       // control pattern styles
-      const winningStyle = {
-        '1-3': 4.67,
-        '1-2': 4,
-        '2-3': 3.33
+      const zoneStyle = {
+        '1-3': { rect: '#ffffff', circle: 'party', r: 3.0 },
+        '1-2': { rect: 'party', circle: '#ffffff', r: 3.6 },
+        '2-3': { rect: 'party', circle: '#ffffff', r: 2.0 }
       };
       return {
         id: patternId,
@@ -93,6 +93,7 @@ export const partyFill = (electionYear, uid = '') => {
         fill: `url(#${patternId})`,
         createPattern: $defs => {
           $defs.selectAll(`#${patternId}`).remove();
+          const style = zoneStyle[`${partyWinnerCount}-${quotaCount}`];
           const $pattern = $defs.append('pattern');
           // Create pattern
           $pattern
@@ -110,15 +111,15 @@ export const partyFill = (electionYear, uid = '') => {
             .attr('width', 10)
             .attr('height', 10)
             .style('stroke', 'none')
-            .style('fill', partyColor);
+            .style('fill', style.rect === 'party' ? partyColor : style.rect);
           // Paint polka dots
           $pattern
             .append('circle')
             .attr('cx', 5)
             .attr('cy', 5)
-            .attr('r', winningStyle[`${partyWinnerCount}-${quotaCount}`])
+            .attr('r', style.r)
             .style('stroke', 'none')
-            .style('fill', '#ffffff');
+            .style('fill', style.circle === 'party' ? partyColor : style.circle);
         }
       };
     }

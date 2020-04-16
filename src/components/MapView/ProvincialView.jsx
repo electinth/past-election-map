@@ -17,7 +17,6 @@ const ProvincialLeft = () => {
   const { setProvince } = useContext(MapContext);
 
   useEffect(() => {
-    console.log('paramProvince', paramProvince);
     setProvince(paramProvince);
   }, [paramProvince]);
   return <ProvinceAreaCompare />;
@@ -29,8 +28,6 @@ const ProvincialRight = () => {
   const [partyView, setPartyView] = useState(true);
   const numDistricts = provincialProps.length;
   const isNovote = electionYear === 'election-2557';
-  console.log('ProvincialRight');
-  console.log(electionYear);
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
@@ -112,8 +109,6 @@ const ProvincialRight = () => {
 const Winner = ({ provincialProps }) => {
   const { electionYear } = useContext(MapContext);
   const [winners, setWinners] = useState([]);
-  console.log('propdelay', electionYear, provincialProps);
-  console.log(provincialProps);
 
   useEffect(() => {
     const districtWinners = provincialProps.map(

@@ -22,7 +22,6 @@ const NationalRight = () => {
     const nationalProps = CountryTopoJson.objects[electionYear].geometries.map(
       geo => geo.properties
     );
-    console.log(nationalProps);
     setNationalProps(nationalProps);
   }, [CountryTopoJson, electionYear]);
   const numZone = nationalProps.length;

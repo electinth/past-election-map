@@ -205,8 +205,9 @@ function D3Map(
     // adjust scale for zoom view (thailand view)
     const as = size === 'normal' ? 4 : 1;
     const tInverse = [
-      `scale(${1 / tt.scaleX / as},${1 / tt.scaleY / as})`
-    ].join(',');
+      `scale(${1 / tt.scaleX / as},${1 / tt.scaleY / as})`,
+      `rotate(45)`
+    ].join('');
     $defs.selectAll('pattern').attr('patternTransform', tInverse);
   }
 
@@ -277,6 +278,9 @@ function D3Map(
         return size / 9;
       })
       .attr('fill', 'var(--color-white)')
+      .attr('stroke-width', 0.2)
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke')
       .attr('opacity', 0)
       .transition()
       .delay(delay ? 500 : 0)
@@ -393,7 +397,10 @@ function fillFactory($defs, uid = '') {
     return province =>
       function({ properties }) {
         const { result: candidates, province_name, quota } = properties;
-        if (!candidates) return 'white';
+        if (!candidates) {
+          return province === province_name || province === 'ประเทศไทย'
+            ? 'white' : 'gainsboro';
+        }
 
         const sortedCandidates = _.orderBy(candidates, ['score'], ['desc']);
         const winners = sortedCandidates.slice(0, quota);

@@ -4,7 +4,6 @@ import partyColor from '../../../map/color';
 import MapContext from '../../../map/context';
 
 const Overview = ({ waffleData }) => {
-  console.log('waffleData', waffleData);
   const { electionYear } = useContext(MapContext);
   return (
     <div className="overview">
