@@ -11,6 +11,7 @@ import StackedBar from './StackedBar';
 import { NovoteDisplay } from './NationalView';
 import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx';
 import partyColor from '../../map/color';
+import peopleLogo from '../../images/people-white.svg';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();
@@ -85,6 +86,7 @@ const ProvincialRight = () => {
             <button
               className={`provincial-view--toggle-button ${!partyView &&
                 'active'}`}
+              style={{ verticalAlign: 'center' }}
               onClick={() => setPartyView(false)}
             >
               ดูผู้ชนะ
@@ -99,7 +101,7 @@ const ProvincialRight = () => {
           ) : (
             <Winner provincialProps={provincialProps} />
           )}
-          <Overview waffleData={byPartySorted} />
+          <Overview waffleData={byPartySorted} view={'provinceView'} />
         </>
       )}
     </div>
@@ -154,8 +156,10 @@ const Winner = ({ provincialProps }) => {
                   backgroundColor: partyColor(electionYear)(winner.party)
                 }}
               ></span>
-              {winner.title} {winner.first_name} {winner.last_name},{' '}
-              {winner.party}, {percentageFormat(winner.ratio)}
+              {winner.first_name} {winner.last_name}, พรรค{winner.party},{' '}
+              <span style={{ fontFamily: 'Noto Sans Medium' }}>
+                {percentageFormat(winner.ratio)}
+              </span>
             </div>
           ))}
           <StackedBar data={result} zoneQuota={quota} />

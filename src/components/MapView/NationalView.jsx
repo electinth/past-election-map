@@ -60,8 +60,8 @@ const NationalRight = () => {
         <NovoteDisplay view={'nationView'} />
       ) : (
         <div>
-          <PartyList byPartySorted={byPartySorted} />
-          <Overview waffleData={byPartySorted} />
+          <PartyList byPartySorted={byPartySorted} view={'nationView'} />
+          <Overview waffleData={byPartySorted} view={'nationView'} />
         </div>
       )}
     </div>

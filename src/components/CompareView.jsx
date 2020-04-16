@@ -14,7 +14,7 @@ const Container = styled.div`
   position: fixed;
   display: block;
   width: 100%;
-  height: 100%;
+  overflow-y: auto;
   top: 50px;
   left: 0;
   right: 0;
@@ -31,7 +31,7 @@ const Header = styled.div`
 
 const ViewParty = styled.div`
   width: 100%;
-  height: 800px;
+  height: 100%;
   margin: 0 auto;
   margin-top: 28px;
   color: black;
@@ -77,6 +77,7 @@ const PersonCardContainer = styled.div`
   margin: 0 auto;
   padding: 10px;
   position: relative;
+  margin-bottom: 20px;
 `;
 
 const DistricExplain = styled.h2`
@@ -101,6 +102,7 @@ const Quota = styled.h1`
 const LineHr = styled.hr`
   margin-top: 21px;
   border: 0.5px solid #000000;
+  width: 170px;
 `;
 
 const UlPartyList = styled.ul`
@@ -118,8 +120,15 @@ const LiPartyList = styled.li`
 
 const UlPersonList = styled.ul`
   list-style: none;
-  height: 230px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0rem 0;
+  margin-bottom: 10px;
+  padding: 0rem 1rem 1rem 0;
+  text-align: left;
+
+  margin-left: -15rem;
+  padding-left: 15rem;
 `;
 
 const LiPersonList = styled.li`
@@ -276,9 +285,6 @@ const PartyCard = ({ data = {} }) => {
 };
 
 const PersonCard = ({ data = {} }) => {
-  console.log('personCard');
-  console.log(data.data);
-  console.log(data.year);
   const isNovote = data.year === 'election-2557';
   const numCandidateByZone = data.data.reduce((acc, val) => acc + val.quota, 0);
   const districtWinners = data.data.map(({ zone_id, result, quota }) => {
@@ -307,7 +313,8 @@ const PersonCard = ({ data = {} }) => {
       {isNovote ? (
         <NovoteDisplay view={'compareView'} />
       ) : (
-        <ul className="provincial-view--list">
+        // <ul className="provincial-view--list">
+        <UlPersonList>
           {districtWinners.map(
             ({ zone_id, winnerResultArray, result, quota }) => (
               <li
@@ -332,15 +339,17 @@ const PersonCard = ({ data = {} }) => {
                         backgroundColor: partyColor(data.year)(winner.party)
                       }}
                     ></span>
-                    {winner.title} {winner.first_name} {winner.last_name},{' '}
-                    {winner.party}, {percentageFormat(winner.ratio)}
+                    {winner.first_name} {winner.last_name}, {winner.party},{' '}
+                    <span style={{ fontFamily: 'Noto Sans Medium' }}>
+                      {percentageFormat(winner.ratio)}
+                    </span>
                   </div>
                 ))}
                 <StackedBar data={result} zoneQuota={quota} />
               </li>
             )
           )}
-        </ul>
+        </UlPersonList>
       )}
     </PersonCardContainer>
   );

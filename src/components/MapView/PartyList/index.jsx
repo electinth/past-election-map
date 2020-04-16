@@ -3,10 +3,12 @@ import MapContext from '../../../map/context';
 import partyColor from '../../../map/color';
 import './styles.scss';
 
-const PartyList = ({ byPartySorted }) => {
+const PartyList = ({ byPartySorted, view }) => {
   const { electionYear } = useContext(MapContext);
+  const borderTop =
+    view === 'nationView' ? { borderTop: '1px solid black' } : {};
   return (
-    <ul className="party-list--list">
+    <ul className="party-list--list" style={borderTop}>
       {byPartySorted.map(({ party, candidate }) => (
         <li key={party} className="party-list--list-item">
           <span
@@ -15,7 +17,7 @@ const PartyList = ({ byPartySorted }) => {
               backgroundColor: partyColor(electionYear)(party)
             }}
           ></span>
-          {party} <span className="party-list--count">{candidate} คน</span>
+          พรรค{party} <span className="party-list--count">{candidate} คน</span>
         </li>
       ))}
     </ul>

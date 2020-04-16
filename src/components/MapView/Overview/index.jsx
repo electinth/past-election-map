@@ -3,8 +3,10 @@ import './styles.scss';
 import partyColor from '../../../map/color';
 import MapContext from '../../../map/context';
 
-const Overview = ({ waffleData }) => {
+const Overview = ({ waffleData, view }) => {
   const { electionYear } = useContext(MapContext);
+  const width = view === 'nationView' ? 8 : 24;
+  const height = view === 'nationView' ? 8 : 24;
   return (
     <div className="overview">
       <h2 className="overview--header">Overview</h2>
@@ -15,7 +17,11 @@ const Overview = ({ waffleData }) => {
             <div
               key={party + i}
               className="waffle--waffle"
-              style={{ backgroundColor: partyColor(electionYear)(party) }}
+              style={{
+                backgroundColor: partyColor(electionYear)(party),
+                width: width,
+                height: height
+              }}
             >
               <span className="waffle--waffle__tooltiptext">
                 <span
