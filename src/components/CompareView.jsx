@@ -6,9 +6,10 @@ import * as d3 from 'd3';
 import styled from 'styled-components';
 import MapContext from '../map/context';
 import partyColor from '../map/color';
-// import DrawMap from './MapView/ProvincialViewDetail/DrawMap';
+
 import StackedBar from './MapView/StackedBar';
 import { NovoteDisplay } from './MapView/NationalView';
+import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
 
 const Container = styled.div`
   position: fixed;
@@ -130,73 +131,30 @@ const LiPersonList = styled.li`
   border-bottom: 1px solid black;
 `;
 
-const CreateMap = ({ partyData }) => {
-  let map;
-  const width = 220,
-    height = 240;
-  const [tooltips, setTooltips] = useState('');
-  const [tooltipsStyles, setTooltipStyles] = useState({
-    left: null,
-    top: null,
-    opacity: 0
-  });
+let maps;
+const YearList = ({ view = 'party', party = [], person = [] }) => {
+  const {
+    province,
+    CountryTopoJson,
+    electionYear,
+    setElectionYear
+  } = useContext(MapContext);
 
   useEffect(() => {
-    map = DrawMap(
-      partyData.provinceTopoJson,
-      width,
-      height,
-      partyData.year,
-      partyData.province,
-      setTooltips
-    );
-    const $gVis = d3.select(`#idMapVis-${partyData.year}`);
-    map.setVis($gVis);
-    map.render(partyData.year);
-    map.setProvince(partyData.province);
-  }, []);
+    if (CountryTopoJson.length === 0) return;
 
-  return (
-    <div>
-      <div className="tooltips" style={tooltipsStyles}>
-        {tooltips}
-      </div>
-      <svg width={width} height={height}>
-        <g id={`idMapVis-${partyData.year}`}>
-          <defs id={`map-defs`}></defs>
-          <g
-            id={`map-province-${partyData.year}`}
-            onMouseMove={e =>
-              setTooltipStyles({
-                top: e.clientY - 100,
-                left: e.clientX,
-                transform: 'translateX(-50%)',
-                opacity: 1
-              })
-            }
-            onMouseLeave={() =>
-              setTooltipStyles({
-                top: null,
-                left: null,
-                opacity: 0
-              })
-            }
-          ></g>
-          <g
-            id={`border-province-${partyData.year}`}
-            style={{ pointerEvents: 'none' }}
-          ></g>
-          <g
-            id={`zone-label-province-${partyData.year}`}
-            style={{ pointerEvents: 'none' }}
-          ></g>
-        </g>
-      </svg>
-    </div>
-  );
-};
+    const $compare = d3.selectAll('svg[id*=compare-election-]');
+    const $defs = d3.select(`#map-defs-compare`);
+    maps = D3Compare(CountryTopoJson, $compare, $defs);
+  }, [CountryTopoJson]);
 
-const YearList = ({ view = 'party', party = [], person = [] }) => {
+  useEffect(() => {
+    if (CountryTopoJson.length === 0) return;
+
+    console.log(maps, province);
+    maps.handleProvinceChange(province);
+  }, [CountryTopoJson, province]);
+
   const year = [2562, 2557, 2554, 2550];
 
   return (
@@ -207,7 +165,13 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
             <Year key={year}>
               <CardList>
                 <YearTilte>ปี {year}</YearTilte>
-                <CreateMap partyData={party[index]} />
+                {console.log(year)}
+                <svg
+                  id={`compare-election-${year}`}
+                  data-election-year={`election-${year}`}
+                  width="100%"
+                  height="100%"
+                ></svg>
                 {view === 'party' ? (
                   <PartyCard data={party[index]} />
                 ) : (
@@ -348,8 +312,12 @@ const PersonCard = ({ data = {} }) => {
 
 const CompareView = () => {
   const [partyView, setPartyView] = useState(true);
-  const { CountryTopoJson } = useContext(MapContext);
+  const { CountryTopoJson, setProvince } = useContext(MapContext);
   const { province: paramProvince } = useParams();
+
+  useEffect(() => {
+    setProvince(paramProvince);
+  }, [paramProvince]);
   let partyData, personData;
 
   if (CountryTopoJson.length !== 0) {
