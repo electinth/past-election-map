@@ -19,8 +19,12 @@ const useFetch = () => {
         geometries.forEach(({ properties }) => {
           const { province_id, zone_id } = properties;
           if (year === 'election-2550') {
-            properties.quota =
-              _.get(_.find(quotaData, { province_id, zone_id }), 'quota') || -1;
+            // procince_id from topo json might be a string
+            const zone = _.find(quotaData, {
+              province_id: +province_id,
+              zone_id: +zone_id
+            });
+            properties.quota = _.get(zone, 'quota') || -1;
           } else {
             properties.quota = 1;
           }

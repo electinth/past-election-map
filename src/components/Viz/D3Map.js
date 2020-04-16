@@ -402,11 +402,6 @@ function fillFactory($defs, uid = '') {
           .length;
 
         // load fill definitions
-        console.log(
-          province_name,
-          winnerParty,
-          totalWinnerParty,
-          quota)
         const fillOptions = partyFill(electionYear)(
           winnerParty,
           totalWinnerParty,
