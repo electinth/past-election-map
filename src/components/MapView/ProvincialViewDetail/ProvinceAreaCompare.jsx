@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useParams, withRouter } from 'react-router-dom';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
@@ -69,17 +69,26 @@ const CompareMap = styled.div`
 let geo, $defs;
 let maps;
 const ProvinceAreaCompare = () => {
-  const { province, CountryTopoJson, electionYear } = useContext(MapContext);
+  const { year: paramYear } = useParams();
+  useEffect(() => {
+    if (!paramYear) return;
+    setElectionYear(`election-${paramYear}`);
+  }, [paramYear]);
 
-  const compareRef = useRef(null);
+  const {
+    province,
+    CountryTopoJson,
+    electionYear,
+    setElectionYear
+  } = useContext(MapContext);
 
   useEffect(() => {
-    if (CountryTopoJson.length === 0 && compareRef !== null) return;
+    if (CountryTopoJson.length === 0) return;
 
     const $compare = d3.selectAll('svg[id*=compare-election-]');
     $defs = d3.select(`#map-defs-compare`);
     maps = D3Compare(CountryTopoJson, $compare, $defs);
-  }, [CountryTopoJson, compareRef]);
+  }, [CountryTopoJson]);
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
@@ -172,4 +181,4 @@ const ProvinceAreaCompare = () => {
   );
 };
 
-export default ProvinceAreaCompare;
+export default withRouter(ProvinceAreaCompare);
