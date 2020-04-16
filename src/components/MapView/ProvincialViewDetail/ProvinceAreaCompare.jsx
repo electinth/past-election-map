@@ -45,6 +45,20 @@ const SeeMore = styled.button`
   }
 `;
 
+const CompareContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0 20px;
+`;
+
+const CompareMap = styled.div`
+  flex: 0 0 45%;
+  height: 200px;
+  border: 1px solid var(--color-black);
+  border-radius: 10px;
+  margin: 2.5%;
+`;
+
 let geo, $defs;
 let maps;
 const ProvinceAreaCompare = () => {
@@ -55,8 +69,9 @@ const ProvinceAreaCompare = () => {
   useEffect(() => {
     if (CountryTopoJson.length === 0 && compareRef !== null) return;
 
+    const $compare = d3.selectAll('svg[id*=compare-election-]');
     $defs = d3.select(`#map-defs-compare`);
-    maps = D3Compare(CountryTopoJson, compareRef, $defs);
+    maps = D3Compare(CountryTopoJson, $compare, $defs);
   }, [CountryTopoJson, compareRef]);
 
   useEffect(() => {
@@ -67,9 +82,57 @@ const ProvinceAreaCompare = () => {
 
   return (
     <Container>
-      <Title>เปรียบเทียบ 4 ปี</Title>
-      <div style={{ marginTop: '3rem' }}>
-        <svg width="100%" height="400">
+      <Title>ผลเลือกตั้งย้อนหลัง</Title>
+      <CompareContainer>
+        <CompareMap>
+          <svg
+            id="compare-election-2562"
+            data-election-year="election-2562"
+            width="100%"
+            height="100%"
+          >
+            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+              2562
+            </text>
+          </svg>
+        </CompareMap>
+        <CompareMap>
+          <svg
+            id="compare-election-2557"
+            data-election-year="election-2557"
+            width="100%"
+            height="100%"
+          >
+            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+              2557
+            </text>
+          </svg>
+        </CompareMap>
+        <CompareMap>
+          <svg
+            id="compare-election-2554"
+            data-election-year="election-2554"
+            width="100%"
+            height="100%"
+          >
+            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+              2554
+            </text>
+          </svg>
+        </CompareMap>
+        <CompareMap>
+          <svg
+            id="compare-election-2550"
+            data-election-year="election-2550"
+            width="100%"
+            height="100%"
+          >
+            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+              2550
+            </text>
+          </svg>
+        </CompareMap>
+        {/* <svg width="100%" height="400">
           <g className="compare-province" ref={compareRef}>
             <defs id={`map-defs-compare`}></defs>
             <g className="election-2562">
@@ -93,10 +156,10 @@ const ProvinceAreaCompare = () => {
               </text>
             </g>
           </g>
-        </svg>
-      </div>
+        </svg> */}
+      </CompareContainer>
       <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
-        <SeeMore>ดูเพิ่มเติม</SeeMore>
+        <SeeMore>ดูเปรียบเทียบ 4 ปี</SeeMore>
       </Link>
     </Container>
   );

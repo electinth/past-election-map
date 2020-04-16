@@ -11,14 +11,12 @@ import {
 
 import partyColor, { partyFill } from '../../../map/color';
 
-function D3Compare(CountryTopoJson, compareRef, $defs) {
+function D3Compare(CountryTopoJson, $compare, $defs) {
   const simplifyMinWeight = 5e-4;
   const CountryTopo = tps.presimplify(CountryTopoJson);
   const geo = tps.simplify(CountryTopo, simplifyMinWeight);
 
   const handleProvinceChange = province => {
-    const $compare = d3.select(compareRef.current);
-
     const data = Object.entries(geo.objects)
       .map(([_, g]) => {
         const { type, geometries } = g;
@@ -32,31 +30,27 @@ function D3Compare(CountryTopoJson, compareRef, $defs) {
       })
       .map(d => topojson.feature(geo, d));
 
-    const w = $compare.node().parentElement.parentElement.offsetWidth,
-      h = 0.75 * $compare.node().parentElement.parentElement.offsetHeight;
+    const marginTop = 50,
+      marginBottom = 20,
+      marginH = 25;
+    const w = 130 - marginH * 2,
+      h = 200 - marginTop - marginBottom;
     const b = d3.geoBounds(data[0]);
     const longest = Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]);
-
+    const lonCenter = (b[0][0] + b[1][0]) / 2;
+    const latCenter = (b[0][1] + b[1][1]) / 2;
     const SCALE = 6500 / longest;
-    const center = d3.geoCentroid(data[0]);
     const projection = d3
       .geoMercator()
-      .translate([w / 4, h / 4 + 30])
+      .translate([marginH + w / 2, marginTop + h / 2])
       .scale([SCALE])
-      .center(center);
+      .center([lonCenter, latCenter]);
     const path = d3.geoPath(projection);
 
-    const $gElection = $compare
-      .selectAll('g')
-      .data(data)
-      .join('g')
-      .attr('transform', (d, i) => {
-        const x = ((i % 2) * w) / 2;
-        const y = i >= 2 ? h / 2 + 50 : 0;
-        return `translate(${x}, ${y})`;
-      });
-
     console.log($compare);
+    const $gElection = $compare.data(data).join('svg');
+
+    window.d3 = d3;
 
     const $path = $gElection
       .selectAll('path')
@@ -68,7 +62,7 @@ function D3Compare(CountryTopoJson, compareRef, $defs) {
       .attr('stroke', 'black')
       .attr('vector-effect', 'non-scaling-stroke')
       .each(function(d) {
-        const year = this.parentElement.className.baseVal;
+        const year = this.parentElement.getAttribute('data-election-year');
 
         d3.select(this).attr(
           'fill',
