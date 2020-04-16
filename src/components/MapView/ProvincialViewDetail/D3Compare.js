@@ -9,9 +9,7 @@ import {
   fontSizeFactory
 } from '../../Viz/D3Map';
 
-import partyColor, { partyFill } from '../../../map/color';
-
-function D3Compare(CountryTopoJson, $compare, $defs) {
+function D3Compare(CountryTopoJson, $compare, $defs, dimension, initScale) {
   const simplifyMinWeight = 5e-4;
   const CountryTopo = tps.presimplify(CountryTopoJson);
   const geo = tps.simplify(CountryTopo, simplifyMinWeight);
@@ -30,25 +28,21 @@ function D3Compare(CountryTopoJson, $compare, $defs) {
       })
       .map(d => topojson.feature(geo, d));
 
-    const marginTop = 50,
-      marginBottom = 20,
-      marginH = 25;
-    const w = 130 - marginH * 2,
-      h = 200 - marginTop - marginBottom;
     const b = d3.geoBounds(data[0]);
     const longest = Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]);
     const lonCenter = (b[0][0] + b[1][0]) / 2;
     const latCenter = (b[0][1] + b[1][1]) / 2;
-    const SCALE = 6500 / longest;
+    const SCALE = initScale / longest;
     const projection = d3
       .geoMercator()
-      .translate([marginH + w / 2, marginTop + h / 2])
+      .translate([
+        dimension.marginLeft + dimension.w / 2,
+        dimension.marginTop + dimension.h / 2
+      ])
       .scale([SCALE])
       .center([lonCenter, latCenter]);
     const path = d3.geoPath(projection);
     const $gElection = $compare.data(data).join('svg');
-
-    window.d3 = d3;
 
     const $path = $gElection
       .selectAll('path')
@@ -62,6 +56,7 @@ function D3Compare(CountryTopoJson, $compare, $defs) {
       .each(function(d) {
         const year = this.parentElement.getAttribute('data-election-year');
 
+        console.log($defs, year);
         d3.select(this).attr(
           'fill',
           fillFactory($defs, 'compare')(year)(province)
@@ -71,7 +66,7 @@ function D3Compare(CountryTopoJson, $compare, $defs) {
     const polylabelPosition = polylabelPositionFactory(projection);
     const fontSize = fontSizeFactory(path);
     const $circle = $gElection
-      .selectAll('circle')
+      .selectAll('circle.label-bg')
       .data(d => d.features)
       .join('circle')
       .attr('class', 'label-bg')

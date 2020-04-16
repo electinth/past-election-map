@@ -4,7 +4,6 @@ import { Route, Switch } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
 import MapContext from '../../map/context';
-import ElectionYear from './ElectionYear';
 
 const MapView = () => {
   const { province } = useContext(MapContext);

@@ -4,11 +4,11 @@ import MapContext from '../../map/context';
 import _ from 'lodash';
 import Overview from './Overview';
 import PartyList from './PartyList';
-
+import ElectionYear from './ElectionYear';
 import novoteImage from '../../images/NoVote.svg';
 
 const NationalLeft = () => {
-  return <></>;
+  return <ElectionYear />;
 };
 const NationalRight = () => {
   const { setProvince, CountryTopoJson, electionYear } = useContext(MapContext);
