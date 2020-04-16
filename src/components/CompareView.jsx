@@ -15,13 +15,14 @@ const Container = styled.div`
   position: fixed;
   display: block;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   top: 50px;
   left: 0;
   right: 0;
   bottom: 0;
   background-color: #f0f0f0;
   z-index: 2;
+  overflow: scroll;
 `;
 
 const Header = styled.div`
@@ -117,20 +118,6 @@ const LiPartyList = styled.li`
   font-family: 'Noto Sans';
 `;
 
-const UlPersonList = styled.ul`
-  list-style: none;
-  height: 230px;
-  overflow-y: scroll;
-`;
-
-const LiPersonList = styled.li`
-  text-align: left;
-  font-size: 1rem;
-  font-weight: normal;
-  padding: 1rem 0;
-  border-bottom: 1px solid black;
-`;
-
 let maps;
 
 const marginTop = 0,
@@ -138,7 +125,7 @@ const marginTop = 0,
   marginLeft = 25,
   marginRight = 25;
 const w = 300 - marginLeft - marginRight,
-  h = 430 - marginTop - marginBottom;
+  h = 300 - marginTop - marginBottom;
 const dimension = {
   w,
   h,
@@ -148,12 +135,7 @@ const dimension = {
   marginRight
 };
 const YearList = ({ view = 'party', party = [], person = [] }) => {
-  const {
-    province,
-    CountryTopoJson,
-    electionYear,
-    setElectionYear
-  } = useContext(MapContext);
+  const { province, CountryTopoJson } = useContext(MapContext);
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
@@ -166,7 +148,6 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
 
-    console.log(maps, province);
     maps.handleProvinceChange(province);
   }, [CountryTopoJson, province]);
 
