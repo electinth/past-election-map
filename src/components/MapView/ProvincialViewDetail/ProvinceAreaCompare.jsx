@@ -176,31 +176,6 @@ const ProvinceAreaCompare = props => {
             </text>
           </svg>
         </CompareMap>
-        {/* <svg width="100%" height="400">
-          <g className="compare-province" ref={compareRef}>
-            <defs id={`map-defs-compare`}></defs>
-            <g className="election-2562">
-              <text fontSize="32px" textAnchor="middle" x="25%" y="25px">
-                2562
-              </text>
-            </g>
-            <g className="election-2557">
-              <text fontSize="32px" textAnchor="middle" x="25%" y="25px">
-                2557
-              </text>
-            </g>
-            <g className="election-2554">
-              <text fontSize="32px" textAnchor="middle" x="25%" y="25px">
-                2554
-              </text>
-            </g>
-            <g className="election-2550">
-              <text fontSize="32px" textAnchor="middle" x="25%" y="25px">
-                2550
-              </text>
-            </g>
-          </g>
-        </svg> */}
       </CompareContainer>
       <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
         <SeeMore>ดูเปรียบเทียบ 4 ปี</SeeMore>
