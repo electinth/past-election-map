@@ -14,7 +14,7 @@ import {
 } from '../../Viz/D3Map';
 
 const Container = styled.div`
-  height: 450px;
+  height: 550px;
   width: 350px;
   box-sizing: border-box;
   background-color: #ffffff;
@@ -90,7 +90,7 @@ const ProvinceAreaCompare = () => {
     const center = d3.geoCentroid(data[0]);
     const projection = d3
       .geoMercator()
-      .translate([w / 4, h / 4])
+      .translate([w / 4, h / 4 + 30])
       .scale([SCALE])
       .center(center);
     const path = d3.geoPath(projection);
@@ -101,7 +101,7 @@ const ProvinceAreaCompare = () => {
       .join('g')
       .attr('transform', (d, i) => {
         const x = ((i % 2) * w) / 2;
-        const y = i >= 2 ? h / 2 : 0;
+        const y = i >= 2 ? h / 2 + 50 : 0;
         return `translate(${x}, ${y})`;
       });
 
@@ -143,7 +143,7 @@ const ProvinceAreaCompare = () => {
       .raise();
 
     const $label = $gElection
-      .selectAll('text')
+      .selectAll('text.zone-label')
       .data(d => d.features)
       .join('text')
       .attr('class', 'zone-label')
@@ -158,14 +158,30 @@ const ProvinceAreaCompare = () => {
   return (
     <Container>
       <Title>เปรียบเทียบ 4 ปี</Title>
-      <div>
-        <svg width="100%" height="300">
+      <div style={{ marginTop: '3rem' }}>
+        <svg width="100%" height="400">
           <g className="compare-province" ref={compareRef}>
             <defs id={`map-defs-compare`}></defs>
-            <g className="election-2562"></g>
-            <g className="election-2557"></g>
-            <g className="election-2554"></g>
-            <g className="election-2550"></g>
+            <g className="election-2562">
+              <text fontSize="32px" textAnchor="middle" x="25%" y="25px">
+                2562
+              </text>
+            </g>
+            <g className="election-2557">
+              <text fontSize="32px" textAnchor="middle" x="25%" y="25px">
+                2557
+              </text>
+            </g>
+            <g className="election-2554">
+              <text fontSize="32px" textAnchor="middle" x="25%" y="25px">
+                2554
+              </text>
+            </g>
+            <g className="election-2550">
+              <text fontSize="32px" textAnchor="middle" x="25%" y="25px">
+                2550
+              </text>
+            </g>
           </g>
         </svg>
       </div>
