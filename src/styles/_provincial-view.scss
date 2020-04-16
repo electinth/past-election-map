@@ -75,6 +75,7 @@
       font-family: inherit;
       font-size: 1.8rem;
       z-index: 10;
+      box-sizing: border-box;
 
       &.active {
         color: var(--color-black);

@@ -9,13 +9,14 @@ import partyColor from '../map/color';
 
 import StackedBar from './MapView/StackedBar';
 import { NovoteDisplay } from './MapView/NationalView';
+import { SeePartyMenu, SeeWinnerMenu } from './MapView/ProvincialView';
 import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
 
 const Container = styled.div`
   position: fixed;
   display: block;
   width: 100%;
-  min-height: 100%;
+  // min-height: 100%;
   top: 50px;
   left: 0;
   right: 0;
@@ -28,12 +29,13 @@ const Container = styled.div`
 const Header = styled.div`
   margin: 0 auto;
   margin-top: 26px;
-  width: 364px;
+  width: 378px;
+  height: 50px;
 `;
 
 const ViewParty = styled.div`
   width: 100%;
-  height: 100%;
+  // height: 800px;
   margin: 0 auto;
   margin-top: 28px;
   color: black;
@@ -47,11 +49,14 @@ const PartyUL = styled.ul`
 
 const Year = styled.li`
   margin: 0 auto;
+  padding-bottom: 10px;
+  &:not(:last-child) {
+  }
 `;
 
 const CardList = styled.div`
   width: 295px;
-  height: 700px;
+  // height: 700px;
   text-align: center;
 `;
 
@@ -79,7 +84,6 @@ const PersonCardContainer = styled.div`
   margin: 0 auto;
   padding: 10px;
   position: relative;
-  margin-bottom: 20px;
 `;
 
 const DistricExplain = styled.h2`
@@ -104,7 +108,6 @@ const Quota = styled.h1`
 const LineHr = styled.hr`
   margin-top: 21px;
   border: 0.5px solid #000000;
-  width: 170px;
 `;
 
 const UlPartyList = styled.ul`
@@ -243,6 +246,9 @@ const PartyCard = ({ data = {} }) => {
 };
 
 const PersonCard = ({ data = {} }) => {
+  console.log('personCard');
+  console.log(data.data);
+  console.log(data.year);
   const isNovote = data.year === 'election-2557';
   const numCandidateByZone = data.data.reduce((acc, val) => acc + val.quota, 0);
   const districtWinners = data.data.map(({ zone_id, result, quota }) => {
@@ -271,8 +277,7 @@ const PersonCard = ({ data = {} }) => {
       {isNovote ? (
         <NovoteDisplay view={'compareView'} />
       ) : (
-        // <ul className="provincial-view--list">
-        <UlPersonList>
+        <ul className="provincial-view--list">
           {districtWinners.map(
             ({ zone_id, winnerResultArray, result, quota }) => (
               <li
@@ -297,17 +302,15 @@ const PersonCard = ({ data = {} }) => {
                         backgroundColor: partyColor(data.year)(winner.party)
                       }}
                     ></span>
-                    {winner.first_name} {winner.last_name}, {winner.party},{' '}
-                    <span style={{ fontFamily: 'Noto Sans Medium' }}>
-                      {percentageFormat(winner.ratio)}
-                    </span>
+                    {winner.title} {winner.first_name} {winner.last_name},{' '}
+                    {winner.party}, {percentageFormat(winner.ratio)}
                   </div>
                 ))}
                 <StackedBar data={result} zoneQuota={quota} />
               </li>
             )
           )}
-        </UlPersonList>
+        </ul>
       )}
     </PersonCardContainer>
   );
@@ -406,21 +409,25 @@ const CompareView = () => {
   return (
     <Container>
       <Header>
-        <div className="provincial-view--toggle">
-          <button
+        <div
+          className="provincial-view--toggle"
+          style={{ height: '100%', borderRadius: '12px' }}
+        >
+          <div
             className={`provincial-view--toggle-button ${partyView &&
               'active'}`}
             onClick={() => setPartyView(true)}
           >
-            ดูพรรค
-          </button>
-          <button
+            <SeePartyMenu partyView={partyView} view={'compareView'} />
+          </div>
+          <div
             className={`provincial-view--toggle-button ${!partyView &&
               'active'}`}
+            style={{ height: '100%' }}
             onClick={() => setPartyView(false)}
           >
-            ดูผู้ชนะ
-          </button>
+            <SeeWinnerMenu partyView={partyView} view={'compareView'} />
+          </div>
           <span
             className="provincial-view--toggle-active"
             style={{ left: !partyView && '50%' }}
