@@ -30,7 +30,7 @@ function D3Map(
 
   const projection = d3
     .geoMercator()
-    .translate([w / 2, h / 2])
+    .translate([cw, ch])
     .scale([SCALE])
     .center([100.5, 13.8]);
 
