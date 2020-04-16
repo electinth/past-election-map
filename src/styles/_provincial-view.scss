@@ -12,6 +12,7 @@
     overflow-x: hidden;
     margin: 1rem 0;
     padding: 1rem 1rem 1rem 0;
+    text-align: left;
 
     // fix overflow y affect overflow x and part of stackbard tooltip is hidden
     margin-left: -15rem;
@@ -34,10 +35,15 @@
       border-radius: 1rem;
     }
 
+    &-zone {
+      font-size: 1.4rem;
+    }
+
     &-item {
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       padding: 1rem 0;
       border-bottom: 1px solid black;
+      font-family: 'Noto Sans Thai';
 
       &:first-child {
         border-top: 1px solid black;

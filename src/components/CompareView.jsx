@@ -8,8 +8,7 @@ import MapContext from '../map/context';
 import partyColor from '../map/color';
 import DrawMap from './MapView/ProvincialViewDetail/DrawMap';
 import StackedBar from './MapView/StackedBar';
-
-import './MapView/PartyList/styles.scss';
+import { NovoteDisplay } from './MapView/NationalView';
 
 const Container = styled.div`
   position: fixed;
@@ -70,13 +69,14 @@ const PartyCardContainer = styled.div`
 `;
 
 const PersonCardContainer = styled.div`
-  height: 350px;
+  min-height: 240px;
   width: 200px;
   border-radius: 10px;
   background-color: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   margin: 0 auto;
   padding: 10px;
+  position: relative;
 `;
 
 const DistricExplain = styled.h2`
@@ -222,108 +222,126 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
   );
 };
 
-const PartyCard = ({ data = {} }) => {
+const TitleZone = ({ province, zone, numCandidateByZone }) => {
   return (
-    <PartyCardContainer>
+    <div>
       <DistricExplain>
         เขตเลือกตั้ง
         <br />
-        จังหวัด{data.province}
+        จังหวัด{province}
       </DistricExplain>
       <Quota>
-        {data.zone} เขต / {data.zone} คน
+        {zone} เขต / {numCandidateByZone} คน
       </Quota>
+    </div>
+  );
+};
+
+const PartyCard = ({ data = {} }) => {
+  console.log('partyCard');
+  console.log(data.data);
+  console.log(data.year);
+  const isNovote = data.year === 'election-2557';
+  const numCandidateByZone = data.data.reduce(
+    (acc, val) => acc + val.candidate,
+    0
+  );
+  return (
+    <PartyCardContainer>
+      <TitleZone
+        province={data.province}
+        zone={data.zone}
+        numCandidateByZone={numCandidateByZone}
+      />
       <LineHr />
-      <UlPartyList>
-        {data.data.map(({ party, candidate }) => (
-          <LiPartyList key={party}>
-            <span
-              className="party-list--party-box"
-              style={{
-                backgroundColor: partyColor(data.year)(party)
-              }}
-            ></span>
-            {party} <span className="party-list--count">{candidate} คน</span>
-          </LiPartyList>
-        ))}
-      </UlPartyList>
+      {isNovote ? (
+        <NovoteDisplay view={'compareView'} />
+      ) : (
+        <UlPartyList>
+          {data.data.map(({ party, candidate }) => (
+            <LiPartyList key={party}>
+              <span
+                className="party-list--party-box"
+                style={{
+                  backgroundColor: partyColor(data.year)(party)
+                }}
+              ></span>
+              {party} <span className="party-list--count">{candidate} คน</span>
+            </LiPartyList>
+          ))}
+        </UlPartyList>
+      )}
     </PartyCardContainer>
   );
 };
 
 const PersonCard = ({ data = {} }) => {
-  const districtWinners = data.data.map(({ zone_id, result }) => {
-    if (!result)
-      return {
-        zone_id,
-        winner: 'การเลือกตั้งเป็นโมฆะ',
-        summary: {
-          winner: { party: 'การเลือกตั้งเป็นโมฆะ', ratio: 0 },
-          runnerUp: {
-            party: 'การเลือกตั้งเป็นโมฆะ',
-            ratio: 0
-          },
-          rest: { party: 'อื่นๆ', ratio: 0 }
-        }
-      };
+  console.log('personCard');
+  console.log(data.data);
+  console.log(data.year);
+  const isNovote = data.year === 'election-2557';
+  const numCandidateByZone = data.data.reduce((acc, val) => acc + val.quota, 0);
+  const districtWinners = data.data.map(({ zone_id, result, quota }) => {
+    if (!result) return;
     result.sort((a, b) => b.score - a.score);
-    const [winner, runnerUp] = result;
+    const winnerResultArray = result
+      .sort((a, b) => b.score - a.score)
+      .slice(0, quota);
     const totalScore = result.reduce((total, cur) => (total += cur.score), 0);
-    const restScore = totalScore - winner.score - runnerUp.score;
-    const summary = {
-      winner: { party: winner.party, ratio: winner.score / totalScore },
-      runnerUp: {
-        party: runnerUp.party,
-        ratio: runnerUp.score / totalScore
-      },
-      rest: { party: 'อื่นๆ', ratio: restScore / totalScore }
-    };
-    return { zone_id, winner, summary };
+    winnerResultArray.map(val => {
+      val.ratio = val.score / totalScore;
+    });
+    return { zone_id, winnerResultArray, result, quota };
   });
 
   const percentageFormat = d3.format('.2%');
 
   return (
     <PersonCardContainer>
-      <DistricExplain>
-        เขตเลือกตั้ง
-        <br />
-        จังหวัด{data.province}
-      </DistricExplain>
-      <Quota>
-        {data.zone} เขต / {data.zone} คน
-      </Quota>
+      <TitleZone
+        province={data.province}
+        zone={data.zone}
+        numCandidateByZone={numCandidateByZone}
+      />
       <LineHr />
-      <UlPersonList>
-        {districtWinners.length !== 0 ? (
-          <div>
-            {districtWinners.map(({ zone_id, winner, summary }) => (
-              <LiPersonList key={zone_id + data.year}>
+      {isNovote ? (
+        <NovoteDisplay view={'compareView'} />
+      ) : (
+        <ul className="provincial-view--list">
+          {districtWinners.map(
+            ({ zone_id, winnerResultArray, result, quota }) => (
+              <li
+                key={zone_id + data.year}
+                className="provincial-view--list-item"
+              >
                 <div>
                   {' '}
-                  <b style={{ fontSize: '1.2rem' }}>เขต {zone_id}</b>
+                  <b className="provincial-view--list-zone">เขต {zone_id}</b>
                 </div>
-                <div>
-                  <span
-                    style={{
-                      display: 'inline-block',
-                      width: '1rem',
-                      height: '1rem',
-                      marginRight: '0.5rem',
-                      backgroundColor: partyColor(data.year)(winner.party)
-                    }}
-                  ></span>
-                  {winner.title} {winner.first_name} {winner.last_name},{' '}
-                  {winner.party}, {percentageFormat(summary.winner.ratio)}
-                </div>
-                <StackedBar data={summary} />
-              </LiPersonList>
-            ))}
-          </div>
-        ) : (
-          <div>Loading...</div>
-        )}
-      </UlPersonList>
+                {winnerResultArray.map(winner => (
+                  <div
+                    className="provincial-view--list-item__winner"
+                    key={winner.first_name + winner.party}
+                  >
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        width: '1rem',
+                        height: '1rem',
+                        marginRight: '0.5rem',
+                        backgroundColor: partyColor(data.year)(winner.party)
+                      }}
+                    ></span>
+                    {winner.title} {winner.first_name} {winner.last_name},{' '}
+                    {winner.party}, {percentageFormat(winner.ratio)}
+                  </div>
+                ))}
+                <StackedBar data={result} zoneQuota={quota} />
+              </li>
+            )
+          )}
+        </ul>
+      )}
     </PersonCardContainer>
   );
 };
@@ -359,12 +377,25 @@ const CompareView = () => {
     });
 
     provincialZone.map(val => {
-      let currentByParty = _.groupBy(val, ({ result }) => {
-        if (!result) return 'การเลือกตั้งเป็นโมฆะ';
-        const winner = result.reduce(function(prev, current) {
-          return prev.score > current.score ? prev : current;
-        });
-        return winner.party;
+      let currentByParty = {};
+      val.map(cur => {
+        if (!cur.result) {
+          currentByParty['noresult'] = 'No vote';
+          return;
+        }
+        cur.result
+          .sort((a, b) => b.score - a.score)
+          .slice(0, cur.quota)
+          .map(person => {
+            if (!(person.party in currentByParty)) {
+              currentByParty[person.party] = [person];
+            } else {
+              currentByParty[person.party] = [
+                ...currentByParty[person.party],
+                person
+              ];
+            }
+          });
       });
       byParty.push(currentByParty);
     });

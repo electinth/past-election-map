@@ -71,7 +71,7 @@ const ProvincialRight = () => {
         จำนวน {numDistricts} เขต {numCandidate} คน
       </h1>
       {isNovote ? (
-        <NovoteDisplay />
+        <NovoteDisplay view={'nationView'} />
       ) : (
         <>
           <div className="provincial-view--toggle">
@@ -138,7 +138,7 @@ const Winner = ({ provincialProps }) => {
         <li key={zone_id + electionYear} className="provincial-view--list-item">
           <div>
             {' '}
-            <b>เขต {zone_id}</b>
+            <b className="provincial-view--list-zone">เขต {zone_id}</b>
           </div>
           {winnerResultArray.map(winner => (
             <div

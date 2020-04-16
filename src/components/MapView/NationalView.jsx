@@ -57,7 +57,7 @@ const NationalRight = () => {
         {numZone} เขต {numCandidate} คน
       </h1>
       {isNoVote ? (
-        <NovoteDisplay />
+        <NovoteDisplay view={'nationView'} />
       ) : (
         <div>
           <PartyList byPartySorted={byPartySorted} />
@@ -69,11 +69,17 @@ const NationalRight = () => {
 };
 const Container = styled.div`
   width: 258px;
-  height: 400px;
   margin: 0 auto;
-  border-top: 1px solid #222222;
   margin-top: 20px;
   padding-top: 27px;
+  ${props =>
+    props.compareView &&
+    `
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  `}
 `;
 const WarnText = styled.h1`
   color: #da3731;
@@ -82,6 +88,16 @@ const WarnText = styled.h1`
   font-weight: 800;
   line-height: 36px;
   text-align: center;
+  ${props =>
+    props.compareView &&
+    `
+    color: #da3731;
+    font-family: "The MATTER";
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 18px;
+    text-align: center;
+  `}
 `;
 const ExplainText = styled.p`
   color: #000000;
@@ -90,18 +106,46 @@ const ExplainText = styled.p`
   font-weight: 500;
   line-height: 2.5rem;
   text-align: left;
+  ${props =>
+    props.compareView &&
+    `
+    color: #000000;
+    font-family: "Noto Sans Thai";
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 14px;
+  `}
 `;
-const NovoteDisplay = () => {
+
+const NovoteDisplay = ({ view }) => {
+  const width = view === 'nationView' ? 257 : 65;
+  const height = view === 'nationView' ? 159 : 40;
+  console.log(view);
   return (
-    <Container>
-      <img src={novoteImage} width="257" height="159" />
-      <WarnText>การเลือกตั้งเป็นโมฆะ</WarnText>
-      <ExplainText>
-        เนื่องจากเกิดการชุมนุมปิดคูหาเลือกตั้ง
-        ทำให้ไม่สามารถเลือกตั้งพร้อมกันได้ทั่วประเทศในวันเดียวกัน
-        ตามที่กำหนดไว้ในรัฐธรรมนูญ
-      </ExplainText>
-    </Container>
+    <div>
+      {view === 'nationView' ? (
+        <Container>
+          <img src={novoteImage} width={width} height={height} />
+          <WarnText>การเลือกตั้งเป็นโมฆะ</WarnText>
+          <ExplainText>
+            เนื่องจากเกิดการชุมนุมปิดคูหาเลือกตั้ง
+            ทำให้ไม่สามารถเลือกตั้งพร้อมกันได้ทั่วประเทศในวันเดียวกัน
+            ตามที่กำหนดไว้ในรัฐธรรมนูญ
+          </ExplainText>
+        </Container>
+      ) : (
+        <Container compareView>
+          <img src={novoteImage} width={width} height={height} />
+          <WarnText compareView>การเลือกตั้งเป็นโมฆะ</WarnText>
+          <ExplainText compareView>
+            เนื่องจากเกิดการชุมนุมปิดคูหาเลือกตั้ง
+            ทำให้ไม่สามารถเลือกตั้งพร้อมกันได้ทั่วประเทศในวันเดียวกัน
+            ตามที่กำหนดไว้ในรัฐธรรมนูญ
+          </ExplainText>
+        </Container>
+      )}
+    </div>
   );
 };
 export { NationalLeft, NationalRight, NovoteDisplay };
