@@ -56,7 +56,6 @@ function D3Compare(CountryTopoJson, $compare, $defs, dimension, initScale) {
       .each(function(d) {
         const year = this.parentElement.getAttribute('data-election-year');
 
-        console.log($defs, year);
         d3.select(this).attr(
           'fill',
           fillFactory($defs, 'compare')(year)(province)
