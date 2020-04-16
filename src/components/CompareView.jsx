@@ -133,12 +133,12 @@ const LiPersonList = styled.li`
 
 let maps;
 
-const marginTop = 20,
-  marginBottom = 20,
+const marginTop = 0,
+  marginBottom = 0,
   marginLeft = 25,
   marginRight = 25;
 const w = 300 - marginLeft - marginRight,
-  h = 400 - marginTop - marginBottom;
+  h = 430 - marginTop - marginBottom;
 const dimension = {
   w,
   h,
