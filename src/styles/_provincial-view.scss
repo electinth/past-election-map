@@ -10,8 +10,8 @@
     max-height: 35vh;
     overflow-y: scroll;
     overflow-x: hidden;
-    margin: 1rem 0;
-    padding: 1rem 1rem 1rem 0;
+    margin: 0rem 0;
+    padding: 0rem 1rem 1rem 0;
     text-align: left;
 
     // fix overflow y affect overflow x and part of stackbard tooltip is hidden
@@ -45,9 +45,9 @@
       border-bottom: 1px solid black;
       font-family: 'Noto Sans Thai';
 
-      &:first-child {
-        border-top: 1px solid black;
-      }
+      // &:first-child {
+      //   border-top: 1px solid black;
+      // }
 
       &__winner {
         font-size: 1.4rem;
