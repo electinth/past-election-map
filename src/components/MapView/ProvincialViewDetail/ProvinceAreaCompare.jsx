@@ -54,15 +54,22 @@ const CompareContainer = styled.div`
 const CompareMap = styled.div`
   flex: 0 0 45%;
   height: 200px;
-  border: 1px solid var(--color-black);
-  border-radius: 10px;
   margin: 2.5%;
+  cursor: pointer;
+
+  border: 1px solid
+    ${props => (props.active ? 'var(--color-black)' : 'transparent')};
+  border-radius: 10px;
+
+  &:hover {
+    border: 1px solid var(--color-black);
+  }
 `;
 
 let geo, $defs;
 let maps;
 const ProvinceAreaCompare = () => {
-  const { province, CountryTopoJson } = useContext(MapContext);
+  const { province, CountryTopoJson, electionYear } = useContext(MapContext);
 
   const compareRef = useRef(null);
 
@@ -84,7 +91,7 @@ const ProvinceAreaCompare = () => {
     <Container>
       <Title>ผลเลือกตั้งย้อนหลัง</Title>
       <CompareContainer>
-        <CompareMap>
+        <CompareMap active={electionYear === 'election-2562'}>
           <svg
             id="compare-election-2562"
             data-election-year="election-2562"
@@ -96,7 +103,7 @@ const ProvinceAreaCompare = () => {
             </text>
           </svg>
         </CompareMap>
-        <CompareMap>
+        <CompareMap active={electionYear === 'election-2557'}>
           <svg
             id="compare-election-2557"
             data-election-year="election-2557"
@@ -108,7 +115,7 @@ const ProvinceAreaCompare = () => {
             </text>
           </svg>
         </CompareMap>
-        <CompareMap>
+        <CompareMap active={electionYear === 'election-2554'}>
           <svg
             id="compare-election-2554"
             data-election-year="election-2554"
@@ -120,7 +127,7 @@ const ProvinceAreaCompare = () => {
             </text>
           </svg>
         </CompareMap>
-        <CompareMap>
+        <CompareMap active={electionYear === 'election-2550'}>
           <svg
             id="compare-election-2550"
             data-election-year="election-2550"
