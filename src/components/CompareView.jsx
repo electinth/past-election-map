@@ -197,7 +197,7 @@ const CreateMap = ({ partyData }) => {
 };
 
 const YearList = ({ view = 'party', party = [], person = [] }) => {
-  const year = [2550, 2554, 2557, 2562];
+  const year = [2562, 2557, 2554, 2550];
 
   return (
     <ViewParty>
@@ -380,7 +380,14 @@ const CompareView = () => {
       let currentByParty = {};
       val.map(cur => {
         if (!cur.result) {
-          currentByParty['noresult'] = 'No vote';
+          if (!('noresult' in currentByParty)) {
+            currentByParty['noresult'] = ['novote'];
+          } else {
+            currentByParty['noresult'] = [
+              ...currentByParty['noresult'],
+              'novote'
+            ];
+          }
           return;
         }
         cur.result
@@ -443,8 +450,8 @@ const CompareView = () => {
       byPersonSorted[index].zone = provincialZone[index].length;
       byPersonSorted[index].provinceTopoJson = provinceTopoJsonData[index];
     });
-    partyData = byPartySorted;
-    personData = byPersonSorted;
+    partyData = byPartySorted.reverse();
+    personData = byPersonSorted.reverse();
   }
 
   useEffect(() => {}, []);
