@@ -65,6 +65,21 @@ const CompareMap = styled.div`
 
 let $defs;
 let maps;
+
+const marginTop = 50,
+  marginBottom = 20,
+  marginLeft = 25,
+  marginRight = 25;
+const w = 130 - marginLeft - marginRight,
+  h = 200 - marginTop - marginBottom;
+const dimension = {
+  w,
+  h,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight
+};
 const ProvinceAreaCompare = props => {
   const { year: paramYear } = useParams();
   useEffect(() => {
@@ -84,7 +99,7 @@ const ProvinceAreaCompare = props => {
 
     const $compare = d3.selectAll('svg[id*=compare-election-]');
     $defs = d3.select(`#map-defs-compare`);
-    maps = D3Compare(CountryTopoJson, $compare, $defs);
+    maps = D3Compare(CountryTopoJson, $compare, $defs, dimension, 6500);
   }, [CountryTopoJson]);
 
   useEffect(() => {

@@ -132,6 +132,21 @@ const LiPersonList = styled.li`
 `;
 
 let maps;
+
+const marginTop = 20,
+  marginBottom = 20,
+  marginLeft = 25,
+  marginRight = 25;
+const w = 300 - marginLeft - marginRight,
+  h = 400 - marginTop - marginBottom;
+const dimension = {
+  w,
+  h,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight
+};
 const YearList = ({ view = 'party', party = [], person = [] }) => {
   const {
     province,
@@ -145,7 +160,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
 
     const $compare = d3.selectAll('svg[id*=compare-election-]');
     const $defs = d3.select(`#map-defs-compare`);
-    maps = D3Compare(CountryTopoJson, $compare, $defs);
+    maps = D3Compare(CountryTopoJson, $compare, $defs, dimension, 15000);
   }, [CountryTopoJson]);
 
   useEffect(() => {
@@ -169,9 +184,15 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                 <svg
                   id={`compare-election-${year}`}
                   data-election-year={`election-${year}`}
-                  width="100%"
-                  height="100%"
-                ></svg>
+                  width={
+                    dimension.w + dimension.marginLeft + dimension.marginRight
+                  }
+                  height={
+                    dimension.h + dimension.marginTop + dimension.marginBottom
+                  }
+                >
+                  {year === 2550 && <defs id={`map-defs-compare`}></defs>}
+                </svg>
                 {view === 'party' ? (
                   <PartyCard data={party[index]} />
                 ) : (
