@@ -13,11 +13,11 @@ function toNumber(d) {
 }
 
 function merge() {
-  const [res48, res50, res54, res62] = [
-    csvParse(
-      fs.readFileSync('./csv/candidate_result_2548.csv').toString(),
-      toNumber
-    ),
+  const [/* res48, */ res50, res54, res62] = [
+    // csvParse(
+    //   fs.readFileSync('./csv/candidate_result_2548.csv').toString(),
+    //   toNumber
+    // ),
     csvParse(
       fs.readFileSync('./csv/candidate_result_2550.csv').toString(),
       toNumber
@@ -57,7 +57,7 @@ function merge() {
     )
   );
 
-  fs.writeFileSync('./thailand-election.topo.json', JSON.stringify(topojson));
+  fs.writeFileSync('./topo/thailand-election.topo.json', JSON.stringify(topojson));
 }
 
 merge();

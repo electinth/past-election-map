@@ -15,7 +15,7 @@ const ElectionYear = props => {
 
   useEffect(() => {
     if (!paramYear) return;
-    setElectionYear(paramYear);
+    setElectionYear(`election-${paramYear}`);
   }, [paramYear]);
 
   return (

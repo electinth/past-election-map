@@ -7,13 +7,25 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Script for merging election result data in csv into topo json files
+## Generate election map TopoJSON
 
-To merge, do the following,
+Prerequisites
 
-1. put election result files inside `csv` folder
-2. filename should be `candidate_result_${BE}.csv`
-3. source topojson files should be in `topo` folder
-4. run `node -r esm merge.js`
-5. output should be named `thailand-election.topo.json` and found in this folder
-6. To use, put the file in `src/data`
+```bash
+npm install -g mapshaper
+```
+
+To create TopoJSON and combine additional data, do the following:
+
+1. Put province file `province.csv` in `/csv`.
+2. Put election results files at `csv/candidate_result_${BE}.csv`.
+2. Put election map GeoJSON files at `/geo/${BE}.geojson`.
+3. Run:
+
+    ```bash
+    $ chmod +x create-topojson.sh
+    $ ./create-topojson.sh
+    ```
+
+4. Output TopoJSON will be created at `topo/thailand-election.topo.json`.
+5. To use, put the file in `src/data`.
