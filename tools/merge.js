@@ -60,4 +60,6 @@ function merge() {
   fs.writeFileSync('./topo/thailand-election.topo.json', JSON.stringify(topojson));
 }
 
+console.log('Merge candidate results...');
 merge();
+console.log('[done] Merge candidate results');

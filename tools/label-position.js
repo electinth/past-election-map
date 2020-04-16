@@ -15,18 +15,15 @@ function makePolylabelProps(year) {
     .features;
 
   data.forEach(({ properties, geometry }) => {
-    console.log(properties);
+    // console.log(properties);
     let lon, lat;
-    if (properties.province_name === 'สกลนคร' && year === 'election-2554') {
-      [lon, lat] = d3.geoCentroid(geometry);
-    } else {
-      [lon, lat] = polylabel(geometry.coordinates);
-    }
+    [lon, lat] = polylabel(geometry.coordinates);
 
     Object.assign(properties, { labelLat: lat, labelLon: lon });
   });
 }
 
+console.log('Add label position...');
 makePolylabelProps('election-2562');
 makePolylabelProps('election-2557');
 makePolylabelProps('election-2554');
@@ -35,5 +32,6 @@ fs.writeFileSync(
   './topo/thailand-election.topo.json',
   JSON.stringify(CountryTopoJson)
 );
+console.log('[done] Add label position');
 
 // console.log(CountryTopoJson.objects['election-2562'].geometries[0].properties);
