@@ -11,19 +11,12 @@ import {
 
 import partyColor, { partyFill } from '../../../map/color';
 
-function D3Compare(CountryTopoJson, $defs) {
+function D3Compare(CountryTopoJson, compareRef, $defs) {
   const simplifyMinWeight = 5e-4;
   const CountryTopo = tps.presimplify(CountryTopoJson);
   const geo = tps.simplify(CountryTopo, simplifyMinWeight);
 
-  const setVis = vis => {
-    $vis = vis;
-    $map = $vis.select(`#map-province-${electionYear}`);
-    $defs = $vis.select(`#map-defs`);
-    $zoneLabel = $vis.select(`#zone-label-province-${electionYear}`);
-  };
-
-  const setProvince = (province, compareRef) => {
+  const handleProvinceChange = province => {
     const $compare = d3.select(compareRef.current);
 
     const data = Object.entries(geo.objects)
@@ -117,7 +110,7 @@ function D3Compare(CountryTopoJson, $defs) {
 
   const render = year => {};
 
-  return { render, setProvince };
+  return { render, handleProvinceChange };
 }
 
 export default D3Compare;
