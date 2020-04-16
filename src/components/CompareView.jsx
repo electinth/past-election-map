@@ -180,7 +180,6 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
             <Year key={year}>
               <CardList>
                 <YearTilte>ปี {year}</YearTilte>
-                {console.log(year)}
                 <svg
                   id={`compare-election-${year}`}
                   data-election-year={`election-${year}`}
@@ -352,9 +351,8 @@ const CompareView = () => {
     let byParty = [];
     let byPartySorted = [];
     let byPersonSorted = [];
-    let provinceTopoJsonData = [];
 
-    electionYear.map(val => {
+    electionYear.forEach(val => {
       let currentProvince = CountryTopoJson.objects[val].geometries
         .filter(geo => geo.properties.province_name === paramProvince)
         .map(geo => geo.properties);
@@ -365,9 +363,9 @@ const CompareView = () => {
       });
     });
 
-    provincialZone.map(val => {
+    provincialZone.forEach(val => {
       let currentByParty = {};
-      val.map(cur => {
+      val.forEach(cur => {
         if (!cur.result) {
           if (!('noresult' in currentByParty)) {
             currentByParty['noresult'] = ['novote'];
@@ -382,7 +380,7 @@ const CompareView = () => {
         cur.result
           .sort((a, b) => b.score - a.score)
           .slice(0, cur.quota)
-          .map(person => {
+          .forEach(person => {
             if (!(person.party in currentByParty)) {
               currentByParty[person.party] = [person];
             } else {
@@ -396,7 +394,7 @@ const CompareView = () => {
       byParty.push(currentByParty);
     });
 
-    byParty.map(val => {
+    byParty.forEach(val => {
       let currentByPartySorted = [];
       for (let [party, winnerResult] of Object.entries(val)) {
         currentByPartySorted.push({ party, candidate: winnerResult.length });
@@ -407,37 +405,14 @@ const CompareView = () => {
       });
     });
 
-    electionYear.map(year => {
-      const ProviceGeomatires = CountryTopoJson.objects[year].geometries.filter(
-        val => {
-          return val.properties.province_name === paramProvince;
-        }
-      );
-
-      let ProvinceTopoJson = JSON.parse(JSON.stringify(CountryTopoJson));
-
-      const allowed = [year];
-
-      const ProvinceTopoJsonFilter = Object.keys(ProvinceTopoJson.objects)
-        .filter(key => allowed.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = ProvinceTopoJson.objects[key];
-          return obj;
-        }, {});
-
-      ProvinceTopoJson.objects = ProvinceTopoJsonFilter;
-      ProvinceTopoJson.objects[year].geometries = ProviceGeomatires;
-      provinceTopoJsonData.push(ProvinceTopoJson);
-    });
     electionYear.forEach((year, index) => {
       byPartySorted[index].year = year;
       byPartySorted[index].province = paramProvince;
       byPartySorted[index].zone = provincialZone[index].length;
-      byPartySorted[index].provinceTopoJson = provinceTopoJsonData[index];
+
       byPersonSorted[index].year = year;
       byPersonSorted[index].province = paramProvince;
       byPersonSorted[index].zone = provincialZone[index].length;
-      byPersonSorted[index].provinceTopoJson = provinceTopoJsonData[index];
     });
     partyData = byPartySorted.reverse();
     personData = byPersonSorted.reverse();
