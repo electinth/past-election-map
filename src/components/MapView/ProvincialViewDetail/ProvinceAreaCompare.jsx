@@ -1,11 +1,8 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useParams, withRouter } from 'react-router-dom';
 import * as d3 from 'd3';
-import * as topojson from 'topojson-client';
-import * as tps from 'topojson-simplify';
 
-import partyColor from '../../../map/color';
 import MapContext from '../../../map/context';
 import D3Compare from './D3Compare';
 
@@ -66,7 +63,7 @@ const CompareMap = styled.div`
   }
 `;
 
-let geo, $defs;
+let $defs;
 let maps;
 const ProvinceAreaCompare = props => {
   const { year: paramYear } = useParams();
@@ -171,6 +168,7 @@ const ProvinceAreaCompare = props => {
             width="100%"
             height="100%"
           >
+            <defs id={`map-defs-compare`}></defs>
             <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
               2550
             </text>

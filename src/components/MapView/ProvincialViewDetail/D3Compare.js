@@ -9,8 +9,6 @@ import {
   fontSizeFactory
 } from '../../Viz/D3Map';
 
-import partyColor, { partyFill } from '../../../map/color';
-
 function D3Compare(CountryTopoJson, $compare, $defs) {
   const simplifyMinWeight = 5e-4;
   const CountryTopo = tps.presimplify(CountryTopoJson);
@@ -48,8 +46,6 @@ function D3Compare(CountryTopoJson, $compare, $defs) {
     const path = d3.geoPath(projection);
     const $gElection = $compare.data(data).join('svg');
 
-    window.d3 = d3;
-
     const $path = $gElection
       .selectAll('path')
       .data(d => d.features)
@@ -62,6 +58,7 @@ function D3Compare(CountryTopoJson, $compare, $defs) {
       .each(function(d) {
         const year = this.parentElement.getAttribute('data-election-year');
 
+        console.log($defs, year);
         d3.select(this).attr(
           'fill',
           fillFactory($defs, 'compare')(year)(province)
@@ -71,7 +68,7 @@ function D3Compare(CountryTopoJson, $compare, $defs) {
     const polylabelPosition = polylabelPositionFactory(projection);
     const fontSize = fontSizeFactory(path);
     const $circle = $gElection
-      .selectAll('circle')
+      .selectAll('circle.label-bg')
       .data(d => d.features)
       .join('circle')
       .attr('class', 'label-bg')
