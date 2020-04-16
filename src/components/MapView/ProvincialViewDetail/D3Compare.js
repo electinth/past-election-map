@@ -46,8 +46,6 @@ function D3Compare(CountryTopoJson, $compare, $defs) {
       .scale([SCALE])
       .center([lonCenter, latCenter]);
     const path = d3.geoPath(projection);
-
-    console.log($compare);
     const $gElection = $compare.data(data).join('svg');
 
     window.d3 = d3;

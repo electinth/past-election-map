@@ -12,7 +12,6 @@ const MapView = () => {
   return (
     <>
       <aside className="bar bar__left">
-        <ElectionYear />
         <div className="bar--lower__left">
           <Switch>
             <Route path="/:year?" exact component={NationalLeft} />

@@ -68,7 +68,7 @@ const CompareMap = styled.div`
 
 let geo, $defs;
 let maps;
-const ProvinceAreaCompare = () => {
+const ProvinceAreaCompare = props => {
   const { year: paramYear } = useParams();
   useEffect(() => {
     if (!paramYear) return;
@@ -100,7 +100,14 @@ const ProvinceAreaCompare = () => {
     <Container>
       <Title>ผลเลือกตั้งย้อนหลัง</Title>
       <CompareContainer>
-        <CompareMap active={electionYear === 'election-2562'}>
+        <CompareMap
+          active={electionYear === 'election-2562'}
+          onClick={() =>
+            province === 'ประเทศไทย'
+              ? props.history.push(`/2562`)
+              : props.history.push(`/2562/${province}`)
+          }
+        >
           <svg
             id="compare-election-2562"
             data-election-year="election-2562"
@@ -112,7 +119,14 @@ const ProvinceAreaCompare = () => {
             </text>
           </svg>
         </CompareMap>
-        <CompareMap active={electionYear === 'election-2557'}>
+        <CompareMap
+          active={electionYear === 'election-2557'}
+          onClick={() =>
+            province === 'ประเทศไทย'
+              ? props.history.push(`/2557`)
+              : props.history.push(`/2557/${province}`)
+          }
+        >
           <svg
             id="compare-election-2557"
             data-election-year="election-2557"
@@ -124,7 +138,14 @@ const ProvinceAreaCompare = () => {
             </text>
           </svg>
         </CompareMap>
-        <CompareMap active={electionYear === 'election-2554'}>
+        <CompareMap
+          active={electionYear === 'election-2554'}
+          onClick={() =>
+            province === 'ประเทศไทย'
+              ? props.history.push(`/2554`)
+              : props.history.push(`/2554/${province}`)
+          }
+        >
           <svg
             id="compare-election-2554"
             data-election-year="election-2554"
@@ -136,7 +157,14 @@ const ProvinceAreaCompare = () => {
             </text>
           </svg>
         </CompareMap>
-        <CompareMap active={electionYear === 'election-2550'}>
+        <CompareMap
+          active={electionYear === 'election-2550'}
+          onClick={() =>
+            province === 'ประเทศไทย'
+              ? props.history.push(`/2550`)
+              : props.history.push(`/2550/${province}`)
+          }
+        >
           <svg
             id="compare-election-2550"
             data-election-year="election-2550"
