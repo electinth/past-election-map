@@ -22,8 +22,8 @@ const ElectionYear = props => {
     <ul className="year-choice--list">
       {TH_ELECTION_YEAR.map(({ en, th }) => (
         <li
-          className={`year-choice--list-item ${en === electionYear &&
-            'year-choice--list-item__active'}`}
+          className={`year-choice--list-item ${`election-${en}` ===
+            electionYear && 'year-choice--list-item__active'}`}
           key={en}
           onClick={() =>
             province === 'ประเทศไทย'
