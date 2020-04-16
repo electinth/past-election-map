@@ -402,7 +402,7 @@ function fillFactory($defs, uid = '') {
           .length;
 
         // load fill definitions
-        const fillOptions = partyFill(electionYear)(
+        const fillOptions = partyFill(electionYear, uid)(
           winnerParty,
           totalWinnerParty,
           quota
