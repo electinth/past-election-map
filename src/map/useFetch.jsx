@@ -8,7 +8,7 @@ const useFetch = () => {
     const fetch = async () => {
       const res = await Promise.all([
         d3.json('/thailand-election.topo.json'),
-        d3.json('/2550-zone-quota.json')
+        d3.json('/zone-quota-2550.json')
       ]);
 
       // Append "quota" to zones for 2550

@@ -3,10 +3,10 @@ import { useParams, withRouter } from 'react-router-dom';
 import MapContext from '../../map/context';
 
 const TH_ELECTION_YEAR = [
-  { en: 'election-2562', th: 'ปี 2562' },
-  { en: 'election-2557', th: 'ปี 2557' },
-  { en: 'election-2554', th: 'ปี 2554' },
-  { en: 'election-2550', th: 'ปี 2550' }
+  { en: '2562', th: 'ปี 2562' },
+  { en: '2557', th: 'ปี 2557' },
+  { en: '2554', th: 'ปี 2554' },
+  { en: '2550', th: 'ปี 2550' }
 ];
 
 const ElectionYear = props => {

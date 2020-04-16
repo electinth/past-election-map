@@ -273,8 +273,8 @@ function D3Map(
       .attr('d', path)
       .on('click', ({ properties: { province_name } }) =>
         province_name === province
-          ? push(`/${electionYear}`)
-          : push(`/${electionYear}/${province_name}`)
+          ? push(`/${electionYear.slice(-4)}`)
+          : push(`/${electionYear.slice(-4)}/${province_name}`)
       )
       .on('mouseenter', setTooltipContent)
       .attr('fill', fill);

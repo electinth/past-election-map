@@ -1,0 +1,944 @@
+[
+  {
+    "province_name": "กระบี่",
+    "province_id": 81,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 3,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 4,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 5,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 6,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 7,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 8,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 9,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 10,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 11,
+    "quota": 3
+  },
+  {
+    "province_name": "กรุงเทพมหานคร",
+    "province_id": 10,
+    "zone_id": 12,
+    "quota": 3
+  },
+  {
+    "province_name": "กาญจนบุรี",
+    "province_id": 71,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "กาญจนบุรี",
+    "province_id": 71,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "กาฬสินธุ์",
+    "province_id": 46,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "กาฬสินธุ์",
+    "province_id": 46,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "กำแพงเพชร",
+    "province_id": 62,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "กำแพงเพชร",
+    "province_id": 62,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ขอนแก่น",
+    "province_id": 40,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ขอนแก่น",
+    "province_id": 40,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "ขอนแก่น",
+    "province_id": 40,
+    "zone_id": 3,
+    "quota": 3
+  },
+  {
+    "province_name": "ขอนแก่น",
+    "province_id": 40,
+    "zone_id": 4,
+    "quota": 2
+  },
+  {
+    "province_name": "จันทบุรี",
+    "province_id": 22,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ฉะเชิงเทรา",
+    "province_id": 24,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "ฉะเชิงเทรา",
+    "province_id": 24,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ชลบุรี",
+    "province_id": 20,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ชลบุรี",
+    "province_id": 20,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "ชลบุรี",
+    "province_id": 20,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "ชัยนาท",
+    "province_id": 18,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "ชัยภูมิ",
+    "province_id": 36,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ชัยภูมิ",
+    "province_id": 36,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ชัยภูมิ",
+    "province_id": 36,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "ชุมพร",
+    "province_id": 86,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "เชียงราย",
+    "province_id": 57,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "เชียงราย",
+    "province_id": 57,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "เชียงราย",
+    "province_id": 57,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "เชียงใหม่",
+    "province_id": 50,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "เชียงใหม่",
+    "province_id": 50,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "เชียงใหม่",
+    "province_id": 50,
+    "zone_id": 3,
+    "quota": 3
+  },
+  {
+    "province_name": "เชียงใหม่",
+    "province_id": 50,
+    "zone_id": 4,
+    "quota": 2
+  },
+  {
+    "province_name": "ตรัง",
+    "province_id": 92,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "ตรัง",
+    "province_id": 92,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ตราด",
+    "province_id": 23,
+    "zone_id": 1,
+    "quota": 1
+  },
+  {
+    "province_name": "ตาก",
+    "province_id": 63,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "นครนายก",
+    "province_id": 26,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "นครปฐม",
+    "province_id": 73,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "นครปฐม",
+    "province_id": 73,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "นครพนม",
+    "province_id": 48,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "นครพนม",
+    "province_id": 48,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "นครราชสีมา",
+    "province_id": 30,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "นครราชสีมา",
+    "province_id": 30,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "นครราชสีมา",
+    "province_id": 30,
+    "zone_id": 3,
+    "quota": 3
+  },
+  {
+    "province_name": "นครราชสีมา",
+    "province_id": 30,
+    "zone_id": 4,
+    "quota": 3
+  },
+  {
+    "province_name": "นครราชสีมา",
+    "province_id": 30,
+    "zone_id": 5,
+    "quota": 2
+  },
+  {
+    "province_name": "นครราชสีมา",
+    "province_id": 30,
+    "zone_id": 6,
+    "quota": 2
+  },
+  {
+    "province_name": "นครศรีธรรมราช",
+    "province_id": 80,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "นครศรีธรรมราช",
+    "province_id": 80,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "นครศรีธรรมราช",
+    "province_id": 80,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "นครศรีธรรมราช",
+    "province_id": 80,
+    "zone_id": 4,
+    "quota": 2
+  },
+  {
+    "province_name": "นครสวรรค์",
+    "province_id": 60,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "นครสวรรค์",
+    "province_id": 60,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "นครสวรรค์",
+    "province_id": 60,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "นนทบุรี",
+    "province_id": 12,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "นนทบุรี",
+    "province_id": 12,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "นราธิวาส",
+    "province_id": 96,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "นราธิวาส",
+    "province_id": 96,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "น่าน",
+    "province_id": 55,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "บุรีรัมย์",
+    "province_id": 31,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "บุรีรัมย์",
+    "province_id": 31,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "บุรีรัมย์",
+    "province_id": 31,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "บุรีรัมย์",
+    "province_id": 31,
+    "zone_id": 4,
+    "quota": 2
+  },
+  {
+    "province_name": "ปทุมธานี",
+    "province_id": 13,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ปทุมธานี",
+    "province_id": 13,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "ประจวบคีรีขันธ์",
+    "province_id": 77,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ปราจีนบุรี",
+    "province_id": 25,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ปัตตานี",
+    "province_id": 94,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "ปัตตานี",
+    "province_id": 94,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "พระนครศรีอยุธยา",
+    "province_id": 14,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "พระนครศรีอยุธยา",
+    "province_id": 14,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "พะเยา",
+    "province_id": 56,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "พังงา",
+    "province_id": 82,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "พัทลุง",
+    "province_id": 93,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "พิจิตร",
+    "province_id": 66,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "พิจิตร",
+    "province_id": 66,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "พิษณุโลก",
+    "province_id": 65,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "พิษณุโลก",
+    "province_id": 65,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "เพชรบุรี",
+    "province_id": 76,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "เพชรบูรณ์",
+    "province_id": 67,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "เพชรบูรณ์",
+    "province_id": 67,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "แพร่",
+    "province_id": 54,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ภูเก็ต",
+    "province_id": 83,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "มหาสารคาม",
+    "province_id": 44,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "มหาสารคาม",
+    "province_id": 44,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "มุกดาหาร",
+    "province_id": 49,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "แม่ฮ่องสอน",
+    "province_id": 58,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "ยโสธร",
+    "province_id": 35,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "ยโสธร",
+    "province_id": 35,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ยะลา",
+    "province_id": 95,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ร้อยเอ็ด",
+    "province_id": 45,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ร้อยเอ็ด",
+    "province_id": 45,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "ร้อยเอ็ด",
+    "province_id": 45,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "ระนอง",
+    "province_id": 85,
+    "zone_id": 1,
+    "quota": 1
+  },
+  {
+    "province_name": "ระยอง",
+    "province_id": 21,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "ระยอง",
+    "province_id": 21,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ราชบุรี",
+    "province_id": 70,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ราชบุรี",
+    "province_id": 70,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ลพบุรี",
+    "province_id": 16,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ลพบุรี",
+    "province_id": 16,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ลำปาง",
+    "province_id": 52,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ลำปาง",
+    "province_id": 52,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ลำพูน",
+    "province_id": 51,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "เลย",
+    "province_id": 42,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "เลย",
+    "province_id": 42,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "ศรีสะเกษ",
+    "province_id": 33,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "ศรีสะเกษ",
+    "province_id": 33,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "ศรีสะเกษ",
+    "province_id": 33,
+    "zone_id": 3,
+    "quota": 3
+  },
+  {
+    "province_name": "สกลนคร",
+    "province_id": 47,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "สกลนคร",
+    "province_id": 47,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "สกลนคร",
+    "province_id": 47,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "สงขลา",
+    "province_id": 90,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "สงขลา",
+    "province_id": 90,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "สงขลา",
+    "province_id": 90,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "สตูล",
+    "province_id": 91,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "สมุทรปราการ",
+    "province_id": 11,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "สมุทรปราการ",
+    "province_id": 11,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "สมุทรปราการ",
+    "province_id": 11,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "สมุทรสงคราม",
+    "province_id": 75,
+    "zone_id": 1,
+    "quota": 1
+  },
+  {
+    "province_name": "สมุทรสาคร",
+    "province_id": 74,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "สระแก้ว",
+    "province_id": 27,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "สระบุรี",
+    "province_id": 19,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "สระบุรี",
+    "province_id": 19,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "สิงห์บุรี",
+    "province_id": 17,
+    "zone_id": 1,
+    "quota": 1
+  },
+  {
+    "province_name": "สุโขทัย",
+    "province_id": 64,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "สุโขทัย",
+    "province_id": 64,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "สุพรรณบุรี",
+    "province_id": 72,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "สุพรรณบุรี",
+    "province_id": 72,
+    "zone_id": 2,
+    "quota": 2
+  },
+  {
+    "province_name": "สุราษฎร์ธานี",
+    "province_id": 84,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "สุราษฎร์ธานี",
+    "province_id": 84,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "สุรินทร์",
+    "province_id": 32,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "สุรินทร์",
+    "province_id": 32,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "สุรินทร์",
+    "province_id": 32,
+    "zone_id": 3,
+    "quota": 3
+  },
+  {
+    "province_name": "หนองคาย",
+    "province_id": 43,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "หนองคาย",
+    "province_id": 43,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "หนองบัวลำภู",
+    "province_id": 39,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "อ่างทอง",
+    "province_id": 15,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "อำนาจเจริญ",
+    "province_id": 37,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "อุดรธานี",
+    "province_id": 41,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "อุดรธานี",
+    "province_id": 41,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "อุดรธานี",
+    "province_id": 41,
+    "zone_id": 3,
+    "quota": 2
+  },
+  {
+    "province_name": "อุดรธานี",
+    "province_id": 41,
+    "zone_id": 4,
+    "quota": 2
+  },
+  {
+    "province_name": "อุตรดิตถ์",
+    "province_id": 53,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "อุทัยธานี",
+    "province_id": 61,
+    "zone_id": 1,
+    "quota": 2
+  },
+  {
+    "province_name": "อุบลราชธานี",
+    "province_id": 34,
+    "zone_id": 1,
+    "quota": 3
+  },
+  {
+    "province_name": "อุบลราชธานี",
+    "province_id": 34,
+    "zone_id": 2,
+    "quota": 3
+  },
+  {
+    "province_name": "อุบลราชธานี",
+    "province_id": 34,
+    "zone_id": 3,
+    "quota": 3
+  },
+  {
+    "province_name": "อุบลราชธานี",
+    "province_id": 34,
+    "zone_id": 4,
+    "quota": 2
+  }
+]
