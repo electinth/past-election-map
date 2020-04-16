@@ -197,7 +197,7 @@ const CreateMap = ({ partyData }) => {
 };
 
 const YearList = ({ view = 'party', party = [], person = [] }) => {
-  const year = [2562, 2557, 2554, 2550];
+  const year = [2550, 2554, 2557, 2562];
 
   return (
     <ViewParty>
@@ -336,10 +336,10 @@ const CompareView = () => {
 
   if (CountryTopoJson.length !== 0) {
     const electionYear = [
-      'election-2562',
-      'election-2557',
+      'election-2550',
       'election-2554',
-      'election-2550'
+      'election-2557',
+      'election-2562'
     ];
     let provincialZone = [];
     let byParty = [];
