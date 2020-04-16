@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 import styled from 'styled-components';
 import MapContext from '../map/context';
 import partyColor from '../map/color';
-import DrawMap from './MapView/ProvincialViewDetail/DrawMap';
+// import DrawMap from './MapView/ProvincialViewDetail/DrawMap';
 import StackedBar from './MapView/StackedBar';
 import { NovoteDisplay } from './MapView/NationalView';
 
