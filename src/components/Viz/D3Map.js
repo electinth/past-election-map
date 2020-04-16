@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 import partyColor, { partyFill } from '../../map/color';
-import polylabel from 'polylabel';
 
 function D3Map(
   CountryTopoJson,
@@ -150,7 +149,7 @@ function D3Map(
         .duration(750)
         .attr('transform', transform)
         .on('end', () => {
-          $zone.attr('fill', fill); // post map-panning
+          $zone.attr('fill', fillFactory($defs)(electionYear)(province)); // post map-panning
           updatePatternTransform.call($vis.node(), 'zoom');
         });
     } else {
@@ -160,7 +159,7 @@ function D3Map(
         .duration(750)
         .attr('transform', '')
         .on('end', () => {
-          $zone.attr('fill', fill); // post map-panning
+          $zone.attr('fill', fillFactory($defs)(electionYear)(province)); // post map-panning
           updatePatternTransform.call($vis.node());
         });
     }
@@ -211,30 +210,6 @@ function D3Map(
     $defs.selectAll('pattern').attr('patternTransform', tInverse);
   }
 
-  function fill({ properties }) {
-    const { result: candidates, province_name, quota } = properties;
-    if (!candidates) return 'white';
-
-    const sortedCandidates = _.orderBy(candidates, ['score'], ['desc']);
-    const winners = sortedCandidates.slice(0, quota);
-    const winnerParty = winners[0].party;
-    const totalWinnerParty = winners.filter(w => w.party === winnerParty)
-      .length;
-
-    // load fill definitions
-    const fillOptions = partyFill(electionYear)(
-      winnerParty,
-      totalWinnerParty,
-      quota
-    );
-    if (fillOptions.type === 'pattern') {
-      $defs.call(fillOptions.createPattern);
-    }
-    return province === province_name || province === 'ประเทศไทย'
-      ? fillOptions.fill || 'purple' // = color not found
-      : 'gainsboro';
-  }
-
   // when select a province, we separate fill rendering into 2 steps:
   // (1.) pre map-panning and (2.) post map-panning.
   // The reason is that if we do it in one step, rendering glitch is seen
@@ -277,7 +252,7 @@ function D3Map(
           : push(`/${electionYear.slice(-4)}/${province_name}`)
       )
       .on('mouseenter', setTooltipContent)
-      .attr('fill', fill);
+      .attr('fill', fillFactory($defs)(electionYear)(province));
 
     updatePatternTransform.call(
       $vis.node(),
@@ -291,6 +266,8 @@ function D3Map(
 
     $label.attr('class', 'zone-label');
 
+    const polylabelPosition = polylabelPositionFactory(projection);
+    const fontSize = fontSizeFactory(path);
     $label
       .append('circle')
       .attr('cx', polylabelPosition('x'))
@@ -316,22 +293,6 @@ function D3Map(
       .transition()
       .delay(delay ? 500 : 0)
       .attr('opacity', 1);
-
-    function polylabelPosition(axis) {
-      return ({ geometry: { coordinates } }) => {
-        const [lon, lat] = polylabel(coordinates);
-        const [x, y] = projection([lon, lat]);
-
-        return axis === 'x' ? x : y;
-      };
-    }
-
-    function fontSize(geo) {
-      const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
-      const yRange = y1 - y0;
-      const xRange = x1 - x0;
-      return d3.min([yRange, xRange]);
-    }
   }
 
   function updateBorderCountry($country) {
@@ -427,4 +388,58 @@ function D3Map(
   return { render, setVis, setElectionYear, setProvince, setViewport };
 }
 
+function fillFactory($defs, uid = '') {
+  return electionYear => {
+    return province =>
+      function({ properties }) {
+        const { result: candidates, province_name, quota } = properties;
+        if (!candidates) return 'white';
+
+        const sortedCandidates = _.orderBy(candidates, ['score'], ['desc']);
+        const winners = sortedCandidates.slice(0, quota);
+        const winnerParty = winners[0].party;
+        const totalWinnerParty = winners.filter(w => w.party === winnerParty)
+          .length;
+
+        // load fill definitions
+        console.log(
+          province_name,
+          winnerParty,
+          totalWinnerParty,
+          quota)
+        const fillOptions = partyFill(electionYear)(
+          winnerParty,
+          totalWinnerParty,
+          quota
+        );
+        if (fillOptions.type === 'pattern') {
+          $defs.call(fillOptions.createPattern);
+        }
+        return province === province_name || province === 'ประเทศไทย'
+          ? fillOptions.fill || 'purple' // = color not found
+          : 'gainsboro';
+      };
+  };
+}
+
+function polylabelPositionFactory(projection) {
+  return axis => {
+    return ({ properties: { labelLat: lat, labelLon: lon } }) => {
+      const [x, y] = projection([lon, lat]);
+
+      return axis === 'x' ? x : y;
+    };
+  };
+}
+
+function fontSizeFactory(path) {
+  return geo => {
+    const [[x0, y0], [x1, y1]] = path.bounds(geo); // adjust font size according to zone bound
+    const yRange = y1 - y0;
+    const xRange = x1 - x0;
+    return d3.min([yRange, xRange]);
+  };
+}
+
+export { fillFactory, polylabelPositionFactory, fontSizeFactory };
 export default D3Map;

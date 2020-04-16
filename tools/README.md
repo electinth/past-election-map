@@ -4,6 +4,7 @@
 **Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Script for merging election result data in csv into topo json files](#script-for-merging-election-result-data-in-csv-into-topo-json-files)
+- [Note on labelPosition script](#note-on-labelposition-script)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -29,3 +30,7 @@ To create TopoJSON and combine additional data, do the following:
 
 4. Output TopoJSON will be created at `topo/thailand-election.topo.json`.
 5. To use, put the file in `src/data`.
+
+## Note on labelPosition script
+
+currently polylabel cannot compute position for `สกลนคร`, use d3 centroid as a position for now.

@@ -5,12 +5,12 @@ import * as d3 from 'd3';
 import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
 import Overview from './Overview';
-import partyColor from '../../map/color';
 import PartyList from './PartyList';
 import StackedBar from './StackedBar';
 
 import { NovoteDisplay } from './NationalView';
 import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx';
+import partyColor from '../../map/color';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();

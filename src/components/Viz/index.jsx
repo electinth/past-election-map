@@ -61,8 +61,7 @@ const Map = props => {
       timeoutId = setTimeout(() => {
         if (!map) return;
 
-        w = innerWidth,
-        h = innerHeight;
+        (w = innerWidth), (h = innerHeight);
         const barLeft = getElementWidth('.bar__left');
         const barRight = getElementWidth('.bar__right');
 
@@ -79,7 +78,7 @@ const Map = props => {
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       window.removeEventListener('resize', resizeListener);
-    }
+    };
   }, []);
 
   useEffect(() => {
