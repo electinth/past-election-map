@@ -75,6 +75,7 @@ mapshaper \
 
 # Combine candidate results data to topo json
 node -r esm merge.js
+node -r esm label-position.js
 
 # Done
 echo "----------------------------------------------------------------"

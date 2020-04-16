@@ -3,7 +3,7 @@ import fs from 'fs';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 import polylabel from 'polylabel';
-import CountryTopoJson from './thailand-election.topo.json';
+import CountryTopoJson from './topo/thailand-election.topo.json';
 
 const simplifyMinWeight = 1e-5;
 const CountryTopo = tps.presimplify(CountryTopoJson);
@@ -32,7 +32,7 @@ makePolylabelProps('election-2557');
 makePolylabelProps('election-2554');
 makePolylabelProps('election-2550');
 fs.writeFileSync(
-  './thailand-election.topo.json',
+  './topo/thailand-election.topo.json',
   JSON.stringify(CountryTopoJson)
 );
 
