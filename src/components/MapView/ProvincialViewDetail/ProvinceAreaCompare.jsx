@@ -1,17 +1,13 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useParams, withRouter } from 'react-router-dom';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 
 import partyColor from '../../../map/color';
 import MapContext from '../../../map/context';
-import {
-  fillFactory,
-  polylabelPositionFactory,
-  fontSizeFactory
-} from '../../Viz/D3Map';
+import D3Compare from './D3Compare';
 
 const Container = styled.div`
   height: 550px;
@@ -49,147 +45,143 @@ const SeeMore = styled.button`
   }
 `;
 
-let geo, $defs;
-const ProvinceAreaCompare = () => {
-  const { province, CountryTopoJson } = useContext(MapContext);
+const CompareContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0 20px;
+`;
 
-  const compareRef = useRef(null);
+const CompareMap = styled.div`
+  flex: 0 0 45%;
+  height: 200px;
+  margin: 2.5%;
+  cursor: pointer;
+
+  border: 1px solid
+    ${props => (props.active ? 'var(--color-black)' : 'transparent')};
+  border-radius: 10px;
+
+  &:hover {
+    border: 1px solid var(--color-black);
+  }
+`;
+
+let geo, $defs;
+let maps;
+const ProvinceAreaCompare = props => {
+  const { year: paramYear } = useParams();
+  useEffect(() => {
+    if (!paramYear) return;
+    setElectionYear(`election-${paramYear}`);
+  }, [paramYear]);
+
+  const {
+    province,
+    CountryTopoJson,
+    electionYear,
+    setElectionYear
+  } = useContext(MapContext);
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
 
-    const simplifyMinWeight = 5e-4;
-    const CountryTopo = tps.presimplify(CountryTopoJson);
-    geo = tps.simplify(CountryTopo, simplifyMinWeight);
+    const $compare = d3.selectAll('svg[id*=compare-election-]');
     $defs = d3.select(`#map-defs-compare`);
+    maps = D3Compare(CountryTopoJson, $compare, $defs);
   }, [CountryTopoJson]);
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
-    const $compare = d3.select(compareRef.current);
 
-    const data = Object.entries(geo.objects)
-      .map(([_, g]) => {
-        const { type, geometries } = g;
-        const provinceGeometries = geometries.filter(
-          geometry => geometry.properties.province_name === province
-        );
-        return {
-          type,
-          geometries: provinceGeometries
-        };
-      })
-      .map(d => topojson.feature(geo, d));
-
-    const w = $compare.node().parentElement.parentElement.offsetWidth,
-      h = 0.75 * $compare.node().parentElement.parentElement.offsetHeight;
-    const b = d3.geoBounds(data[0]);
-    const longest = Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]);
-
-    const SCALE = 6500 / longest;
-    const center = d3.geoCentroid(data[0]);
-    const projection = d3
-      .geoMercator()
-      .translate([w / 4, h / 4 + 30])
-      .scale([SCALE])
-      .center(center);
-    const path = d3.geoPath(projection);
-
-    const $gElection = $compare
-      .selectAll('g')
-      .data(data)
-      .join('g')
-      .attr('transform', (d, i) => {
-        const x = ((i % 2) * w) / 2;
-        const y = i >= 2 ? h / 2 + 50 : 0;
-        return `translate(${x}, ${y})`;
-      });
-
-    const $path = $gElection
-      .selectAll('path')
-      .data(d => d.features)
-      .join('path')
-      .attr('class', 'zone')
-      .attr('d', path)
-      .attr('stroke-width', '0.6')
-      .attr('stroke', 'black')
-      .attr('vector-effect', 'non-scaling-stroke')
-      .each(function(d) {
-        const year = this.parentElement.className.baseVal;
-
-        d3.select(this).attr(
-          'fill',
-          fillFactory($defs, 'compare')(year)(province)
-        );
-      });
-
-    const polylabelPosition = polylabelPositionFactory(projection);
-    const fontSize = fontSizeFactory(path);
-    const $circle = $gElection
-      .selectAll('circle')
-      .data(d => d.features)
-      .join('circle')
-      .attr('class', 'label-bg')
-      .attr('cx', polylabelPosition('x'))
-      .attr('cy', polylabelPosition('y'))
-      .attr('r', geo => {
-        const size = fontSize(geo);
-        return size / 5;
-      })
-      .attr('fill', 'var(--color-white)')
-      .attr('stroke-width', 0.2)
-      .attr('stroke', 'black')
-      .attr('vector-effect', 'non-scaling-stroke')
-      .raise();
-
-    const $label = $gElection
-      .selectAll('text.zone-label')
-      .data(d => d.features)
-      .join('text')
-      .attr('class', 'zone-label')
-      .text(({ properties: { zone_id } }) => zone_id)
-      .attr('x', polylabelPosition('x'))
-      .attr('y', polylabelPosition('y'))
-      .attr('font-size', geo => fontSize(geo) / 5)
-      .attr('dominant-baseline', 'middle')
-      .raise();
-  }, [compareRef, CountryTopoJson, province]);
+    maps.handleProvinceChange(province);
+  }, [CountryTopoJson, province]);
 
   return (
     <Container>
-      <Title>เปรียบเทียบ 4 ปี</Title>
-      <div style={{ marginTop: '3rem' }}>
-        <svg width="100%" height="400">
-          <g className="compare-province" ref={compareRef}>
-            <defs id={`map-defs-compare`}></defs>
-            <g className="election-2562">
-              <text fontSize="2.2rem" textAnchor="middle" x="20%" y="25px">
-                2562
-              </text>
-            </g>
-            <g className="election-2557">
-              <text fontSize="2.2rem" textAnchor="middle" x="20%" y="25px">
-                2557
-              </text>
-            </g>
-            <g className="election-2554">
-              <text fontSize="2.2rem" textAnchor="middle" x="20%" y="25px">
-                2554
-              </text>
-            </g>
-            <g className="election-2550">
-              <text fontSize="2.2rem" textAnchor="middle" x="20%" y="25px">
-                2550
-              </text>
-            </g>
-          </g>
-        </svg>
-      </div>
+      <Title>ผลเลือกตั้งย้อนหลัง</Title>
+      <CompareContainer>
+        <CompareMap
+          active={electionYear === 'election-2562'}
+          onClick={() =>
+            province === 'ประเทศไทย'
+              ? props.history.push(`/2562`)
+              : props.history.push(`/2562/${province}`)
+          }
+        >
+          <svg
+            id="compare-election-2562"
+            data-election-year="election-2562"
+            width="100%"
+            height="100%"
+          >
+            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+              2562
+            </text>
+          </svg>
+        </CompareMap>
+        <CompareMap
+          active={electionYear === 'election-2557'}
+          onClick={() =>
+            province === 'ประเทศไทย'
+              ? props.history.push(`/2557`)
+              : props.history.push(`/2557/${province}`)
+          }
+        >
+          <svg
+            id="compare-election-2557"
+            data-election-year="election-2557"
+            width="100%"
+            height="100%"
+          >
+            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+              2557
+            </text>
+          </svg>
+        </CompareMap>
+        <CompareMap
+          active={electionYear === 'election-2554'}
+          onClick={() =>
+            province === 'ประเทศไทย'
+              ? props.history.push(`/2554`)
+              : props.history.push(`/2554/${province}`)
+          }
+        >
+          <svg
+            id="compare-election-2554"
+            data-election-year="election-2554"
+            width="100%"
+            height="100%"
+          >
+            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+              2554
+            </text>
+          </svg>
+        </CompareMap>
+        <CompareMap
+          active={electionYear === 'election-2550'}
+          onClick={() =>
+            province === 'ประเทศไทย'
+              ? props.history.push(`/2550`)
+              : props.history.push(`/2550/${province}`)
+          }
+        >
+          <svg
+            id="compare-election-2550"
+            data-election-year="election-2550"
+            width="100%"
+            height="100%"
+          >
+            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+              2550
+            </text>
+          </svg>
+        </CompareMap>
+      </CompareContainer>
       <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
-        <SeeMore>ดูเพิ่มเติม</SeeMore>
+        <SeeMore>ดูเปรียบเทียบ 4 ปี</SeeMore>
       </Link>
     </Container>
   );
 };
 
-export default ProvinceAreaCompare;
+export default withRouter(ProvinceAreaCompare);
