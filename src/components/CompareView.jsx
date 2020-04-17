@@ -128,6 +128,7 @@ const LiPartyList = styled.li`
   margin: 0.5rem 0;
   text-align: left;
   font-family: 'Noto Sans';
+  overflow: hidden;
 `;
 
 const BackButton = styled.div`
