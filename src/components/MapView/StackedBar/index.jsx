@@ -32,9 +32,6 @@ const StackedBar = ({ data, zoneQuota, year }) => {
       ratio: 1 - summary.reduce((acc, cur) => acc + cur.ratio, 0)
     });
 
-    console.log(summary);
-    console.log(year);
-
     return (
       <ul className="stacked-bar">
         {summary.map(winner => (

@@ -49,7 +49,7 @@ const PartyUL = styled.ul`
 
 const Year = styled.li`
   margin: 0 auto;
-  padding-bottom: 10px;
+  padding-bottom: 50px;
   &:not(:last-child) {
   }
 `;
@@ -246,9 +246,6 @@ const PartyCard = ({ data = {} }) => {
 };
 
 const PersonCard = ({ data = {} }) => {
-  console.log('personCard');
-  console.log(data.data);
-  console.log(data.year);
   const isNovote = data.year === 'election-2557';
   const numCandidateByZone = data.data.reduce((acc, val) => acc + val.quota, 0);
   const districtWinners = data.data.map(({ zone_id, result, quota }) => {
