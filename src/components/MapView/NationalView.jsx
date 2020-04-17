@@ -125,7 +125,6 @@ const ExplainText = styled.p`
 const NoVoteDisplay = ({ view }) => {
   const width = view === 'nationView' ? 257 : 65;
   const height = view === 'nationView' ? 159 : 40;
-  console.log(view);
   return (
     <div>
       {view === 'nationView' ? (

@@ -120,8 +120,6 @@ const Winner = ({ provincialProps }) => {
   const [winners, setWinners] = useState([]);
 
   useEffect(() => {
-    console.log('effect');
-    console.log(provincialProps);
     const districtWinners = provincialProps.map(
       ({ zone_id, result, quota }) => {
         if (!result) {
@@ -149,8 +147,6 @@ const Winner = ({ provincialProps }) => {
     );
     setWinners(districtWinners);
   }, [electionYear, provincialProps]);
-
-  console.log(winners);
 
   const percentageFormat = d3.format('.2%');
   return (
