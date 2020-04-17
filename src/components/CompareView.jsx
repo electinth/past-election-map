@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import _ from 'lodash';
 import * as d3 from 'd3';
@@ -11,7 +11,6 @@ import StackedBar from './MapView/StackedBar';
 import { NovoteDisplay } from './MapView/NationalView';
 import { SeePartyMenu, SeeWinnerMenu } from './MapView/ProvincialView';
 import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
-import Dropdown from './MapView/Dropdown/index';
 
 const Container = styled.div`
   position: fixed;
@@ -126,7 +125,7 @@ const UlPartyList = styled.ul`
 
 const LiPartyList = styled.li`
   font-size: 1.6rem;
-  padding: 0.5rem 0;
+  margin: 0.5rem 0;
   text-align: left;
   font-family: 'Noto Sans';
 `;
@@ -372,7 +371,7 @@ const PersonCard = ({ data = {} }) => {
 
 const CompareView = () => {
   const [partyView, setPartyView] = useState(true);
-  const { CountryTopoJson, setProvince } = useContext(MapContext);
+  const { CountryTopoJson, setProvince, province } = useContext(MapContext);
   const { province: paramProvince } = useParams();
 
   useEffect(() => {
@@ -458,8 +457,6 @@ const CompareView = () => {
     personData = byPersonSorted.reverse();
   }
 
-  useEffect(() => {}, []);
-
   return (
     <Container>
       <Header>
@@ -532,9 +529,9 @@ const CompareView = () => {
             ></span>
           </div>
         </div>
-        {/* <DropDownContainer>
-          <Dropdown />
-        </DropDownContainer> */}
+        <DropDownContainer>
+          <DropdownCompare>{paramProvince}</DropdownCompare>
+        </DropDownContainer>
       </Header>
       {!partyData ? (
         <div>Loading...</div>
@@ -548,5 +545,114 @@ const CompareView = () => {
     </Container>
   );
 };
+
+let allProvinces = [];
+const DropdownCompare = props => {
+  const { setProvince, CountryTopoJson } = useContext(MapContext);
+  const [filter, setFilter] = useState('');
+  const [dropdownProvinces, setDropdownProvinces] = useState([]);
+  const {
+    ref,
+    isComponentVisible: showItems,
+    setIsComponentVisible: setShowItems
+  } = useComponentVisible(false);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    if (CountryTopoJson.length === 0) return;
+    allProvinces = Array.from(
+      new Set(
+        CountryTopoJson.objects['election-2562'].geometries.map(
+          d => d.properties.province_name
+        )
+      )
+    ).sort();
+
+    setDropdownProvinces(allProvinces);
+  }, [CountryTopoJson]);
+
+  useEffect(() => {
+    const filteredProvince = allProvinces.filter(province =>
+      province.includes(filter)
+    );
+    setDropdownProvinces(filteredProvince);
+  }, [filter]);
+
+  useEffect(() => {
+    setFilter('');
+    if (showItems) searchRef.current.focus();
+  }, [showItems]);
+
+  return (
+    <div
+      className="dropdown--container"
+      ref={ref}
+      style={{ height: '100%', width: '300px' }}
+    >
+      <button
+        className="dropdown--button"
+        onClick={() => setShowItems(prev => !prev)}
+        style={{ height: '100%', paddingTop: '5px', fontSize: '3rem' }}
+      >
+        {props.children}
+        <i className="dropdown--chevron" style={{ marginTop: '2px' }}></i>
+      </button>
+      {showItems && (
+        <div className="dropdown--items">
+          <div className="dropdown--items-wrapper">
+            <div className="dropdown--search">
+              <input
+                type="text"
+                className="dropdown--search-input"
+                onChange={e => setFilter(e.target.value)}
+                placeholder="พิมพ์จังหวัด"
+                ref={searchRef}
+              />
+            </div>
+            {dropdownProvinces.map(province => (
+              <Link
+                to={`/compare/${province}`}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <div
+                  className="dropdown--item"
+                  key={province}
+                  onClick={() => {
+                    setProvince(province);
+                    setShowItems(prev => !prev);
+                  }}
+                >
+                  {province}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+function useComponentVisible(initialIsVisible) {
+  const [isComponentVisible, setIsComponentVisible] = useState(
+    initialIsVisible
+  );
+  const ref = useRef(null);
+
+  const handleClickOutside = event => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIsComponentVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  });
+
+  return { ref, isComponentVisible, setIsComponentVisible };
+}
 
 export default CompareView;
