@@ -1,18 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import siteLogoImage from '../images/site-logo.png';
 
 const Nav = () => {
+  const location = useLocation();
+  const isCompareView = location.pathname.split('/')[1] === 'compare';
+  const province = isCompareView ? location.pathname.split('/')[2] : '';
+  console.log(isCompareView);
   return (
     <nav className="nav">
       <a href="https://elect.in.th" className="nav--logo nav--logo__elect">
         <img src={siteLogoImage} className="nav--logo-image"></img>
       </a>
-      <Link className="nav--header__link" to="/">
+      {isCompareView ? (
         <h1 className="nav--header">
-          ย้อนดู 'แบ่งเขตเลือกตั้ง' ในอดีตของประเทศไทย
+          เขตเลือกตั้งจังหวัด{province} เปรียบเทียบ 4 ปี
         </h1>
-      </Link>
+      ) : (
+        <Link className="nav--header__link" to="/">
+          <h1 className="nav--header">
+            ย้อนดู 'แบ่งเขตเลือกตั้ง' ในอดีตของประเทศไทย
+          </h1>
+        </Link>
+      )}
       <Link to="/about-us" className="nav--about-us__link">
         <span className="nav--about-us">About Us</span>
       </Link>

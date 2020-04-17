@@ -44,12 +44,15 @@ const ViewParty = styled.div`
 const PartyUL = styled.ul`
   display: flex;
   list-style-type: none;
+  // justify-content: space-around;
   margin: 0 auto;
+  width: 100%;
 `;
 
 const Year = styled.li`
   margin: 0 auto;
   padding-bottom: 50px;
+  width: 20%;
   &:not(:last-child) {
   }
 `;
