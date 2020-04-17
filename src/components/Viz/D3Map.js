@@ -135,10 +135,12 @@ function D3Map(
       const b = path.bounds(selection);
       const zoomScale =
         0.875 / Math.max((b[1][0] - b[0][0]) / bw, (b[1][1] - b[0][1]) / bh);
-      const centroid = path.centroid(selection);
+      const lonCenter = (b[0][0] + b[1][0]) / 2;
+      const latCenter = (b[0][1] + b[1][1]) / 2;
+      const center = [lonCenter, latCenter];
       const translate = [
-        zoomScale * -centroid[0] + cw,
-        zoomScale * -centroid[1] + ch
+        zoomScale * -center[0] + cw,
+        zoomScale * -center[1] + ch
       ];
 
       let transform = `translate(${translate[0]}, ${translate[1]}) scale(${zoomScale})`;
@@ -399,7 +401,8 @@ function fillFactory($defs, uid = '') {
         const { result: candidates, province_name, quota } = properties;
         if (!candidates) {
           return province === province_name || province === 'ประเทศไทย'
-            ? 'white' : 'gainsboro';
+            ? 'white'
+            : 'gainsboro';
         }
 
         const sortedCandidates = _.orderBy(candidates, ['score'], ['desc']);
