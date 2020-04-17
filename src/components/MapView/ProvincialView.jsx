@@ -307,7 +307,7 @@ const SeeWinnerMenu = ({ partyView, view }) => {
           </g>
         </g>
       </svg>
-      ดูผู้ชนะ
+      ดูส.ส.เขต
     </div>
   );
 };
