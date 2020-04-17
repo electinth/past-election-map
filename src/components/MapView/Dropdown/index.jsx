@@ -15,6 +15,7 @@ const Dropdown = props => {
     setIsComponentVisible: setShowItems
   } = useComponentVisible(false);
   const searchRef = useRef(null);
+  const year = electionYear.substring(electionYear.length - 4);
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
@@ -72,8 +73,8 @@ const Dropdown = props => {
                   setProvince(province);
                   setShowItems(prev => !prev);
                   province === 'ประเทศไทย'
-                    ? props.history.push(`/${electionYear}`)
-                    : props.history.push(`/${electionYear}/${province}`);
+                    ? props.history.push(`/${year}`)
+                    : props.history.push(`/${year}/${province}`);
                 }}
               >
                 {province}
