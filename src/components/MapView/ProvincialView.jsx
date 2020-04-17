@@ -11,7 +11,6 @@ import StackedBar from './StackedBar';
 import { NovoteDisplay } from './NationalView';
 import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx';
 import partyColor from '../../map/color';
-import peopleLogo from '../../images/people-white.svg';
 
 const ProvincialLeft = () => {
   const { province: paramProvince } = useParams();

@@ -6,7 +6,6 @@ const Nav = () => {
   const location = useLocation();
   const isCompareView = location.pathname.split('/')[1] === 'compare';
   const province = isCompareView ? location.pathname.split('/')[2] : '';
-  console.log(isCompareView);
   return (
     <nav className="nav">
       <a href="https://elect.in.th" className="nav--logo nav--logo__elect">
