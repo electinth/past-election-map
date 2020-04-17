@@ -25,7 +25,7 @@ function D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, in
   const handleProvinceChange = province => {
     // adaptive simplification
     // the larger province, the more simlified
-    const pf = getProvinceFeature(CountryTopoJson, 'election-2562', province);
+    const pf = getProvinceFeature(CountryTopoJson, `election-${_.last(compareYears)}`, province);
     const pb = d3.geoBounds(pf);
     const size = Math.max(pb[1][0] - pb[0][0], pb[1][1] - pb[0][1]);
     const simplifyScale = d3.scaleLinear()
@@ -40,7 +40,8 @@ function D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, in
     const data = compareYears.map(electionYear =>
       getProvinceFeature(geo, `election-${electionYear}`, province)
     );
-    const b = d3.geoBounds(data[0]);
+    const b = d3.geoBounds(_.last(data));
+
     const longest = Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]);
     const lonCenter = (b[0][0] + b[1][0]) / 2;
     const latCenter = (b[0][1] + b[1][1]) / 2;

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import MapContext from '../../map/context';
 import _ from 'lodash';
@@ -57,7 +58,7 @@ const NationalRight = () => {
         {numZone} เขต {numCandidate} คน
       </h1>
       {isNoVote ? (
-        <NovoteDisplay view={'nationView'} />
+        <NoVoteDisplay view={'nationView'} />
       ) : (
         <div>
           <PartyList byPartySorted={byPartySorted} view={'nationView'} />
@@ -69,9 +70,8 @@ const NationalRight = () => {
 };
 const Container = styled.div`
   width: 258px;
-  margin: 0 auto;
-  margin-top: 20px;
-  padding-top: 27px;
+  margin: 2rem auto;
+  padding-top: 3rem;
   ${props =>
     props.compareView &&
     `
@@ -93,7 +93,7 @@ const WarnText = styled.h1`
     `
     color: #da3731;
     font-family: "The MATTER";
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
     line-height: 18px;
     text-align: center;
@@ -111,14 +111,18 @@ const ExplainText = styled.p`
     `
     color: #000000;
     font-family: "Noto Sans Thai";
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 500;
     letter-spacing: 0;
     line-height: 14px;
+    margin-top: 0.5rem;
   `}
+  a {
+    color: inherit;
+  }
 `;
 
-const NovoteDisplay = ({ view }) => {
+const NoVoteDisplay = ({ view }) => {
   const width = view === 'nationView' ? 257 : 65;
   const height = view === 'nationView' ? 159 : 40;
   console.log(view);
@@ -148,4 +152,17 @@ const NovoteDisplay = ({ view }) => {
     </div>
   );
 };
-export { NationalLeft, NationalRight, NovoteDisplay };
+
+const NoBeungKanProvince = () => {
+  return (
+    <Container compareView style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+      <WarnText compareView >ไม่มีข้อมูล</WarnText>
+      <ExplainText compareView>
+      จังหวัดบึงกาฬแยกออกจาก<Link to={'/compare/หนองคาย'}>จังหวัดหนองคาย</Link>
+      เมื่อปี 2554
+      </ExplainText>
+    </Container>
+  );
+}
+
+export { NationalLeft, NationalRight, NoVoteDisplay, NoBeungKanProvince };

@@ -8,7 +8,7 @@ import Overview from './Overview';
 import PartyList from './PartyList';
 import StackedBar from './StackedBar';
 
-import { NovoteDisplay } from './NationalView';
+import { NoVoteDisplay, NoBeungKanProvince } from './NationalView';
 import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx';
 import partyColor from '../../map/color';
 
@@ -71,7 +71,7 @@ const ProvincialRight = () => {
         จำนวน {numDistricts} เขต {numCandidate} คน
       </h1>
       {isNovote ? (
-        <NovoteDisplay view={'nationView'} />
+        <NoVoteDisplay view={'nationView'} />
       ) : (
         <>
           <div className="provincial-view--toggle">
@@ -97,12 +97,18 @@ const ProvincialRight = () => {
               style={{ left: !partyView && '50%' }}
             ></span>
           </div>
-          {partyView ? (
-            <PartyList byPartySorted={byPartySorted} />
+          {province === 'บึงกาฬ' && electionYear === 'election-2550' ? (
+            <NoBeungKanProvince />
           ) : (
-            <Winner provincialProps={provincialProps} />
+            [
+              partyView ? (
+                <PartyList byPartySorted={byPartySorted} />
+              ) : (
+                <Winner provincialProps={provincialProps} />
+              ),
+              <Overview waffleData={byPartySorted} view={'provinceView'} />
+            ]
           )}
-          <Overview waffleData={byPartySorted} view={'provinceView'} />
         </>
       )}
     </div>
@@ -306,7 +312,7 @@ const SeeWinnerMenu = ({ partyView, view }) => {
           </g>
         </g>
       </svg>
-      ดูส.ส.เขต
+      ดู ส.ส. เขต
     </div>
   );
 };

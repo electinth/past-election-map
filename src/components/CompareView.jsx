@@ -9,7 +9,7 @@ import partyColor from '../map/color';
 import { ELECTION_YEAR } from '../config';
 
 import StackedBar from './MapView/StackedBar';
-import { NovoteDisplay } from './MapView/NationalView';
+import { NoVoteDisplay, NoBeungKanProvince } from './MapView/NationalView';
 import { SeePartyMenu, SeeWinnerMenu } from './MapView/ProvincialView';
 import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
 
@@ -75,8 +75,9 @@ const YearTilte = styled.h1`
 
 const PartyCardContainer = styled.div`
   min-height: 240px;
-  width: 200px;
-  border-radius: 10px;
+  max-width: 260px;
+  width: 90%;
+  border-radius: var(--border-radius);
   background-color: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   margin: 0 auto;
@@ -86,7 +87,7 @@ const PartyCardContainer = styled.div`
 const PersonCardContainer = styled.div`
   min-height: 240px;
   width: 200px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   background-color: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   margin: 0 auto;
@@ -105,7 +106,7 @@ const DistricExplain = styled.h2`
 const Quota = styled.h1`
   color: #484848;
   font-family: 'The MATTER';
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: bold;
   letter-spacing: 0;
   line-height: 21px;
@@ -115,13 +116,17 @@ const Quota = styled.h1`
 
 const LineHr = styled.hr`
   margin-top: 21px;
-  border: 0.5px solid #000000;
+  border: none;
+  border-bottom: 1px solid #000000;
 `;
 
 const UlPartyList = styled.ul`
   list-style: none;
   max-height: 35vh;
   overflow-y: scroll;
+  a {
+    color: inherit;
+  }
 `;
 
 const LiPartyList = styled.li`
@@ -137,7 +142,7 @@ const BackButton = styled.div`
   width: 164px;
   left: 50px;
   border: 1px solid #333333;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   background-color: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
   position: absolute;
@@ -210,7 +215,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                     dimension.h + dimension.marginTop + dimension.marginBottom
                   }
                 >
-                  {year === 2550 && <defs id={`map-defs-compare`}></defs>}
+                  <defs id={`map-defs-compare`}></defs>
                 </svg>
                 {view === 'party' ? (
                   <PartyCard data={party[index]} />
@@ -230,9 +235,7 @@ const TitleZone = ({ province, zone, numCandidateByZone }) => {
   return (
     <div>
       <DistricExplain>
-        เขตเลือกตั้ง
-        <br />
-        จังหวัด{province}
+        เขตเลือกตั้ง จังหวัด{province}
       </DistricExplain>
       <Quota>
         {zone} เขต / {numCandidateByZone} คน
@@ -256,19 +259,11 @@ const PartyCard = ({ data = {} }) => {
       />
       <LineHr />
       {isNovote ? (
-        <NovoteDisplay view={'compareView'} />
+        <NoVoteDisplay view={'compareView'} />
       ) : (
         <UlPartyList>
           {data.province === 'บึงกาฬ' && data.year === 'election-2550' ? (
-            <div>
-              <Link
-                to={'/compare/หนองคาย'}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <h1>ไม่มีข้อมูล</h1>
-                <p>จังหวัดบึงกาฬแยกออกจากจังหวัดหนองคายเมื่อปี 2554</p>
-              </Link>
-            </div>
+            <NoBeungKanProvince />
           ) : (
             data.data.map(({ party, candidate }) => (
               <LiPartyList key={party}>
@@ -316,19 +311,11 @@ const PersonCard = ({ data = {} }) => {
       />
       <LineHr />
       {isNovote ? (
-        <NovoteDisplay view={'compareView'} />
+        <NoVoteDisplay view={'compareView'} />
       ) : (
         <ul className="provincial-view--list">
           {data.province === 'บึงกาฬ' && data.year === 'election-2550' ? (
-            <div style={{ textAlign: 'center' }}>
-              <Link
-                to={'/compare/หนองคาย'}
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <h1>ไม่มีข้อมูล</h1>
-                <p>จังหวัดบึงกาฬแยกออกจากจังหวัดหนองคายเมื่อปี 2554</p>
-              </Link>
-            </div>
+            <NoBeungKanProvince />
           ) : (
             <div>
               {districtWinners.map(
@@ -503,10 +490,10 @@ const CompareView = () => {
             Back
           </BackButton>
         </Link>
-        <div style={{ width: '378px', margin: '0 auto' }}>
+        <div style={{ width: '40rem', margin: '0 auto' }}>
           <div
             className="provincial-view--toggle"
-            style={{ height: '100%', borderRadius: '12px' }}
+            style={{ height: '100%', borderRadius: 'var(--border-radius)' }}
           >
             <div
               className={`provincial-view--toggle-button ${partyView &&
