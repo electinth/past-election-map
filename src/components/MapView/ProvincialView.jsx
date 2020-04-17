@@ -120,12 +120,7 @@ const Winner = ({ provincialProps }) => {
     const districtWinners = provincialProps.map(
       ({ zone_id, result, quota }) => {
         if (!result) {
-          return {
-            zone_id: '1',
-            winnerResultArray: [],
-            result: '1',
-            quota: 1
-          };
+          return;
         }
         result.sort((a, b) => b.score - a.score);
         const winnerResultArray = result
@@ -150,38 +145,44 @@ const Winner = ({ provincialProps }) => {
     setWinners(districtWinners);
   }, [electionYear, provincialProps]);
 
+  console.log(winners);
+
   const percentageFormat = d3.format('.2%');
   return (
     <ul className="provincial-view--list">
-      {winners.map(({ zone_id, winnerResultArray, result, quota, year }) => (
-        <li key={zone_id + year} className="provincial-view--list-item">
-          <div>
-            {' '}
-            <b className="provincial-view--list-zone">เขต {zone_id}</b>
-          </div>
-          {winnerResultArray.map(winner => (
-            <div
-              className="provincial-view--list-item__winner"
-              key={winner.first_name + winner.party}
-            >
-              <span
-                style={{
-                  display: 'inline-block',
-                  width: '1rem',
-                  height: '1rem',
-                  marginRight: '0.5rem',
-                  backgroundColor: partyColor(year)(winner.party)
-                }}
-              ></span>
-              {winner.first_name} {winner.last_name}, พรรค{winner.party},{' '}
-              <span style={{ fontFamily: 'Noto Sans Medium' }}>
-                {percentageFormat(winner.ratio)}
-              </span>
+      {!winners[0] ? (
+        <div></div>
+      ) : (
+        winners.map(({ zone_id, winnerResultArray, result, quota, year }) => (
+          <li key={zone_id + year} className="provincial-view--list-item">
+            <div>
+              {' '}
+              <b className="provincial-view--list-zone">เขต {zone_id}</b>
             </div>
-          ))}
-          <StackedBar data={result} zoneQuota={quota} year={year} />
-        </li>
-      ))}
+            {winnerResultArray.map(winner => (
+              <div
+                className="provincial-view--list-item__winner"
+                key={winner.first_name + winner.party}
+              >
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '1rem',
+                    height: '1rem',
+                    marginRight: '0.5rem',
+                    backgroundColor: partyColor(year)(winner.party)
+                  }}
+                ></span>
+                {winner.first_name} {winner.last_name}, พรรค{winner.party},{' '}
+                <span style={{ fontFamily: 'Noto Sans Medium' }}>
+                  {percentageFormat(winner.ratio)}
+                </span>
+              </div>
+            ))}
+            <StackedBar data={result} zoneQuota={quota} year={year} />
+          </li>
+        ))
+      )}
     </ul>
   );
 };
