@@ -66,7 +66,7 @@ const YearTilte = styled.h1`
 `;
 
 const PartyCardContainer = styled.div`
-  height: 240px;
+  min-height: 240px;
   width: 200px;
   border-radius: 10px;
   background-color: #ffffff;
@@ -261,7 +261,7 @@ const PersonCard = ({ data = {} }) => {
     winnerResultArray.map(val => {
       val.ratio = val.score / totalScore;
     });
-    return { zone_id, winnerResultArray, result, quota };
+    return { zone_id, winnerResultArray, result, quota, year: data.year };
   });
 
   const percentageFormat = d3.format('.2%');
@@ -279,7 +279,7 @@ const PersonCard = ({ data = {} }) => {
       ) : (
         <ul className="provincial-view--list">
           {districtWinners.map(
-            ({ zone_id, winnerResultArray, result, quota }) => (
+            ({ zone_id, winnerResultArray, result, quota, year }) => (
               <li
                 key={zone_id + data.year}
                 className="provincial-view--list-item"
@@ -306,7 +306,7 @@ const PersonCard = ({ data = {} }) => {
                     {winner.party}, {percentageFormat(winner.ratio)}
                   </div>
                 ))}
-                <StackedBar data={result} zoneQuota={quota} />
+                <StackedBar data={result} zoneQuota={quota} year={year} />
               </li>
             )
           )}

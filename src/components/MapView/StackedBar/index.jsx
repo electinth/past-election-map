@@ -5,7 +5,7 @@ import './styles.scss';
 import MapContext from '../../../map/context';
 import partyColor from '../../../map/color';
 
-const StackedBar = ({ data, zoneQuota }) => {
+const StackedBar = ({ data, zoneQuota, year }) => {
   /*
   data = {
     winner: { party: 'เพื่อไทย', ratio: 60 },
@@ -15,7 +15,7 @@ const StackedBar = ({ data, zoneQuota }) => {
   */
   const { electionYear } = useContext(MapContext);
   const percentageFormat = d3.format('.2%');
-  const color = partyColor(electionYear);
+  const color = partyColor(year);
 
   //More Quota
   if (zoneQuota != 1) {
@@ -31,6 +31,9 @@ const StackedBar = ({ data, zoneQuota }) => {
       party: 'อื่นๆ',
       ratio: 1 - summary.reduce((acc, cur) => acc + cur.ratio, 0)
     });
+
+    console.log(summary);
+    console.log(year);
 
     return (
       <ul className="stacked-bar">
@@ -48,7 +51,7 @@ const StackedBar = ({ data, zoneQuota }) => {
                 className="stacked-bar--bar__tooltipcolor"
                 style={{
                   display: 'inline-block',
-                  backgroundColor: partyColor(electionYear)(winner.party),
+                  backgroundColor: partyColor(year)(winner.party),
                   width: '1rem',
                   height: '1rem',
                   marginRight: '.5rem'
@@ -77,8 +80,6 @@ const StackedBar = ({ data, zoneQuota }) => {
       ratio: 1 - winner.ratio - runnerUp.ratio
     };
 
-    const summary = { winner, runnerUp, rest };
-
     return (
       <ul className="stacked-bar">
         <li
@@ -94,7 +95,7 @@ const StackedBar = ({ data, zoneQuota }) => {
               className="stacked-bar--bar__tooltipcolor"
               style={{
                 display: 'inline-block',
-                backgroundColor: partyColor(electionYear)(winner.party),
+                backgroundColor: partyColor(year)(winner.party),
                 width: '1rem',
                 height: '1rem',
                 marginRight: '.5rem'
@@ -115,7 +116,7 @@ const StackedBar = ({ data, zoneQuota }) => {
               className="stacked-bar--bar__tooltipcolor"
               style={{
                 display: 'inline-block',
-                backgroundColor: partyColor(electionYear)(runnerUp.party),
+                backgroundColor: partyColor(year)(runnerUp.party),
                 width: '1rem',
                 height: '1rem',
                 marginRight: '.5rem'

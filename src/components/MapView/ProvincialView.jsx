@@ -115,9 +115,18 @@ const Winner = ({ provincialProps }) => {
   const [winners, setWinners] = useState([]);
 
   useEffect(() => {
+    console.log('effect');
+    console.log(provincialProps);
     const districtWinners = provincialProps.map(
       ({ zone_id, result, quota }) => {
-        if (!result) return;
+        if (!result) {
+          return {
+            zone_id: '1',
+            winnerResultArray: [],
+            result: '1',
+            quota: 1
+          };
+        }
         result.sort((a, b) => b.score - a.score);
         const winnerResultArray = result
           .sort((a, b) => b.score - a.score)
@@ -129,18 +138,23 @@ const Winner = ({ provincialProps }) => {
         winnerResultArray.map(val => {
           val.ratio = val.score / totalScore;
         });
-        return { zone_id, winnerResultArray, result, quota };
+        return {
+          zone_id,
+          winnerResultArray,
+          result,
+          quota,
+          year: electionYear
+        };
       }
     );
     setWinners(districtWinners);
   }, [electionYear, provincialProps]);
-  console.log(winners);
 
   const percentageFormat = d3.format('.2%');
   return (
     <ul className="provincial-view--list">
-      {winners.map(({ zone_id, winnerResultArray, result, quota }) => (
-        <li key={zone_id + electionYear} className="provincial-view--list-item">
+      {winners.map(({ zone_id, winnerResultArray, result, quota, year }) => (
+        <li key={zone_id + year} className="provincial-view--list-item">
           <div>
             {' '}
             <b className="provincial-view--list-zone">เขต {zone_id}</b>
@@ -156,7 +170,7 @@ const Winner = ({ provincialProps }) => {
                   width: '1rem',
                   height: '1rem',
                   marginRight: '0.5rem',
-                  backgroundColor: partyColor(electionYear)(winner.party)
+                  backgroundColor: partyColor(year)(winner.party)
                 }}
               ></span>
               {winner.first_name} {winner.last_name}, พรรค{winner.party},{' '}
@@ -165,7 +179,7 @@ const Winner = ({ provincialProps }) => {
               </span>
             </div>
           ))}
-          <StackedBar data={result} zoneQuota={quota} />
+          <StackedBar data={result} zoneQuota={quota} year={year} />
         </li>
       ))}
     </ul>
