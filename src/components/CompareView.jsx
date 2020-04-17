@@ -86,13 +86,13 @@ const PartyCardContainer = styled.div`
 
 const PersonCardContainer = styled.div`
   min-height: 240px;
-  width: 200px;
+  max-width: 260px;
+  width: 90%;
   border-radius: var(--border-radius);
   background-color: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   margin: 0 auto;
   padding: 10px;
-  position: relative;
 `;
 
 const DistricExplain = styled.h2`
@@ -245,6 +245,7 @@ const TitleZone = ({ province, zone, numCandidateByZone }) => {
 };
 
 const PartyCard = ({ data = {} }) => {
+  const { year: paramYear } = useParams();
   const isNovote = data.year === 'election-2557';
   const numCandidateByZone = data.data.reduce(
     (acc, val) => acc + val.candidate,
@@ -263,7 +264,7 @@ const PartyCard = ({ data = {} }) => {
       ) : (
         <UlPartyList>
           {data.province === 'บึงกาฬ' && data.year === 'election-2550' ? (
-            <NoBeungKanProvince />
+            <NoBeungKanProvince year={paramYear} />
           ) : (
             data.data.map(({ party, candidate }) => (
               <LiPartyList key={party}>
@@ -363,7 +364,7 @@ const PersonCard = ({ data = {} }) => {
 const CompareView = () => {
   const [partyView, setPartyView] = useState(true);
   const { CountryTopoJson, setProvince, province } = useContext(MapContext);
-  const { province: paramProvince } = useParams();
+  const { province: paramProvince, year: paramYear } = useParams();
 
   useEffect(() => {
     setProvince(paramProvince);
@@ -447,7 +448,7 @@ const CompareView = () => {
   return (
     <Container>
       <Header>
-        <Link to="/">
+        <Link to={`/${paramYear}/${paramProvince}`}>
           <BackButton>
             <svg
               width="36px"
@@ -538,6 +539,7 @@ const DropdownCompare = props => {
   const { setProvince, CountryTopoJson } = useContext(MapContext);
   const [filter, setFilter] = useState('');
   const [dropdownProvinces, setDropdownProvinces] = useState([]);
+  const { year: paramYear } = useParams();
   const {
     ref,
     isComponentVisible: showItems,
@@ -599,7 +601,7 @@ const DropdownCompare = props => {
             {dropdownProvinces.map(province => (
               <Link
                 key={province}
-                to={`/compare/${province}`}
+                to={`/${paramYear}/compare/${province}`}
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <div

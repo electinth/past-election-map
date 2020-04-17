@@ -13,7 +13,7 @@ import ProvinceAreaCompare from './ProvincialViewDetail/ProvinceAreaCompare.jsx'
 import partyColor from '../../map/color';
 
 const ProvincialLeft = () => {
-  const { province: paramProvince } = useParams();
+  const { province: paramProvince, year: paramYear } = useParams();
   const { setProvince } = useContext(MapContext);
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const ProvincialRight = () => {
             ></span>
           </div>
           {province === 'บึงกาฬ' && electionYear === 'election-2550' ? (
-            <NoBeungKanProvince />
+            <NoBeungKanProvince year={paramYear} />
           ) : (
             [
               partyView ? (

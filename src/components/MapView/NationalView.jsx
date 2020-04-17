@@ -153,12 +153,12 @@ const NoVoteDisplay = ({ view }) => {
   );
 };
 
-const NoBeungKanProvince = () => {
+const NoBeungKanProvince = ({ year }) => {
   return (
     <Container compareView style={{ marginTop: '2rem', marginBottom: '2rem' }}>
       <WarnText compareView >ไม่มีข้อมูล</WarnText>
       <ExplainText compareView>
-      จังหวัดบึงกาฬแยกออกจาก<Link to={'/compare/หนองคาย'}>จังหวัดหนองคาย</Link>
+      จังหวัดบึงกาฬแยกออกจาก<Link to={`/${year}/compare/หนองคาย`}>จังหวัดหนองคาย</Link>
       เมื่อปี 2554
       </ExplainText>
     </Container>

@@ -143,7 +143,7 @@ const ProvinceAreaCompare = props => {
           </CompareMap>
         ))}
       </CompareContainer>
-      <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
+      <Link to={`/${paramYear}/compare/${province}`} style={{ textDecoration: 'none' }}>
         <SeeMore>ดูเปรียบเทียบ 4 ปี</SeeMore>
       </Link>
     </Container>
