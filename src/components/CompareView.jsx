@@ -11,6 +11,7 @@ import StackedBar from './MapView/StackedBar';
 import { NovoteDisplay } from './MapView/NationalView';
 import { SeePartyMenu, SeeWinnerMenu } from './MapView/ProvincialView';
 import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
+import Dropdown from './MapView/Dropdown/index';
 
 const Container = styled.div`
   position: fixed;
@@ -45,22 +46,25 @@ const ViewParty = styled.div`
 const PartyUL = styled.ul`
   display: flex;
   list-style-type: none;
-  // justify-content: space-around;
+  // align-items: center;
+  justify-content: center;
   margin: 0 auto;
   width: 100%;
 `;
 
 const Year = styled.li`
-  margin: 0 auto;
-  padding-bottom: 50px;
-  width: 20%;
+  top: 0px;
+  margin-bottom: 50px;
+  width: 344px;
   &:not(:last-child) {
+    border-right: 2px solid #000000;
   }
 `;
 
 const CardList = styled.div`
   width: 295px;
   // height: 700px;
+  margin: 0 auto;
   text-align: center;
 `;
 
@@ -141,6 +145,13 @@ const BackButton = styled.div`
   color: black;
   text-align: center;
   line-height: 40px;
+`;
+
+const DropDownContainer = styled.div`
+  right: 55px;
+  width: 300px;
+  height: 50px;
+  position: absolute;
 `;
 
 let maps;
@@ -228,9 +239,6 @@ const TitleZone = ({ province, zone, numCandidateByZone }) => {
 };
 
 const PartyCard = ({ data = {} }) => {
-  console.log('partyCard');
-  console.log(data.data);
-  console.log(data.year);
   const isNovote = data.year === 'election-2557';
   const numCandidateByZone = data.data.reduce(
     (acc, val) => acc + val.candidate,
@@ -248,17 +256,30 @@ const PartyCard = ({ data = {} }) => {
         <NovoteDisplay view={'compareView'} />
       ) : (
         <UlPartyList>
-          {data.data.map(({ party, candidate }) => (
-            <LiPartyList key={party}>
-              <span
-                className="party-list--party-box"
-                style={{
-                  backgroundColor: partyColor(data.year)(party)
-                }}
-              ></span>
-              {party} <span className="party-list--count">{candidate} คน</span>
-            </LiPartyList>
-          ))}
+          {data.province === 'บึงกาฬ' && data.year === 'election-2550' ? (
+            <div>
+              <Link
+                to={'/compare/หนองคาย'}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <h1>ไม่มีข้อมูล</h1>
+                <p>จังหวัดบึงกาฬแยกออกจากจังหวัดหนองคายเมื่อปี 2554</p>
+              </Link>
+            </div>
+          ) : (
+            data.data.map(({ party, candidate }) => (
+              <LiPartyList key={party}>
+                <span
+                  className="party-list--party-box"
+                  style={{
+                    backgroundColor: partyColor(data.year)(party)
+                  }}
+                ></span>
+                {party}{' '}
+                <span className="party-list--count">{candidate} คน</span>
+              </LiPartyList>
+            ))
+          )}
         </UlPartyList>
       )}
     </PartyCardContainer>
@@ -295,37 +316,53 @@ const PersonCard = ({ data = {} }) => {
         <NovoteDisplay view={'compareView'} />
       ) : (
         <ul className="provincial-view--list">
-          {districtWinners.map(
-            ({ zone_id, winnerResultArray, result, quota, year }) => (
-              <li
-                key={zone_id + data.year}
-                className="provincial-view--list-item"
+          {data.province === 'บึงกาฬ' && data.year === 'election-2550' ? (
+            <div style={{ textAlign: 'center' }}>
+              <Link
+                to={'/compare/หนองคาย'}
+                style={{ textDecoration: 'none', color: 'inherit' }}
               >
-                <div>
-                  {' '}
-                  <b className="provincial-view--list-zone">เขต {zone_id}</b>
-                </div>
-                {winnerResultArray.map(winner => (
-                  <div
-                    className="provincial-view--list-item__winner"
-                    key={winner.first_name + winner.party}
+                <h1>ไม่มีข้อมูล</h1>
+                <p>จังหวัดบึงกาฬแยกออกจากจังหวัดหนองคายเมื่อปี 2554</p>
+              </Link>
+            </div>
+          ) : (
+            <div>
+              {districtWinners.map(
+                ({ zone_id, winnerResultArray, result, quota, year }) => (
+                  <li
+                    key={zone_id + data.year}
+                    className="provincial-view--list-item"
                   >
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        width: '1rem',
-                        height: '1rem',
-                        marginRight: '0.5rem',
-                        backgroundColor: partyColor(data.year)(winner.party)
-                      }}
-                    ></span>
-                    {winner.title} {winner.first_name} {winner.last_name},{' '}
-                    {winner.party}, {percentageFormat(winner.ratio)}
-                  </div>
-                ))}
-                <StackedBar data={result} zoneQuota={quota} year={year} />
-              </li>
-            )
+                    <div>
+                      {' '}
+                      <b className="provincial-view--list-zone">
+                        เขต {zone_id}
+                      </b>
+                    </div>
+                    {winnerResultArray.map(winner => (
+                      <div
+                        className="provincial-view--list-item__winner"
+                        key={winner.first_name + winner.party}
+                      >
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            width: '1rem',
+                            height: '1rem',
+                            marginRight: '0.5rem',
+                            backgroundColor: partyColor(data.year)(winner.party)
+                          }}
+                        ></span>
+                        {winner.title} {winner.first_name} {winner.last_name},{' '}
+                        {winner.party}, {percentageFormat(winner.ratio)}
+                      </div>
+                    ))}
+                    <StackedBar data={result} zoneQuota={quota} year={year} />
+                  </li>
+                )
+              )}
+            </div>
           )}
         </ul>
       )}
@@ -437,9 +474,9 @@ const CompareView = () => {
               <g
                 id="Guideline"
                 stroke="none"
-                stroke-width="1"
+                strokeWidth="1"
                 fill="none"
-                fill-rule="evenodd"
+                fillRule="evenodd"
               >
                 <g
                   id="Master-Guideline"
@@ -495,6 +532,9 @@ const CompareView = () => {
             ></span>
           </div>
         </div>
+        {/* <DropDownContainer>
+          <Dropdown />
+        </DropDownContainer> */}
       </Header>
       {!partyData ? (
         <div>Loading...</div>
