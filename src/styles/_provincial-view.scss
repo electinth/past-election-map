@@ -7,8 +7,8 @@
 
   &--list {
     list-style: none;
-    max-height: 35vh;
-    overflow-y: scroll;
+    max-height: 50vh;
+    overflow-y: auto;
     overflow-x: hidden;
     margin: 0rem 0;
     padding: 0rem 1rem 1rem 0;
@@ -43,14 +43,14 @@
       font-size: 1.2rem;
       padding: 1rem 0;
       border-bottom: 1px solid black;
-      font-family: 'Noto Sans Thai';
+      font-family: 'Noto Sans Thai UI Medium';
 
       // &:first-child {
       //   border-top: 1px solid black;
       // }
 
       &__winner {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
       }
     }
   }
@@ -58,14 +58,15 @@
   &--toggle {
     display: flex;
     border: 1px solid var(--color-black);
-    border-radius: 1rem;
+    border-radius: 17rem;
     background-color: var(--color-black);
     overflow: hidden;
     position: relative;
+    margin-bottom: 12.5px;
+    height: 34px;
 
     &-button {
       flex: 0 0 50%;
-      padding: 0.5rem 0.5rem;
       background-color: transparent;
       color: var(--color-white);
       border: none;
@@ -74,6 +75,7 @@
       font-family: inherit;
       font-size: 1.8rem;
       z-index: 10;
+      box-sizing: border-box;
 
       &.active {
         color: var(--color-black);

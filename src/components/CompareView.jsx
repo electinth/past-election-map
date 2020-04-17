@@ -9,13 +9,14 @@ import partyColor from '../map/color';
 
 import StackedBar from './MapView/StackedBar';
 import { NovoteDisplay } from './MapView/NationalView';
+import { SeePartyMenu, SeeWinnerMenu } from './MapView/ProvincialView';
 import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
 
 const Container = styled.div`
   position: fixed;
   display: block;
   width: 100%;
-  min-height: 100%;
+  // min-height: 100%;
   top: 50px;
   left: 0;
   right: 0;
@@ -28,12 +29,13 @@ const Container = styled.div`
 const Header = styled.div`
   margin: 0 auto;
   margin-top: 26px;
-  width: 364px;
+  width: 378px;
+  height: 50px;
 `;
 
 const ViewParty = styled.div`
   width: 100%;
-  height: 800px;
+  // height: 800px;
   margin: 0 auto;
   margin-top: 28px;
   color: black;
@@ -47,11 +49,14 @@ const PartyUL = styled.ul`
 
 const Year = styled.li`
   margin: 0 auto;
+  padding-bottom: 10px;
+  &:not(:last-child) {
+  }
 `;
 
 const CardList = styled.div`
   width: 295px;
-  height: 700px;
+  // height: 700px;
   text-align: center;
 `;
 
@@ -61,7 +66,7 @@ const YearTilte = styled.h1`
 `;
 
 const PartyCardContainer = styled.div`
-  height: 240px;
+  min-height: 240px;
   width: 200px;
   border-radius: 10px;
   background-color: #ffffff;
@@ -256,7 +261,7 @@ const PersonCard = ({ data = {} }) => {
     winnerResultArray.map(val => {
       val.ratio = val.score / totalScore;
     });
-    return { zone_id, winnerResultArray, result, quota };
+    return { zone_id, winnerResultArray, result, quota, year: data.year };
   });
 
   const percentageFormat = d3.format('.2%');
@@ -274,7 +279,7 @@ const PersonCard = ({ data = {} }) => {
       ) : (
         <ul className="provincial-view--list">
           {districtWinners.map(
-            ({ zone_id, winnerResultArray, result, quota }) => (
+            ({ zone_id, winnerResultArray, result, quota, year }) => (
               <li
                 key={zone_id + data.year}
                 className="provincial-view--list-item"
@@ -301,7 +306,7 @@ const PersonCard = ({ data = {} }) => {
                     {winner.party}, {percentageFormat(winner.ratio)}
                   </div>
                 ))}
-                <StackedBar data={result} zoneQuota={quota} />
+                <StackedBar data={result} zoneQuota={quota} year={year} />
               </li>
             )
           )}
@@ -404,21 +409,25 @@ const CompareView = () => {
   return (
     <Container>
       <Header>
-        <div className="provincial-view--toggle">
-          <button
+        <div
+          className="provincial-view--toggle"
+          style={{ height: '100%', borderRadius: '12px' }}
+        >
+          <div
             className={`provincial-view--toggle-button ${partyView &&
               'active'}`}
             onClick={() => setPartyView(true)}
           >
-            ดูพรรค
-          </button>
-          <button
+            <SeePartyMenu partyView={partyView} view={'compareView'} />
+          </div>
+          <div
             className={`provincial-view--toggle-button ${!partyView &&
               'active'}`}
+            style={{ height: '100%' }}
             onClick={() => setPartyView(false)}
           >
-            ดูผู้ชนะ
-          </button>
+            <SeeWinnerMenu partyView={partyView} view={'compareView'} />
+          </div>
           <span
             className="provincial-view--toggle-active"
             style={{ left: !partyView && '50%' }}

@@ -119,7 +119,10 @@ export const partyFill = (electionYear, uid = '') => {
             .attr('cy', 5)
             .attr('r', style.r)
             .style('stroke', 'none')
-            .style('fill', style.circle === 'party' ? partyColor : style.circle);
+            .style(
+              'fill',
+              style.circle === 'party' ? partyColor : style.circle
+            );
         }
       };
     }
