@@ -1,13 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import MapContext from '../../map/context';
-
-const TH_ELECTION_YEAR = [
-  { en: '2562', th: 'ปี 2562' },
-  { en: '2557', th: 'ปี 2557' },
-  { en: '2554', th: 'ปี 2554' },
-  { en: '2550', th: 'ปี 2550' }
-];
+import { ELECTION_YEAR } from '../../config';
 
 const ElectionYear = props => {
   const { year: paramYear } = useParams();
@@ -20,7 +14,7 @@ const ElectionYear = props => {
 
   return (
     <ul className="year-choice--list">
-      {TH_ELECTION_YEAR.map(({ en, th }) => (
+      {ELECTION_YEAR.map(({ en, th }) => (
         <li
           className={`year-choice--list-item ${`election-${en}` ===
             electionYear && 'year-choice--list-item__active'}`}

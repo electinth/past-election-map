@@ -31,7 +31,7 @@ const party54 = partyname => {
 
 const party50 = partyname => {
   const colors = {
-    พลังประชาชน: '#6d1c19',
+    พลังประชาชน: '#af0e08',
     ประชาธิปัตย์: '#06aff3',
     ชาติไทย: '#bf567e',
     มัชฌิมาธิปไตย: '#187778',
@@ -45,10 +45,10 @@ const party50 = partyname => {
 
 const partyColor = electionYear => {
   const yearColor = {
-    'election-2562': party62,
-    'election-2554': party54,
     'election-2550': party50,
-    'election-2557': () => 'white'
+    'election-2554': party54,
+    'election-2557': () => 'white',
+    'election-2562': party62
   };
   return partyName => yearColor[electionYear](partyName) || 'purple';
 };
@@ -61,10 +61,10 @@ const partyColor = electionYear => {
  */
 export const partyFill = (electionYear, uid = '') => {
   const yearColor = {
-    'election-2562': party62,
-    'election-2554': party54,
     'election-2550': party50,
-    'election-2557': () => 'white'
+    'election-2554': party54,
+    'election-2557': () => 'white',
+    'election-2562': party62
   };
 
   /**

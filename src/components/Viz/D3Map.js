@@ -168,8 +168,6 @@ function D3Map(
   };
 
   function getTransform(transform) {
-    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttributeNS(null, 'transform', transform);
     if (!transform) {
       return {
         translateX: 0,
@@ -180,6 +178,8 @@ function D3Map(
         scaleY: 1
       };
     }
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttributeNS(null, 'transform', transform);
     const matrix = g.transform.baseVal.consolidate().matrix;
     let { a, b, c, d, e, f } = matrix;
     let scaleX, scaleY, skewX;

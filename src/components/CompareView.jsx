@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 import styled from 'styled-components';
 import MapContext from '../map/context';
 import partyColor from '../map/color';
+import { ELECTION_YEAR } from '../config';
 
 import StackedBar from './MapView/StackedBar';
 import { NovoteDisplay } from './MapView/NationalView';
@@ -170,6 +171,9 @@ const dimension = {
   marginLeft,
   marginRight
 };
+
+const compareYears = ELECTION_YEAR.map(y => y.year);
+
 const YearList = ({ view = 'party', party = [], person = [] }) => {
   const { province, CountryTopoJson } = useContext(MapContext);
 
@@ -178,7 +182,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
 
     const $compare = d3.selectAll('svg[id*=compare-election-]');
     const $defs = d3.select(`#map-defs-compare`);
-    maps = D3Compare(CountryTopoJson, $compare, $defs, dimension, 15000);
+    maps = D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, 15000);
   }, [CountryTopoJson]);
 
   useEffect(() => {
@@ -187,12 +191,11 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
     maps.handleProvinceChange(province);
   }, [CountryTopoJson, province]);
 
-  const year = [2562, 2557, 2554, 2550];
 
   return (
     <ViewParty>
       <PartyUL>
-        {year.map((year, index) => {
+        {compareYears.map((year, index) => {
           return (
             <Year key={year}>
               <CardList>
@@ -381,19 +384,14 @@ const CompareView = () => {
   let partyData, personData;
 
   if (CountryTopoJson.length !== 0) {
-    const electionYear = [
-      'election-2550',
-      'election-2554',
-      'election-2557',
-      'election-2562'
-    ];
+    const electionYear = compareYears.map(year => `election-${year}`);
     let provincialZone = [];
     let byParty = [];
     let byPartySorted = [];
     let byPersonSorted = [];
 
-    electionYear.forEach(val => {
-      let currentProvince = CountryTopoJson.objects[val].geometries
+    electionYear.forEach(year => {
+      let currentProvince = CountryTopoJson.objects[year].geometries
         .filter(geo => geo.properties.province_name === paramProvince)
         .map(geo => geo.properties);
       currentProvince.sort((a, b) => a.zone_id - b.zone_id);
@@ -403,10 +401,10 @@ const CompareView = () => {
       });
     });
 
-    provincialZone.forEach(val => {
+    provincialZone.forEach(zones => {
       let currentByParty = {};
-      val.forEach(cur => {
-        if (!cur.result) {
+      zones.forEach(zone => {
+        if (!zone.result) {
           if (!('noresult' in currentByParty)) {
             currentByParty['noresult'] = ['novote'];
           } else {
@@ -417,9 +415,10 @@ const CompareView = () => {
           }
           return;
         }
-        cur.result
+        // get top candidates limited by zone quota
+        zone.result
           .sort((a, b) => b.score - a.score)
-          .slice(0, cur.quota)
+          .slice(0, zone.quota)
           .forEach(person => {
             if (!(person.party in currentByParty)) {
               currentByParty[person.party] = [person];
@@ -454,8 +453,8 @@ const CompareView = () => {
       byPersonSorted[index].province = paramProvince;
       byPersonSorted[index].zone = provincialZone[index].length;
     });
-    partyData = byPartySorted.reverse();
-    personData = byPersonSorted.reverse();
+    partyData = byPartySorted;
+    personData = byPersonSorted;
   }
 
   return (
@@ -612,6 +611,7 @@ const DropdownCompare = props => {
             </div>
             {dropdownProvinces.map(province => (
               <Link
+                key={province}
                 to={`/compare/${province}`}
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >

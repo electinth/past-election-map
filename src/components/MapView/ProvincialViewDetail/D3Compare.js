@@ -9,25 +9,37 @@ import {
   fontSizeFactory
 } from '../../Viz/D3Map';
 
-function D3Compare(CountryTopoJson, $compare, $defs, dimension, initScale) {
-  const simplifyMinWeight = 5e-4;
-  const CountryTopo = tps.presimplify(CountryTopoJson);
-  const geo = tps.simplify(CountryTopo, simplifyMinWeight);
+function D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, initScale) {
+
+  const getProvinceFeature = (topo, object_name, province_name) => {
+    const { type, geometries } = topo.objects[object_name];
+    const provinceGeometries = geometries.filter(
+      geometry => geometry.properties.province_name === province_name
+    );
+    return topojson.feature(topo, {
+      type,
+      geometries: provinceGeometries
+    });
+  };
 
   const handleProvinceChange = province => {
-    const data = Object.entries(geo.objects)
-      .map(([_, g]) => {
-        const { type, geometries } = g;
-        const provinceGeometries = geometries.filter(
-          geometry => geometry.properties.province_name === province
-        );
-        return {
-          type,
-          geometries: provinceGeometries
-        };
-      })
-      .map(d => topojson.feature(geo, d));
+    // adaptive simplification
+    // the larger province, the more simlified
+    const pf = getProvinceFeature(CountryTopoJson, 'election-2562', province);
+    const pb = d3.geoBounds(pf);
+    const size = Math.max(pb[1][0] - pb[0][0], pb[1][1] - pb[0][1]);
+    const simplifyScale = d3.scaleLinear()
+      .domain([0.3, 2.9])
+      .range([1e-5, 5e-4]);
 
+    const simplifyMinWeight = simplifyScale(size);
+    const CountryTopo = tps.presimplify(CountryTopoJson);
+    const geo = tps.simplify(CountryTopo, simplifyMinWeight);
+
+    // province's geojson features for all years
+    const data = compareYears.map(electionYear =>
+      getProvinceFeature(geo, `election-${electionYear}`, province)
+    );
     const b = d3.geoBounds(data[0]);
     const longest = Math.max(b[1][0] - b[0][0], b[1][1] - b[0][1]);
     const lonCenter = (b[0][0] + b[1][0]) / 2;

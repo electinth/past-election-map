@@ -4,6 +4,8 @@ import { Link, useParams, withRouter } from 'react-router-dom';
 import * as d3 from 'd3';
 
 import MapContext from '../../../map/context';
+import { ELECTION_YEAR } from '../../../config';
+
 import D3Compare from './D3Compare';
 
 const Container = styled.div`
@@ -80,6 +82,9 @@ const dimension = {
   marginLeft,
   marginRight
 };
+
+const compareYears = ELECTION_YEAR.map(y => y.year);
+
 const ProvinceAreaCompare = props => {
   const { year: paramYear } = useParams();
   useEffect(() => {
@@ -99,7 +104,7 @@ const ProvinceAreaCompare = props => {
 
     const $compare = d3.selectAll('svg[id*=compare-election-]');
     $defs = d3.select(`#map-defs-compare`);
-    maps = D3Compare(CountryTopoJson, $compare, $defs, dimension, 6500);
+    maps = D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, 6500);
   }, [CountryTopoJson]);
 
   useEffect(() => {
@@ -112,83 +117,29 @@ const ProvinceAreaCompare = props => {
     <Container>
       <Title>ผลเลือกตั้งย้อนหลัง</Title>
       <CompareContainer>
-        <CompareMap
-          active={electionYear === 'election-2562'}
-          onClick={() =>
-            province === 'ประเทศไทย'
-              ? props.history.push(`/2562`)
-              : props.history.push(`/2562/${province}`)
-          }
-        >
-          <svg
-            id="compare-election-2562"
-            data-election-year="election-2562"
-            width="100%"
-            height="100%"
+        {compareYears.map(year => (
+          <CompareMap
+            key={year}
+            active={electionYear === `election-${year}`}
+            onClick={() =>
+              province === 'ประเทศไทย'
+                ? props.history.push(`/${year}`)
+                : props.history.push(`/${year}/${province}`)
+            }
           >
-            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
-              2562
-            </text>
-          </svg>
-        </CompareMap>
-        <CompareMap
-          active={electionYear === 'election-2557'}
-          onClick={() =>
-            province === 'ประเทศไทย'
-              ? props.history.push(`/2557`)
-              : props.history.push(`/2557/${province}`)
-          }
-        >
-          <svg
-            id="compare-election-2557"
-            data-election-year="election-2557"
-            width="100%"
-            height="100%"
-          >
-            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
-              2557
-            </text>
-          </svg>
-        </CompareMap>
-        <CompareMap
-          active={electionYear === 'election-2554'}
-          onClick={() =>
-            province === 'ประเทศไทย'
-              ? props.history.push(`/2554`)
-              : props.history.push(`/2554/${province}`)
-          }
-        >
-          <svg
-            id="compare-election-2554"
-            data-election-year="election-2554"
-            width="100%"
-            height="100%"
-          >
-            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
-              2554
-            </text>
-          </svg>
-        </CompareMap>
-        <CompareMap
-          active={electionYear === 'election-2550'}
-          onClick={() =>
-            province === 'ประเทศไทย'
-              ? props.history.push(`/2550`)
-              : props.history.push(`/2550/${province}`)
-          }
-        >
-          <svg
-            id="compare-election-2550"
-            data-election-year="election-2550"
-            width="100%"
-            height="100%"
-          >
-            <defs id={`map-defs-compare`}></defs>
-            <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
-              2550
-            </text>
-          </svg>
-        </CompareMap>
+            <svg
+              id={`compare-election-${year}`}
+              data-election-year={`election-${year}`}
+              width="100%"
+              height="100%"
+            >
+              <defs id={`map-defs-compare`}></defs>
+              <text fontSize="32px" textAnchor="middle" x="50%" y="40px">
+                {year}
+              </text>
+            </svg>
+          </CompareMap>
+        ))}
       </CompareContainer>
       <Link to={`/compare/${province}`} style={{ textDecoration: 'none' }}>
         <SeeMore>ดูเปรียบเทียบ 4 ปี</SeeMore>
