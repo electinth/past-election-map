@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import _ from 'lodash';
 import * as d3 from 'd3';
 
@@ -29,8 +29,9 @@ const Container = styled.div`
 const Header = styled.div`
   margin: 0 auto;
   margin-top: 26px;
-  width: 378px;
+  width: 100%;
   height: 50px;
+  display: flex;
 `;
 
 const ViewParty = styled.div`
@@ -124,6 +125,22 @@ const LiPartyList = styled.li`
   padding: 0.5rem 0;
   text-align: left;
   font-family: 'Noto Sans';
+`;
+
+const BackButton = styled.div`
+  height: 50px;
+  width: 164px;
+  left: 50px;
+  border: 1px solid #333333;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+  position: absolute;
+  font-family: 'The MATTER';
+  font-size: 3rem;
+  color: black;
+  text-align: center;
+  line-height: 40px;
 `;
 
 let maps;
@@ -409,29 +426,74 @@ const CompareView = () => {
   return (
     <Container>
       <Header>
-        <div
-          className="provincial-view--toggle"
-          style={{ height: '100%', borderRadius: '12px' }}
-        >
+        <Link to="/">
+          <BackButton>
+            <svg
+              width="36px"
+              height="36px"
+              viewBox="0 0 36 36"
+              style={{ verticalAlign: 'middle', marginBottom: '5px' }}
+            >
+              <g
+                id="Guideline"
+                stroke="none"
+                stroke-width="1"
+                fill="none"
+                fill-rule="evenodd"
+              >
+                <g
+                  id="Master-Guideline"
+                  transform="translate(-922.000000, -2769.000000)"
+                  stroke="#000000"
+                >
+                  <g
+                    id="Group-16"
+                    transform="translate(911.000000, 2763.000000)"
+                  >
+                    <g
+                      id="Group-9"
+                      transform="translate(29.000000, 24.000000) rotate(-270.000000) translate(-29.000000, -24.000000) translate(11.000000, 6.000000)"
+                    >
+                      <g id="Group-7">
+                        <circle id="Oval" cx="18" cy="18" r="17.5"></circle>
+                        <polyline
+                          id="Path-2"
+                          points="10.7234043 15.3191489 18 22.9787234 25.2765957 15.3191489"
+                        ></polyline>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </svg>{' '}
+            Back
+          </BackButton>
+        </Link>
+        <div style={{ width: '378px', margin: '0 auto' }}>
           <div
-            className={`provincial-view--toggle-button ${partyView &&
-              'active'}`}
-            onClick={() => setPartyView(true)}
+            className="provincial-view--toggle"
+            style={{ height: '100%', borderRadius: '12px' }}
           >
-            <SeePartyMenu partyView={partyView} view={'compareView'} />
+            <div
+              className={`provincial-view--toggle-button ${partyView &&
+                'active'}`}
+              onClick={() => setPartyView(true)}
+            >
+              <SeePartyMenu partyView={partyView} view={'compareView'} />
+            </div>
+            <div
+              className={`provincial-view--toggle-button ${!partyView &&
+                'active'}`}
+              style={{ height: '100%' }}
+              onClick={() => setPartyView(false)}
+            >
+              <SeeWinnerMenu partyView={partyView} view={'compareView'} />
+            </div>
+            <span
+              className="provincial-view--toggle-active"
+              style={{ left: !partyView && '50%' }}
+            ></span>
           </div>
-          <div
-            className={`provincial-view--toggle-button ${!partyView &&
-              'active'}`}
-            style={{ height: '100%' }}
-            onClick={() => setPartyView(false)}
-          >
-            <SeeWinnerMenu partyView={partyView} view={'compareView'} />
-          </div>
-          <span
-            className="provincial-view--toggle-active"
-            style={{ left: !partyView && '50%' }}
-          ></span>
         </div>
       </Header>
       {!partyData ? (
