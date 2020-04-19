@@ -18,6 +18,28 @@ function makePolylabelProps(year) {
     // console.log(properties);
     let lon, lat;
     [lon, lat] = polylabel(geometry.coordinates);
+    if ([lat, lon].includes(NaN)) {
+      console.log(year, properties.province_name, properties.zone_id);
+      console.log(geometry.coordinates);
+      // console.log(biggestPart(geometry.coordinates));
+      [lon, lat] = polylabel([biggestPart(geometry.coordinates)]);
+      function biggestPart(coordinates) {
+        let coords = coordinates[0];
+        if (coords.length == 1) {
+          //find the biggest part in each province
+          var max_length = -1;
+          var max_i = -1;
+          for (var i = 0; i < coordinates.length; i++) {
+            if (max_length < coordinates[i][0].length) {
+              max_length = coordinates[i][0].length;
+              max_i = i;
+            }
+          }
+          coords = coordinates[max_i][0];
+        }
+        return coords;
+      }
+    }
 
     Object.assign(properties, { labelLat: lat, labelLon: lon });
   });
