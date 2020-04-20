@@ -187,7 +187,14 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
 
     const $compare = d3.selectAll('svg[id*=compare-election-]');
     const $defs = d3.select(`#map-defs-compare`);
-    maps = D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, 15000);
+    maps = D3Compare(
+      CountryTopoJson,
+      compareYears,
+      $compare,
+      $defs,
+      dimension,
+      15000
+    );
   }, [CountryTopoJson]);
 
   useEffect(() => {
@@ -195,7 +202,6 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
 
     maps.handleProvinceChange(province);
   }, [CountryTopoJson, province]);
-
 
   return (
     <ViewParty>
@@ -234,9 +240,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
 const TitleZone = ({ province, zone, numCandidateByZone }) => {
   return (
     <div>
-      <DistricExplain>
-        เขตเลือกตั้ง จังหวัด{province}
-      </DistricExplain>
+      <DistricExplain>เขตเลือกตั้ง จังหวัด{province}</DistricExplain>
       <Quota>
         {zone} เขต / {numCandidateByZone} คน
       </Quota>

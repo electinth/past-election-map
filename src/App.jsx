@@ -3,6 +3,7 @@ import Nav from './components/Nav';
 
 import Viz from './components/Viz';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import MetaTags from 'react-meta-tags';
 import CompareView from './components/CompareView';
 import MapView from './components/MapView';
 import MapContext from './map/context';
@@ -25,11 +26,26 @@ const App = () => {
         }}
       >
         <BrowserRouter>
+          <MetaTags>
+            <title>แผนที่เขตเลือกตั้งย้อนหลังของประเทศไทย</title>
+            <meta
+              name="description"
+              content="ย้อนดูการแบ่งเขตและผลการเลือกตั้งในอดีตของไทยได้ที่นี่"
+            />
+            <meta
+              property="og:title"
+              content="แผนที่เขตเลือกตั้งย้อนหลังของประเทศไทย"
+            />
+            {/* <meta property="og:image" content="path/to/image.jpg" /> */}
+          </MetaTags>
           <Nav />
           <main>
             <article className="detail-layer">
               <Switch>
-                <Route path="/:year/compare/:province" component={CompareView} />
+                <Route
+                  path="/:year/compare/:province"
+                  component={CompareView}
+                />
                 <Route path="/about-us" component={AboutUs} />
                 <Route path="/:year?" component={MapView} />
               </Switch>
