@@ -23,16 +23,17 @@
 
     &-item {
       font-size: 1.4rem;
-      padding: 0.5rem 0;
+      padding: 0.5rem 0 0;
       font-family: 'Noto Sans Thai';
 
       &:first-child {
         border-bottom: 1px solid black;
         font-size: 1.8rem;
+        padding-bottom: 0.5rem;
       }
 
       &:last-child {
-        padding-bottom: 12px;
+        padding-bottom: 0.5rem;
         border-bottom: 1px solid black;
       }
     }

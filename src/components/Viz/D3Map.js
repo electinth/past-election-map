@@ -113,7 +113,8 @@ function D3Map(
 
   const setProvince = newProvince => {
     province = newProvince;
-    labelJoin();
+    // labelJoin();
+    removeLabel();
 
     $zone
       .transition()
@@ -153,6 +154,7 @@ function D3Map(
         .on('end', () => {
           $zone.attr('fill', fillFactory($defs)(electionYear)(province)); // post map-panning
           updatePatternTransform.call($vis.node(), 'zoom');
+          labelJoin();
         });
     } else {
       // Thailand view
@@ -213,6 +215,12 @@ function D3Map(
     $defs.selectAll('pattern').attr('patternTransform', tInverse);
   }
 
+  function getFixedFontSize($$vis, font_size = 10) {
+    const t = $$vis.attr('transform');
+    const tt = getTransform(t);
+   return font_size / tt.scaleX;
+  }
+
   // when select a province, we separate fill rendering into 2 steps:
   // (1.) pre map-panning and (2.) post map-panning.
   // The reason is that if we do it in one step, rendering glitch is seen
@@ -263,6 +271,12 @@ function D3Map(
     );
   }
 
+  function removeLabel() {
+    if (!$label) return;
+    $label.selectAll('circle').remove();
+    $label.selectAll('text').remove();
+  }
+
   function addLabel($label, delay = true) {
     $label.selectAll('circle').remove();
     $label.selectAll('text').remove();
@@ -270,17 +284,20 @@ function D3Map(
     $label.attr('class', 'zone-label');
 
     const polylabelPosition = polylabelPositionFactory(projection);
-    const fontSize = fontSizeFactory(path);
+    // Smaller font size for large province like Bangkok
+    const labelData = $label.data();
+    const fontSize = labelData.length < 10 ? 20 :
+      (labelData.length < 16 ? 16 : 12);
+    // const fontSize = fontSizeFactory(path);
     $label
       .append('circle')
       .attr('cx', polylabelPosition('x'))
       .attr('cy', polylabelPosition('y'))
       .attr('r', geo => {
-        const size = fontSize(geo);
-        return size / 9;
+        return getFixedFontSize($vis, fontSize);
       })
       .attr('fill', 'var(--color-white)')
-      .attr('stroke-width', 0.2)
+      .attr('stroke-width', 1)
       .attr('stroke', 'black')
       .attr('vector-effect', 'non-scaling-stroke')
       .attr('opacity', 0)
@@ -293,7 +310,9 @@ function D3Map(
       .text(({ properties: { zone_id } }) => zone_id)
       .attr('x', polylabelPosition('x'))
       .attr('y', polylabelPosition('y'))
-      .attr('font-size', geo => fontSize(geo) / 9)
+      .attr('font-size', geo => {
+        return getFixedFontSize($vis, fontSize);
+      })
       .attr('dominant-baseline', 'middle')
       .attr('opacity', 0)
       .transition()
