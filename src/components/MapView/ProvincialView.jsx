@@ -100,14 +100,14 @@ const ProvincialRight = () => {
           {province === 'บึงกาฬ' && electionYear === 'election-2550' ? (
             <NoBeungKanProvince year={paramYear} />
           ) : (
-            [
-              partyView ? (
+            <div>
+              {partyView ? (
                 <PartyList byPartySorted={byPartySorted} />
               ) : (
                 <Winner provincialProps={provincialProps} />
-              ),
+              )}
               <Overview waffleData={byPartySorted} view={'provinceView'} />
-            ]
+            </div>
           )}
         </>
       )}
