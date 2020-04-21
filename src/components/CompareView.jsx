@@ -27,6 +27,10 @@ const Container = styled.div`
   overflow: scroll;
 `;
 
+const Zone_detail_text = styled.p`
+  font-size: 1rem;
+`;
+
 const Header = styled.div`
   margin: 0 auto;
   margin-top: 26px;
@@ -181,6 +185,12 @@ const compareYears = ELECTION_YEAR.map(y => y.year);
 
 const YearList = ({ view = 'party', party = [], person = [] }) => {
   const { province, CountryTopoJson } = useContext(MapContext);
+  const [tooltips, setTooltips] = useState([]);
+  const [tooltipsStyles, setTooltipStyles] = useState({
+    left: null,
+    top: null,
+    opacity: 0
+  });
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
@@ -193,15 +203,16 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
       $compare,
       $defs,
       dimension,
-      15000
+      15000,
+      setTooltips
     );
   }, [CountryTopoJson]);
 
   useEffect(() => {
     if (CountryTopoJson.length === 0) return;
-
     maps.handleProvinceChange(province);
   }, [CountryTopoJson, province]);
+  // console.log(tooltipsStyles);
 
   return (
     <ViewParty>
@@ -211,6 +222,10 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
             <Year key={year}>
               <CardList>
                 <YearTilte>ปี {year}</YearTilte>
+                <div className="tooltips" style={tooltipsStyles}>
+                  {tooltips[0]}
+                  <Zone_detail_text>{tooltips[1]}</Zone_detail_text>
+                </div>
                 <svg
                   id={`compare-election-${year}`}
                   data-election-year={`election-${year}`}
@@ -220,8 +235,44 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                   height={
                     dimension.h + dimension.marginTop + dimension.marginBottom
                   }
+                  onMouseMove={e => {
+                    if (tooltips.length !== 0) {
+                      setTooltipStyles({
+                        top: e.clientY - 100,
+                        left: e.clientX,
+                        overflow: 'hidden',
+                        transform: 'translateX(-50%)',
+                        opacity: 1
+                      });
+                    } else {
+                      setTooltipStyles({
+                        top: null,
+                        left: null,
+                        opacity: 0
+                      });
+                    }
+                  }}
                 >
                   <defs id={`map-defs-compare`}></defs>
+                  <g
+                    id="map"
+                    onMouseMove={e => {
+                      setTooltipStyles({
+                        top: e.clientY - 100,
+                        left: e.clientX,
+                        overflow: 'hidden',
+                        transform: 'translateX(-50%)',
+                        opacity: 1
+                      });
+                    }}
+                    onMouseLeave={() =>
+                      setTooltipStyles({
+                        top: null,
+                        left: null,
+                        opacity: 0
+                      })
+                    }
+                  ></g>
                 </svg>
                 {view === 'party' ? (
                   <PartyCard data={party[index]} />

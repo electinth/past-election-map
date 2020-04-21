@@ -218,7 +218,7 @@ function D3Map(
   function getFixedFontSize($$vis, font_size = 10) {
     const t = $$vis.attr('transform');
     const tt = getTransform(t);
-   return font_size / tt.scaleX;
+    return font_size / tt.scaleX;
   }
 
   // when select a province, we separate fill rendering into 2 steps:
@@ -240,13 +240,15 @@ function D3Map(
 
   function setTooltipContent({ properties }) {
     if (province !== properties.province_name) {
-      setTooltips(properties.province_name);
+      setTooltips([properties.province_name]);
     } else {
-      if (!properties.result) return setTooltips('การเลือกตั้งเป็นโมฆะ');
+      if (!properties.result) {
+        return setTooltips(['การเลือกตั้งเป็นโมฆะ', properties.zone_detail]);
+      }
       const winner = properties.result.reduce(function(prev, current) {
         return prev.score > current.score ? prev : current;
       });
-      setTooltips(winner.party);
+      setTooltips([winner.party, properties.zone_detail]);
     }
   }
 
@@ -286,8 +288,8 @@ function D3Map(
     const polylabelPosition = polylabelPositionFactory(projection);
     // Smaller font size for large province like Bangkok
     const labelData = $label.data();
-    const fontSize = labelData.length < 10 ? 20 :
-      (labelData.length < 16 ? 16 : 12);
+    const fontSize =
+      labelData.length < 10 ? 20 : labelData.length < 16 ? 16 : 12;
     // const fontSize = fontSizeFactory(path);
     $label
       .append('circle')

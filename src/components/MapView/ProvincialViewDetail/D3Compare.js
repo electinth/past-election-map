@@ -9,8 +9,15 @@ import {
   fontSizeFactory
 } from '../../Viz/D3Map';
 
-function D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, initScale) {
-
+function D3Compare(
+  CountryTopoJson,
+  compareYears,
+  $compare,
+  $defs,
+  dimension,
+  initScale,
+  setTooltips
+) {
   const getProvinceFeature = (topo, object_name, province_name) => {
     const { type, geometries } = topo.objects[object_name];
     const provinceGeometries = geometries.filter(
@@ -25,10 +32,15 @@ function D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, in
   const handleProvinceChange = province => {
     // adaptive simplification
     // the larger province, the more simlified
-    const pf = getProvinceFeature(CountryTopoJson, `election-${_.last(compareYears)}`, province);
+    const pf = getProvinceFeature(
+      CountryTopoJson,
+      `election-${_.last(compareYears)}`,
+      province
+    );
     const pb = d3.geoBounds(pf);
     const size = Math.max(pb[1][0] - pb[0][0], pb[1][1] - pb[0][1]);
-    const simplifyScale = d3.scaleLinear()
+    const simplifyScale = d3
+      .scaleLinear()
       .domain([0.3, 2.9])
       .range([1e-5, 5e-4]);
 
@@ -69,10 +81,10 @@ function D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, in
       .each(function(d) {
         const year = this.parentElement.getAttribute('data-election-year');
 
-        d3.select(this).attr(
-          'fill',
-          fillFactory($defs, 'compare')(year)(province)
-        );
+        d3.select(this)
+          .attr('fill', fillFactory($defs, 'compare')(year)(province))
+          .on('mouseleave', handleOnMouseLeave)
+          .on('mouseenter', setTooltipContent);
       });
 
     const polylabelPosition = polylabelPositionFactory(projection);
@@ -106,6 +118,23 @@ function D3Compare(CountryTopoJson, compareYears, $compare, $defs, dimension, in
       .attr('dominant-baseline', 'middle')
       .raise();
   };
+
+  function setTooltipContent({ properties }) {
+    if (!properties) {
+      setTooltips([properties.province_name]);
+    } else {
+      if (!properties.result)
+        return setTooltips(['การเลือกตั้งเป็นโมฆะ', properties.zone_detail]);
+      const winner = properties.result.reduce(function(prev, current) {
+        return prev.score > current.score ? prev : current;
+      });
+      setTooltips([winner.party, properties.zone_detail]);
+    }
+  }
+
+  function handleOnMouseLeave() {
+    setTooltips([]);
+  }
 
   const render = year => {};
 

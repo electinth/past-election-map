@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 import * as d3 from 'd3';
+import styled from 'styled-components';
 
 import D3Map from './D3Map';
 import MapContext from '../../map/context';
@@ -9,6 +10,10 @@ let w = innerWidth,
   h = innerHeight;
 
 let map;
+
+const Zone_detail_text = styled.p`
+  font-size: 1rem;
+`;
 
 function getElementWidth(selector) {
   const selection = d3.select(selector);
@@ -21,7 +26,7 @@ function getElementWidth(selector) {
 const Map = props => {
   const visRef = useRef();
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
-  const [tooltips, setTooltips] = useState('');
+  const [tooltips, setTooltips] = useState([]);
   const [tooltipsStyles, setTooltipStyles] = useState({
     left: null,
     top: null,
@@ -94,7 +99,8 @@ const Map = props => {
   return (
     <figure className="viz-layer">
       <div className="tooltips" style={tooltipsStyles}>
-        {tooltips}
+        {tooltips[0]}
+        <Zone_detail_text>{tooltips[1]}</Zone_detail_text>
       </div>
       <svg width={w} height={h}>
         <g id="vis" ref={visRef}>
@@ -105,6 +111,7 @@ const Map = props => {
               setTooltipStyles({
                 top: e.clientY - 100,
                 left: e.clientX,
+                overflow: 'hidden',
                 transform: 'translateX(-50%)',
                 opacity: 1
               })
