@@ -16,7 +16,7 @@ function D3Compare(
   $defs,
   dimension,
   initScale,
-  setTooltips
+  setTooltips = () => {}
 ) {
   const getProvinceFeature = (topo, object_name, province_name) => {
     const { type, geometries } = topo.objects[object_name];

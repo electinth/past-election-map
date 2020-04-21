@@ -4,6 +4,7 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import styled from 'styled-components';
+import BeatLoader from 'react-spinners/BeatLoader';
 import MapContext from '../map/context';
 import partyColor from '../map/color';
 import { ELECTION_YEAR } from '../config';
@@ -577,7 +578,27 @@ const CompareView = () => {
         </DropDownContainer>
       </Header>
       {!partyData ? (
-        <div>Loading...</div>
+        <div
+          style={{
+            width: '100%',
+            height: '300px',
+            margin: '0 auto',
+            position: 'relative'
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '72px',
+              height: '50px'
+            }}
+          >
+            <BeatLoader size={20} color={'black'} sizeUnit={'px'} />
+          </div>
+        </div>
       ) : (
         <YearList
           view={partyView ? 'party' : 'person'}

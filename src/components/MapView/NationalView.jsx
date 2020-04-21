@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import MapContext from '../../map/context';
+import BeatLoader from 'react-spinners/BeatLoader';
 import _ from 'lodash';
+
+import MapContext from '../../map/context';
 import Overview from './Overview';
 import PartyList from './PartyList';
 import ElectionYear from './ElectionYear';
@@ -14,16 +16,19 @@ const NationalLeft = () => {
 const NationalRight = () => {
   const { setProvince, CountryTopoJson, electionYear } = useContext(MapContext);
   const [nationalProps, setNationalProps] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const isNoVote = electionYear === 'election-2557';
   useEffect(() => {
     setProvince('ประเทศไทย');
   }, []);
   useEffect(() => {
+    setLoading(true);
     if (CountryTopoJson.length === 0) return;
     const nationalProps = CountryTopoJson.objects[electionYear].geometries.map(
       geo => geo.properties
     );
     setNationalProps(nationalProps);
+    setLoading(false);
   }, [CountryTopoJson, electionYear]);
   const numZone = nationalProps.length;
   const numCandidate = nationalProps.reduce((acc, cur) => {
@@ -53,16 +58,42 @@ const NationalRight = () => {
   }
   byPartySorted.sort((a, b) => b.candidate - a.candidate);
   return (
-    <div className="national-view">
-      <h1 className="national-view--header">
-        {numZone} เขต {numCandidate} คน
-      </h1>
-      {isNoVote ? (
-        <NoVoteDisplay view={'nationView'} />
+    <div>
+      {isLoading ? (
+        <div
+          style={{
+            width: '100%',
+            height: '300px',
+            margin: '0 auto',
+            position: 'relative'
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '72px',
+              height: '50px'
+            }}
+          >
+            <BeatLoader size={20} color={'black'} sizeUnit={'px'} />
+          </div>
+        </div>
       ) : (
-        <div>
-          <PartyList byPartySorted={byPartySorted} view={'nationView'} />
-          <Overview waffleData={byPartySorted} view={'nationView'} />
+        <div className="national-view">
+          <h1 className="national-view--header">
+            {numZone} เขต {numCandidate} คน
+          </h1>
+          {isNoVote ? (
+            <NoVoteDisplay view={'nationView'} />
+          ) : (
+            <div>
+              <PartyList byPartySorted={byPartySorted} view={'nationView'} />
+              <Overview waffleData={byPartySorted} view={'nationView'} />
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -155,13 +186,14 @@ const NoVoteDisplay = ({ view }) => {
 const NoBeungKanProvince = ({ year }) => {
   return (
     <Container compareView style={{ marginTop: '2rem', marginBottom: '2rem' }}>
-      <WarnText compareView >ไม่มีข้อมูล</WarnText>
+      <WarnText compareView>ไม่มีข้อมูล</WarnText>
       <ExplainText compareView>
-      จังหวัดบึงกาฬแยกออกจาก<Link to={`/${year}/compare/หนองคาย`}>จังหวัดหนองคาย</Link>
-      เมื่อปี 2554
+        จังหวัดบึงกาฬแยกออกจาก
+        <Link to={`/${year}/compare/หนองคาย`}>จังหวัดหนองคาย</Link>
+        เมื่อปี 2554
       </ExplainText>
     </Container>
   );
-}
+};
 
 export { NationalLeft, NationalRight, NoVoteDisplay, NoBeungKanProvince };
