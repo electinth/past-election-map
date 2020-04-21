@@ -60,26 +60,10 @@ const NationalRight = () => {
   return (
     <div>
       {isLoading ? (
-        <div
-          style={{
-            width: '100%',
-            height: '300px',
-            margin: '0 auto',
-            position: 'relative'
-          }}
-        >
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '72px',
-              height: '50px'
-            }}
-          >
-            <BeatLoader size={20} color={'black'} sizeUnit={'px'} />
-          </div>
+        <div style={{ width: '100%', height: '300px', textAlign: 'center' }}>
+          <h1 style={{ fontSize: '3rem', lineHeight: '300px' }}>
+            กำลังโหลดข้อมูล
+          </h1>
         </div>
       ) : (
         <div className="national-view">
