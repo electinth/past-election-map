@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 import * as d3 from 'd3';
 import styled from 'styled-components';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 import D3Map from './D3Map';
 import MapContext from '../../map/context';
@@ -27,6 +28,7 @@ const Map = props => {
   const visRef = useRef();
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
   const [tooltips, setTooltips] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [tooltipsStyles, setTooltipStyles] = useState({
     left: null,
     top: null,
@@ -34,6 +36,7 @@ const Map = props => {
   });
 
   useEffect(() => {
+    setLoading(true);
     if (CountryTopoJson.length === 0) return;
 
     const barLeft = getElementWidth('.bar__left');
@@ -54,6 +57,7 @@ const Map = props => {
     const $gVis = d3.select(visRef.current);
     map.setVis($gVis);
     map.render(electionYear);
+    setLoading(false);
   }, [CountryTopoJson]);
 
   // Auto re-layout map when window resizing
@@ -101,6 +105,9 @@ const Map = props => {
       <div className="tooltips" style={tooltipsStyles}>
         {tooltips[0]}
         <Zone_detail_text>{tooltips[1]}</Zone_detail_text>
+      </div>
+      <div style={{ position: 'fixed', top: '50%', left: '50%' }}>
+        <BeatLoader size={25} color={'white'} loading={loading} />
       </div>
       <svg width={w} height={h}>
         <g id="vis" ref={visRef}>
