@@ -4,7 +4,6 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import styled from 'styled-components';
-import BeatLoader from 'react-spinners/BeatLoader';
 import MapContext from '../map/context';
 import partyColor from '../map/color';
 import { ELECTION_YEAR } from '../config';
@@ -18,7 +17,6 @@ const Container = styled.div`
   position: fixed;
   display: block;
   width: 100%;
-  // min-height: 100%;
   top: 50px;
   left: 0;
   right: 0;
@@ -29,7 +27,7 @@ const Container = styled.div`
 `;
 
 const Zone_detail_text = styled.p`
-  font-size: 1rem;
+  font-size: 0.1rem;
 `;
 
 const Header = styled.div`
@@ -213,7 +211,6 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
     if (CountryTopoJson.length === 0) return;
     maps.handleProvinceChange(province);
   }, [CountryTopoJson, province]);
-  // console.log(tooltipsStyles);
 
   return (
     <ViewParty>
@@ -243,6 +240,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                         left: e.clientX,
                         overflow: 'hidden',
                         transform: 'translateX(-50%)',
+                        whiteSpace: 'nowrap',
                         opacity: 1
                       });
                     } else {
@@ -255,25 +253,6 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                   }}
                 >
                   <defs id={`map-defs-compare`}></defs>
-                  <g
-                    id="map"
-                    onMouseMove={e => {
-                      setTooltipStyles({
-                        top: e.clientY - 100,
-                        left: e.clientX,
-                        overflow: 'hidden',
-                        transform: 'translateX(-50%)',
-                        opacity: 1
-                      });
-                    }}
-                    onMouseLeave={() =>
-                      setTooltipStyles({
-                        top: null,
-                        left: null,
-                        opacity: 0
-                      })
-                    }
-                  ></g>
                 </svg>
                 {view === 'party' ? (
                   <PartyCard data={party[index]} />
@@ -331,7 +310,12 @@ const PartyCard = ({ data = {} }) => {
                   }}
                 ></span>
                 {party}{' '}
-                <span className="party-list--count">{candidate} คน</span>
+                <span className="party-list--count">
+                  <span style={{ fontFamily: 'Noto Sans Medium' }}>
+                    {candidate}
+                  </span>{' '}
+                  คน
+                </span>
               </LiPartyList>
             ))
           )}
@@ -402,7 +386,10 @@ const PersonCard = ({ data = {} }) => {
                           }}
                         ></span>
                         {winner.title} {winner.first_name} {winner.last_name},{' '}
-                        {winner.party}, {percentageFormat(winner.ratio)}
+                        {winner.party},{' '}
+                        <span style={{ fontFamily: 'Noto Sans Medium' }}>
+                          {percentageFormat(winner.ratio)}
+                        </span>
                       </div>
                     ))}
                     <StackedBar data={result} zoneQuota={quota} year={year} />
@@ -649,10 +636,14 @@ const DropdownCompare = props => {
       <button
         className="dropdown--button"
         onClick={() => setShowItems(prev => !prev)}
-        style={{ height: '100%', paddingTop: '5px', fontSize: '3rem' }}
+        style={{
+          height: '100%',
+          paddingTop: '0px',
+          fontSize: '3rem'
+        }}
       >
         {props.children}
-        <i className="dropdown--chevron" style={{ marginTop: '2px' }}></i>
+        <i className="dropdown--chevron" style={{ marginTop: '5px' }}></i>
       </button>
       {showItems && (
         <div className="dropdown--items">

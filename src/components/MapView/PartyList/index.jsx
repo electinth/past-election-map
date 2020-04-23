@@ -17,7 +17,14 @@ const PartyList = ({ byPartySorted, view }) => {
               backgroundColor: partyColor(electionYear)(party)
             }}
           ></span>
-          พรรค{party} <span className="party-list--count">{candidate} คน</span>
+          พรรค{party}{' '}
+          <span className="party-list--count">
+            {' '}
+            <span style={{ fontFamily: 'Noto Sans Medium' }}>
+              {candidate}
+            </span>{' '}
+            คน
+          </span>
         </li>
       ))}
     </ul>
