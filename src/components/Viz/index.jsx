@@ -30,6 +30,7 @@ function getElementWidth(selector) {
 
 const Map = props => {
   const visRef = useRef();
+  const tooltipZoneRef = useRef();
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
   const [tooltips, setTooltips] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -111,7 +112,7 @@ const Map = props => {
         style={{ ...tooltipsStyles, pointerEvents: 'none' }}
       >
         {tooltips[0]}
-        <ZoneDetailText>{tooltips[1]}</ZoneDetailText>
+        <ZoneDetailText ref={tooltipZoneRef}>{tooltips[1]}</ZoneDetailText>
       </div>
       <div style={{ position: 'fixed', top: '50%', left: '50%' }}>
         <BeatLoader size={25} color={'white'} loading={loading} />
@@ -121,15 +122,16 @@ const Map = props => {
           <defs id={`map-defs`}></defs>
           <g
             id="map"
-            onMouseMove={e =>
+            onMouseMove={e => {
+              const offset = tooltipZoneRef.current.offsetHeight;
               setTooltipStyles({
-                top: e.clientY - 100,
+                top: e.clientY - 100 - offset,
                 left: e.clientX,
                 overflow: 'hidden',
-                transform: 'translateX(-50%)',
+                transform: 'translate(-50%, 0%)',
                 opacity: 1
-              })
-            }
+              });
+            }}
             onMouseLeave={() =>
               setTooltipStyles({
                 top: null,
