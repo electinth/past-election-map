@@ -26,8 +26,11 @@ const Container = styled.div`
   overflow: scroll;
 `;
 
-const Zone_detail_text = styled.p`
-  font-size: 0.1rem;
+const ZoneDetailText = styled.p`
+  width: 320px;
+  font-size: 1.2rem;
+  font-family: "Noto Sans Thai";
+  white-space: normal;
 `;
 
 const Header = styled.div`
@@ -222,7 +225,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                 <YearTilte>ปี {year}</YearTilte>
                 <div className="tooltips" style={tooltipsStyles}>
                   {tooltips[0]}
-                  <Zone_detail_text>{tooltips[1]}</Zone_detail_text>
+                  <ZoneDetailText>{tooltips[1]}</ZoneDetailText>
                 </div>
                 <svg
                   id={`compare-election-${year}`}

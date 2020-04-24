@@ -12,8 +12,11 @@ let w = innerWidth,
 
 let map;
 
-const Zone_detail_text = styled.p`
-  font-size: 1rem;
+const ZoneDetailText = styled.p`
+  max-width: 240px;
+  font-size: 1.2rem;
+  font-family: "Noto Sans Thai";
+  white-space: normal;
 `;
 
 function getElementWidth(selector) {
@@ -104,7 +107,7 @@ const Map = props => {
     <figure className="viz-layer">
       <div className="tooltips" style={tooltipsStyles}>
         {tooltips[0]}
-        <Zone_detail_text>{tooltips[1]}</Zone_detail_text>
+        <ZoneDetailText>{tooltips[1]}</ZoneDetailText>
       </div>
       <div style={{ position: 'fixed', top: '50%', left: '50%' }}>
         <BeatLoader size={25} color={'white'} loading={loading} />
