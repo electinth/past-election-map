@@ -15,8 +15,9 @@ let map;
 const ZoneDetailText = styled.p`
   max-width: 240px;
   font-size: 1.2rem;
-  font-family: "Noto Sans Thai";
+  font-family: 'Noto Sans Thai';
   white-space: normal;
+  pointer-events: none;
 `;
 
 function getElementWidth(selector) {
@@ -105,7 +106,10 @@ const Map = props => {
 
   return (
     <figure className="viz-layer">
-      <div className="tooltips" style={tooltipsStyles}>
+      <div
+        className="tooltips"
+        style={{ ...tooltipsStyles, pointerEvents: 'none' }}
+      >
         {tooltips[0]}
         <ZoneDetailText>{tooltips[1]}</ZoneDetailText>
       </div>
