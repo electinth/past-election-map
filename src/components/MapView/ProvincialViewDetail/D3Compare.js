@@ -104,6 +104,7 @@ function D3Compare(
       .attr('stroke-width', 0.2)
       .attr('stroke', 'black')
       .attr('vector-effect', 'non-scaling-stroke')
+      .style('pointer-events', 'none')
       .raise();
 
     const $label = $gElection
@@ -116,6 +117,7 @@ function D3Compare(
       .attr('y', polylabelPosition('y'))
       .attr('font-size', geo => fontSize(geo) / 5)
       .attr('dominant-baseline', 'middle')
+      .style('pointer-events', 'none')
       .raise();
   };
 
