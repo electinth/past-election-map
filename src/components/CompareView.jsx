@@ -29,7 +29,7 @@ const Container = styled.div`
 const ZoneDetailText = styled.p`
   width: 320px;
   font-size: 1.2rem;
-  font-family: "Noto Sans Thai";
+  font-family: 'Noto Sans Thai';
   white-space: normal;
 `;
 
@@ -186,6 +186,7 @@ const dimension = {
 const compareYears = ELECTION_YEAR.map(y => y.year);
 
 const YearList = ({ view = 'party', party = [], person = [] }) => {
+  const tooltipZoneRef = useRef();
   const { province, CountryTopoJson } = useContext(MapContext);
   const [tooltips, setTooltips] = useState([]);
   const [tooltipsStyles, setTooltipStyles] = useState({
@@ -225,7 +226,9 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                 <YearTilte>ปี {year}</YearTilte>
                 <div className="tooltips" style={tooltipsStyles}>
                   {tooltips[0]}
-                  <ZoneDetailText>{tooltips[1]}</ZoneDetailText>
+                  <ZoneDetailText ref={tooltipZoneRef}>
+                    {tooltips[1]}
+                  </ZoneDetailText>
                 </div>
                 <svg
                   id={`compare-election-${year}`}
@@ -237,9 +240,10 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                     dimension.h + dimension.marginTop + dimension.marginBottom
                   }
                   onMouseMove={e => {
+                    const offset = tooltipZoneRef.current.offsetHeight;
                     if (tooltips.length !== 0) {
                       setTooltipStyles({
-                        top: e.clientY - 100,
+                        top: e.clientY - 100 - offset,
                         left: e.clientX,
                         overflow: 'hidden',
                         transform: 'translateX(-50%)',
