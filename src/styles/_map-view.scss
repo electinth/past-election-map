@@ -47,6 +47,12 @@
       left: 1rem;
       right: 1rem;
       top: calc(100vh - 32rem);
+      transition: top 0.5s ease-out;
+
+      &.show-info {
+        top: 12rem;
+      }
+
     }
   }
 }

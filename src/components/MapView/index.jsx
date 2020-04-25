@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Dropdown from './Dropdown';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
 import MapContext from '../../map/context';
@@ -8,12 +8,23 @@ import MobileTopNav from './MobileTopNav';
 
 const MapView = () => {
   const { province } = useContext(MapContext);
+  const [showMobileDetail, setShowMobileDetail] = useState(false);
+
+  function toggleMobileDetail() {
+    setShowMobileDetail(!showMobileDetail);
+  }
+  function hideMobileDetail() {
+    setShowMobileDetail(false);
+  }
 
   return (
     <>
       <aside className="bar bar__left">
         <div className="bar--upper__left">
-          <Route path="/:year/:province" component={MobileTopNav} />
+          <Route
+            path="/:year/:province"
+            render={() => <MobileTopNav hideDetail={hideMobileDetail} />}
+          />
         </div>
         <div className="bar--lower__left">
           <Switch>
@@ -22,12 +33,19 @@ const MapView = () => {
           </Switch>
         </div>
       </aside>
-      <aside className="bar bar__right">
+      <aside className={`bar bar__right ${showMobileDetail ? "show-info" : null}`}>
         <Dropdown>{province}</Dropdown>
         <div className="bar--lower bar--lower__right">
           <Switch>
-            <Route path="/:year?" exact component={NationalRight} />
-            <Route path="/:year/:province" component={ProvincialRight} />
+            <Route
+              path="/:year?"
+              exact
+              render={() => <NationalRight toggleShowDetail={toggleMobileDetail} />}
+            />
+            <Route
+              path="/:year/:province"
+              render={() => <ProvincialRight toggleShowDetail={toggleMobileDetail} />}
+            />
           </Switch>
         </div>
       </aside>
@@ -35,4 +53,4 @@ const MapView = () => {
   );
 };
 
-export default MapView;
+export default withRouter(MapView);

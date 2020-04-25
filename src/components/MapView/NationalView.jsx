@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import BeatLoader from 'react-spinners/BeatLoader';
 import _ from 'lodash';
+import styled from 'styled-components';
 
 import MapContext from '../../map/context';
 import Overview from './Overview';
@@ -13,7 +13,24 @@ import novoteImage from '../../images/NoVote.svg';
 const NationalLeft = () => {
   return <ElectionYear />;
 };
-const NationalRight = () => {
+
+const ToggleButton = styled.a`
+  float: right;
+  line-height: 1;
+  transform: rotate(180deg);
+  transition: transform .4s ease-out;
+  margin-top: 0.3rem;
+
+  i {
+    border: none;
+  }
+
+  .show-info & {
+    transform: rotate(0);
+  }
+`;
+
+const NationalRight = ({ toggleShowDetail }) => {
   const { setProvince, CountryTopoJson, electionYear } = useContext(MapContext);
   const [nationalProps, setNationalProps] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -69,6 +86,9 @@ const NationalRight = () => {
         <div className="national-view">
           <h1 className="national-view--header">
             {numZone} เขต {numCandidate} คน
+            <ToggleButton onClick={() => toggleShowDetail()}>
+              <i className="icon--chevron icon--chevron"></i>
+            </ToggleButton>
           </h1>
           {isNoVote ? (
             <NoVoteDisplay view={'nationView'} />

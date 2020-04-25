@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
+import styled from 'styled-components';
 
 import { useParams } from 'react-router-dom';
 import MapContext from '../../map/context';
@@ -22,7 +23,23 @@ const ProvincialLeft = () => {
   return <ProvinceAreaCompare />;
 };
 
-const ProvincialRight = () => {
+const ToggleButton = styled.a`
+  float: right;
+  line-height: 1;
+  transform: rotate(180deg);
+  transition: transform .4s ease-out;
+  margin-top: 0.3rem;
+
+  i {
+    border: none;
+  }
+
+  .show-info & {
+    transform: rotate(0);
+  }
+`;
+
+const ProvincialRight =  ({ toggleShowDetail }) => {
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
   const [provincialProps, setProvincialProps] = useState([]);
   const [partyView, setPartyView] = useState(true);
@@ -69,6 +86,9 @@ const ProvincialRight = () => {
     <div className="provincial-view">
       <h1 className="provincial-view--header">
         จำนวน {numDistricts} เขต {numCandidate} คน
+        <ToggleButton onClick={() => toggleShowDetail()}>
+          <i className="icon--chevron icon--chevron"></i>
+        </ToggleButton>
       </h1>
       {isNovote ? (
         <NoVoteDisplay view={'nationView'} />

@@ -279,7 +279,7 @@ const HeaderViewMode = styled.div`
       .provincial-view--toggle-button {
         .toggle-container {
           font-size: 2rem !important;
-          line-height: 1.4;
+          line-height: 1.2;
           bottom: 0 !important;
           position: static;
         }

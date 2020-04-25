@@ -65,12 +65,15 @@ const WhiteButton = styled.div`
   }
 `;
 
-const CountryViewButton = () => {
+const CountryViewButton = ({ hideDetail }) => {
   const { year: paramYear, province: paramProvince } = useParams();
 
   return (
     <HeaderBack>
-      <Link to={`/${paramYear}`}>
+      <Link
+        to={`/${paramYear}`}
+        onClick={() => hideDetail()}
+      >
         <WhiteButton>
           <i
           className="icon--chevron icon--chevron__left"
@@ -100,10 +103,10 @@ const CompareViewButton = () => {
   )
 }
 
-const MobileTopNav = () => {
+const MobileTopNav = ({ hideDetail }) => {
   return (
     <Header className="mobile-only">
-      <CountryViewButton />
+      <CountryViewButton hideDetail={hideDetail} />
       <CompareViewButton />
     </Header>
   )

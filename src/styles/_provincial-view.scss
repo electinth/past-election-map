@@ -97,6 +97,8 @@
   }
 
   @include mobile {
+    padding-bottom: 4rem;
+
     &--header {
       font-size: 2rem;
     }
@@ -104,8 +106,14 @@
       max-height: initial;
     }
     &--content {
-      max-height: 14rem;
+      max-height: 18rem;
       overflow: auto;
+      transition: height .5s ease-out;
+
+      .show-info & {
+        height: calc(100vh - 30rem);
+        max-height: initial;
+      }
     }
   }
 }
