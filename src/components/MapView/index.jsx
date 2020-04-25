@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 import Dropdown from './Dropdown';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
 import MapContext from '../../map/context';
 import MobileTopNav from './MobileTopNav';
+import MobileSelectYear from './MobileSelectYear';
 
 const MapView = () => {
   const { province } = useContext(MapContext);
@@ -34,6 +35,7 @@ const MapView = () => {
         </div>
       </aside>
       <aside className={`bar bar__right ${showMobileDetail ? "show-info" : null}`}>
+        <MobileSelectYear />
         <Dropdown>{province}</Dropdown>
         <div className="bar--lower bar--lower__right">
           <Switch>
@@ -53,4 +55,4 @@ const MapView = () => {
   );
 };
 
-export default withRouter(MapView);
+export default MapView;
