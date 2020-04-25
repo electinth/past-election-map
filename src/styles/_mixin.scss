@@ -1,0 +1,31 @@
+// Small tablets
+$screen-mobile-sm-max: 320px;
+
+// Medium mobile (portrait view)
+$screen-mobile-md-max: 375px;
+
+// Large mobile
+$screen-mobile-lg-max: 425px;
+
+// Tablets
+$screen-tablet-max: 768px;
+
+// Laptops
+$screen-latop-max: 1024px;
+
+// Large desktops
+$screen-desktop-max: 1440px;
+
+// Mobile devices
+@mixin mobile {
+  @media (max-width: #{$screen-mobile-lg-max}) {
+      @content;
+  }
+}
+
+// Tablet devices
+@mixin tablet {
+  @media (max-width: #{$screen-tablet-max}) {
+      @content;
+  }
+}

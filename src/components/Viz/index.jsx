@@ -6,6 +6,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import D3Map from './D3Map';
 import MapContext from '../../map/context';
 import { withRouter } from 'react-router-dom';
+import { isMobile } from '../size';
 
 let w = innerWidth,
   h = innerHeight;
@@ -23,9 +24,35 @@ const ZoneDetailText = styled.p`
 function getElementWidth(selector) {
   const selection = d3.select(selector);
   if (selection.node()) {
-    return +selection.style('width').slice(0, -2);
+    return +selection.style('width').slice(0, -2) || 0;
   }
   return 0;
+}
+
+/**
+ *
+ * @param {*} w
+ * @param {*} h
+ * @return {Array} 0 = width, 1 = height, 2 = center X, 3 = center Y
+ */
+function getViewport(w, h) {
+  if (isMobile()) {
+    return [
+      w,
+      h,
+      w / 2,
+      (h - 320) / 2
+    ];
+  } else {
+    const barLeft = getElementWidth('.bar__left');
+    const barRight = getElementWidth('.bar__right');
+    return [
+      w - barLeft - barRight,
+      h,
+      barLeft + (w - barLeft - barRight) / 2,
+      h / 2
+    ];
+  }
 }
 
 const Map = props => {
@@ -44,16 +71,12 @@ const Map = props => {
     setLoading(true);
     if (CountryTopoJson.length === 0) return;
 
-    const barLeft = getElementWidth('.bar__left');
-    const barRight = getElementWidth('.bar__right');
+    const viewport = getViewport(w, h);
 
     // center map in viewport excluding left & right bars
     map = D3Map(
       CountryTopoJson,
-      w - barLeft - barRight,
-      h,
-      barLeft + (w - barLeft - barRight) / 2,
-      h / 2,
+      ...getViewport(w, h),
       props.history.push,
       electionYear,
       province,
@@ -73,17 +96,7 @@ const Map = props => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (!map) return;
-
-        (w = innerWidth), (h = innerHeight);
-        const barLeft = getElementWidth('.bar__left');
-        const barRight = getElementWidth('.bar__right');
-
-        map.setViewport(
-          w - barLeft - barRight,
-          h,
-          barLeft + (w - barLeft - barRight) / 2,
-          h / 2
-        );
+        map.setViewport(...getViewport(innerWidth, innerHeight));
       }, 150);
     };
     window.addEventListener('resize', resizeListener);

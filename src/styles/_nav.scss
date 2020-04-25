@@ -46,4 +46,24 @@
       color: currentColor;
     }
   }
+
+  @include mobile {
+    width: 100%;
+    min-width: initial;
+    font-size: 1.6rem;
+    padding: 0 2rem;
+
+    &--logo {
+      display: none;
+    }
+    &--logo-image {
+      // display: block;
+      // height: 1.4rem;
+    }
+
+    &--header {
+      font-size: 1.8rem;
+      line-height: 1.4;
+    }
+  }
 }

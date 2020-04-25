@@ -13,11 +13,13 @@ import { NoVoteDisplay, NoBeungKanProvince } from './MapView/NationalView';
 import { SeePartyMenu, SeeWinnerMenu } from './MapView/ProvincialView';
 import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
 
+import { isMobile, device } from './size';
+
 const Container = styled.div`
   position: fixed;
   display: block;
   width: 100%;
-  top: 50px;
+  top: 5rem;
   left: 0;
   right: 0;
   bottom: 0;
@@ -37,8 +39,26 @@ const Header = styled.div`
   margin: 0 auto;
   margin-top: 26px;
   width: 100%;
-  height: 50px;
+  height: 5rem;
   display: flex;
+
+  @media ${device.mobile} {
+    width: 100%;
+    height: 11rem;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 12rem auto;
+    grid-template-rows: 5rem 5rem;
+    grid-template-areas:
+      "back dropdown"
+      "view view";
+    column-gap: 1rem;
+    row-gap: 1rem;
+    justify-items: stretch;
+    align-items: start;
+    justify-content: stretch;
+    align-content: stretch;
+  }
 `;
 
 const ViewParty = styled.div`
@@ -56,14 +76,22 @@ const PartyUL = styled.ul`
   justify-content: center;
   margin: 0 auto;
   width: 100%;
+
+  @media ${device.mobile} {
+    flex-direction: column;
+  }
 `;
 
 const Year = styled.li`
   top: 0px;
-  margin-bottom: 50px;
+  margin-bottom: 5rem;
   width: 344px;
   &:not(:last-child) {
     border-right: 2px solid #000000;
+  }
+
+  @media ${device.mobile} {
+    width: 100%;
   }
 `;
 
@@ -72,11 +100,44 @@ const CardList = styled.div`
   // height: 700px;
   margin: 0 auto;
   text-align: center;
+
+  @media ${device.mobile} {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 3rem 25rem auto;
+    grid-template-areas:
+      "year"
+      "chart"
+      "info";
+    column-gap: 0;
+    row-gap: 2rem;
+    justify-items: stretch;
+    align-items: start;
+    justify-content: stretch;
+    align-content: stretch;
+  }
 `;
 
-const YearTilte = styled.h1`
+const CardYearTitle = styled.h1`
   font-family: 'The MATTER';
   font-size: 3rem;
+
+  @media ${device.mobile} {
+    grid-area: year;
+  }
+`;
+
+const CardMapSvg = styled.div`
+  @media ${device.mobile} {
+    grid-area: chart;
+  }
+`;
+
+const CardInfo = styled.div`
+  @media ${device.mobile} {
+    grid-area: info;
+  }
 `;
 
 const PartyCardContainer = styled.div`
@@ -88,6 +149,13 @@ const PartyCardContainer = styled.div`
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   margin: 0 auto;
   padding: 10px;
+
+  @media ${device.mobile} {
+    margin-left: 0;
+    max-width: initial;
+    margin: 0 auto;
+    min-height: 120px;
+  }
 `;
 
 const PersonCardContainer = styled.div`
@@ -99,6 +167,13 @@ const PersonCardContainer = styled.div`
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   margin: 0 auto;
   padding: 10px;
+
+  @media ${device.mobile} {
+    margin-left: 0;
+    max-width: initial;
+    margin: 0 auto;
+    min-height: 120px;
+  }
 `;
 
 const DistricExplain = styled.h2`
@@ -143,9 +218,19 @@ const LiPartyList = styled.li`
   overflow: hidden;
 `;
 
+const HeaderBack = styled.div`
+  a {
+    text-decoration: none;
+  }
+
+  @media ${device.mobile} {
+    grid-area: back;
+  }
+`;
+
 const BackButton = styled.div`
-  height: 50px;
-  width: 164px;
+  height: 5rem;
+  width: 16rem;
   left: 50px;
   border: 1px solid #333333;
   border-radius: var(--border-radius);
@@ -157,31 +242,107 @@ const BackButton = styled.div`
   color: black;
   text-align: center;
   line-height: 40px;
+
+  @media ${device.mobile} {
+    position: static;
+    width: 100%;
+    font-size: 2rem;
+    line-height: 5rem;
+  }
+`;
+
+const HeaderViewMode = styled.div`
+  width: 40rem;
+  margin: 0 auto;
+
+  .provincial-view--toggle {
+    height: 100%;
+    borderRadius: var(--border-radius);
+  }
+
+  .provincial-view--toggle-button {
+    height: 100%;
+  }
+
+  @media ${device.mobile} {
+    grid-area: view;
+    width: 100%;
+    height: 4.2rem;
+
+    .provincial-view--toggle {
+      .provincial-view--toggle-button {
+        .toggle-container {
+          font-size: 2rem !important;
+        }
+
+      }
+    }
+  }
 `;
 
 const DropDownContainer = styled.div`
   right: 55px;
-  width: 300px;
-  height: 50px;
+  width: 30rem;
+  height: 5rem;
   position: absolute;
+  .dropdown--container {
+    height: 100%;
+    width: 100%;
+  }
+  .dropdown--button {
+    height: 100%;
+    paddingTop: 0;
+    font-size: 3rem;
+    overflow: hidden;
+  }
+
+  @media ${device.mobile} {
+    grid-area: dropdown;
+    position: static;
+    width: 100%;
+    .dropdown--button {
+      font-size: 2rem;
+    }
+  }
 `;
 
 let maps;
 
-const marginTop = 0,
-  marginBottom = 0,
-  marginLeft = 25,
-  marginRight = 25;
-const w = 300 - marginLeft - marginRight,
-  h = 300 - marginTop - marginBottom;
-const dimension = {
-  w,
-  h,
-  marginTop,
-  marginBottom,
-  marginLeft,
-  marginRight
-};
+function getMapDimension() {
+  if (isMobile()) {
+    const marginTop = 0,
+      marginBottom = 0,
+      marginLeft = 10,
+      marginRight = 10;
+    const w = (innerWidth) - marginLeft - marginRight,
+      h = 250 - marginTop - marginBottom;
+    return {
+      w,
+      h,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight
+    };
+  } else {
+    const marginTop = 0,
+      marginBottom = 0,
+      marginLeft = 25,
+      marginRight = 25;
+    const w = 300 - marginLeft - marginRight,
+      h = 300 - marginTop - marginBottom;
+    return {
+      w,
+      h,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight
+    };
+  }
+}
+
+const mapDimension = getMapDimension();
 
 const compareYears = ELECTION_YEAR.map(y => y.year);
 
@@ -205,8 +366,8 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
       compareYears,
       $compare,
       $defs,
-      dimension,
-      15000,
+      mapDimension,
+      isMobile() ? 12000 : 15000,
       setTooltips
     );
   }, [CountryTopoJson]);
@@ -223,49 +384,53 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
           return (
             <Year key={year}>
               <CardList>
-                <YearTilte>ปี {year}</YearTilte>
+                <CardYearTitle>ปี {year}</CardYearTitle>
+                <CardMapSvg>
+                  <svg
+                    id={`compare-election-${year}`}
+                    data-election-year={`election-${year}`}
+                    width={
+                      mapDimension.w + mapDimension.marginLeft + mapDimension.marginRight
+                    }
+                    height={
+                      mapDimension.h + mapDimension.marginTop + mapDimension.marginBottom
+                    }
+                    onMouseMove={e => {
+                      const offset = tooltipZoneRef.current.offsetHeight;
+                      if (tooltips.length !== 0) {
+                        setTooltipStyles({
+                          top: e.clientY - 100 - offset,
+                          left: e.clientX,
+                          overflow: 'hidden',
+                          transform: 'translateX(-50%)',
+                          whiteSpace: 'nowrap',
+                          opacity: 1
+                        });
+                      } else {
+                        setTooltipStyles({
+                          top: null,
+                          left: null,
+                          opacity: 0
+                        });
+                      }
+                    }}
+                  >
+                    <defs id={`map-defs-compare`}></defs>
+                  </svg>
+                </CardMapSvg>
+                <CardInfo>
+                {view === 'party' ? (
+                  <PartyCard data={party[index]} />
+                ) : (
+                  <PersonCard data={person[index]} />
+                )}
+                </CardInfo>
                 <div className="tooltips" style={tooltipsStyles}>
                   {tooltips[0]}
                   <ZoneDetailText ref={tooltipZoneRef}>
                     {tooltips[1]}
                   </ZoneDetailText>
                 </div>
-                <svg
-                  id={`compare-election-${year}`}
-                  data-election-year={`election-${year}`}
-                  width={
-                    dimension.w + dimension.marginLeft + dimension.marginRight
-                  }
-                  height={
-                    dimension.h + dimension.marginTop + dimension.marginBottom
-                  }
-                  onMouseMove={e => {
-                    const offset = tooltipZoneRef.current.offsetHeight;
-                    if (tooltips.length !== 0) {
-                      setTooltipStyles({
-                        top: e.clientY - 100 - offset,
-                        left: e.clientX,
-                        overflow: 'hidden',
-                        transform: 'translateX(-50%)',
-                        whiteSpace: 'nowrap',
-                        opacity: 1
-                      });
-                    } else {
-                      setTooltipStyles({
-                        top: null,
-                        left: null,
-                        opacity: 0
-                      });
-                    }
-                  }}
-                >
-                  <defs id={`map-defs-compare`}></defs>
-                </svg>
-                {view === 'party' ? (
-                  <PartyCard data={party[index]} />
-                ) : (
-                  <PersonCard data={person[index]} />
-                )}
               </CardList>
             </Year>
           );
@@ -498,53 +663,54 @@ const CompareView = () => {
   return (
     <Container>
       <Header>
-        <Link to={`/${paramYear}/${paramProvince}`}>
-          <BackButton>
-            <svg
-              width="36px"
-              height="36px"
-              viewBox="0 0 36 36"
-              style={{ verticalAlign: 'middle', marginBottom: '5px' }}
-            >
-              <g
-                id="Guideline"
-                stroke="none"
-                strokeWidth="1"
-                fill="none"
-                fillRule="evenodd"
+        <HeaderBack>
+          <Link to={`/${paramYear}/${paramProvince}`}>
+            <BackButton>
+              <svg
+                width="36px"
+                height="36px"
+                viewBox="0 0 36 36"
+                style={{ verticalAlign: 'middle', marginBottom: '5px' }}
               >
                 <g
-                  id="Master-Guideline"
-                  transform="translate(-922.000000, -2769.000000)"
-                  stroke="#000000"
+                  id="Guideline"
+                  stroke="none"
+                  strokeWidth="1"
+                  fill="none"
+                  fillRule="evenodd"
                 >
                   <g
-                    id="Group-16"
-                    transform="translate(911.000000, 2763.000000)"
+                    id="Master-Guideline"
+                    transform="translate(-922.000000, -2769.000000)"
+                    stroke="#000000"
                   >
                     <g
-                      id="Group-9"
-                      transform="translate(29.000000, 24.000000) rotate(-270.000000) translate(-29.000000, -24.000000) translate(11.000000, 6.000000)"
+                      id="Group-16"
+                      transform="translate(911.000000, 2763.000000)"
                     >
-                      <g id="Group-7">
-                        <circle id="Oval" cx="18" cy="18" r="17.5"></circle>
-                        <polyline
-                          id="Path-2"
-                          points="10.7234043 15.3191489 18 22.9787234 25.2765957 15.3191489"
-                        ></polyline>
+                      <g
+                        id="Group-9"
+                        transform="translate(29.000000, 24.000000) rotate(-270.000000) translate(-29.000000, -24.000000) translate(11.000000, 6.000000)"
+                      >
+                        <g id="Group-7">
+                          <circle id="Oval" cx="18" cy="18" r="17.5"></circle>
+                          <polyline
+                            id="Path-2"
+                            points="10.7234043 15.3191489 18 22.9787234 25.2765957 15.3191489"
+                          ></polyline>
+                        </g>
                       </g>
                     </g>
                   </g>
                 </g>
-              </g>
-            </svg>{' '}
-            Back
-          </BackButton>
-        </Link>
-        <div style={{ width: '40rem', margin: '0 auto' }}>
+              </svg>{' '}
+              Back
+            </BackButton>
+          </Link>
+        </HeaderBack>
+        <HeaderViewMode>
           <div
             className="provincial-view--toggle"
-            style={{ height: '100%', borderRadius: 'var(--border-radius)' }}
           >
             <div
               className={`provincial-view--toggle-button ${partyView &&
@@ -556,7 +722,6 @@ const CompareView = () => {
             <div
               className={`provincial-view--toggle-button ${!partyView &&
                 'active'}`}
-              style={{ height: '100%' }}
               onClick={() => setPartyView(false)}
             >
               <SeeWinnerMenu partyView={partyView} view={'compareView'} />
@@ -566,7 +731,7 @@ const CompareView = () => {
               style={{ left: !partyView && '50%' }}
             ></span>
           </div>
-        </div>
+        </HeaderViewMode>
         <DropDownContainer>
           <DropdownCompare>{paramProvince}</DropdownCompare>
         </DropDownContainer>
@@ -638,16 +803,10 @@ const DropdownCompare = props => {
     <div
       className="dropdown--container"
       ref={ref}
-      style={{ height: '100%', width: '300px' }}
     >
       <button
         className="dropdown--button"
         onClick={() => setShowItems(prev => !prev)}
-        style={{
-          height: '100%',
-          paddingTop: '0px',
-          fontSize: '3rem'
-        }}
       >
         {props.children}
         <i className="dropdown--chevron" style={{ marginTop: '5px' }}></i>

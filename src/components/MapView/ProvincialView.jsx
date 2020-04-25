@@ -100,7 +100,7 @@ const ProvincialRight = () => {
           {province === 'บึงกาฬ' && electionYear === 'election-2550' ? (
             <NoBeungKanProvince year={paramYear} />
           ) : (
-            <div>
+            <div className="provincial-view--content">
               {partyView ? (
                 <PartyList byPartySorted={byPartySorted} />
               ) : (
@@ -207,7 +207,10 @@ const SeePartyMenu = ({ partyView, view }) => {
           verticalAlign: 'middle'
         };
   return (
-    <div style={{ fontSize: fontSize, position: 'absolute', bottom: bottom }}>
+    <div
+      className="toggle-container"
+      style={{ fontSize: fontSize, position: 'absolute', bottom: bottom }}
+    >
       <svg width={width} height={height} viewBox="0 0 18 13" style={style}>
         <title>Group 8</title>
         <desc>Created with Sketch.</desc>
@@ -268,6 +271,7 @@ const SeeWinnerMenu = ({ partyView, view }) => {
         };
   return (
     <div
+      className="toggle-container"
       style={{
         fontSize: fontSize,
         position: 'absolute',

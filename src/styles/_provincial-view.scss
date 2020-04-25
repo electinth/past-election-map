@@ -94,6 +94,12 @@
       transition: left 0.25s;
     }
   }
+
+  @include mobile {
+    &--list {
+      max-height: initial;
+    }
+  }
 }
 
 .compare {

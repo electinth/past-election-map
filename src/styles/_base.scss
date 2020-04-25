@@ -34,6 +34,11 @@ body {
   & * {
     pointer-events: auto;
   }
+
+  @include mobile {
+    width: 100%;
+    min-width: initial;
+  }
 }
 
 .viz-layer {

@@ -18,4 +18,21 @@
     color: var(--color-black);
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.25);
   }
+
+  @include mobile {
+    display: none;
+
+    &__right {
+      display: flex;
+      position: fixed;
+      left: 1rem;
+      right: 1rem;
+      top: calc(100vh - 32rem);
+
+      .provincial-view--content {
+        max-height: 13rem;
+        overflow: auto;
+      }
+    }
+  }
 }
