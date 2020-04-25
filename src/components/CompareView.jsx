@@ -2,24 +2,24 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import _ from 'lodash';
 import * as d3 from 'd3';
-
 import styled from 'styled-components';
+
 import MapContext from '../map/context';
 import partyColor from '../map/color';
 import { ELECTION_YEAR } from '../config';
+import { isMobile, device } from './size';
 
 import StackedBar from './MapView/StackedBar';
 import { NoVoteDisplay, NoBeungKanProvince } from './MapView/NationalView';
 import { SeePartyMenu, SeeWinnerMenu } from './MapView/ProvincialView';
 import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
 
-import { isMobile, device } from './size';
 
 const Container = styled.div`
   position: fixed;
   display: block;
   width: 100%;
-  top: 5rem;
+  top: 6rem;
   left: 0;
   right: 0;
   bottom: 0;
@@ -45,10 +45,11 @@ const Header = styled.div`
   @media ${device.mobile} {
     width: 100%;
     height: 11rem;
+    margin-top: 0;
     padding: 1rem;
     display: grid;
-    grid-template-columns: 12rem auto;
-    grid-template-rows: 5rem 5rem;
+    grid-template-columns: 10rem 18rem;
+    grid-template-rows: 4rem 3.2rem;
     grid-template-areas:
       "back dropdown"
       "view view";
@@ -56,7 +57,7 @@ const Header = styled.div`
     row-gap: 1rem;
     justify-items: stretch;
     align-items: start;
-    justify-content: stretch;
+    justify-content: space-between;
     align-content: stretch;
   }
 `;
@@ -246,8 +247,10 @@ const BackButton = styled.div`
   @media ${device.mobile} {
     position: static;
     width: 100%;
-    font-size: 2rem;
-    line-height: 5rem;
+    font-size: 1.6rem;
+    line-height: 1;
+    padding: 0.3rem 1rem;
+    height: auto;
   }
 `;
 
@@ -263,18 +266,23 @@ const HeaderViewMode = styled.div`
   .provincial-view--toggle-button {
     height: 100%;
   }
+  .toggle-container {
+    position: absolute;
+  }
 
   @media ${device.mobile} {
     grid-area: view;
     width: 100%;
-    height: 4.2rem;
+    height: 100%;
 
     .provincial-view--toggle {
       .provincial-view--toggle-button {
         .toggle-container {
           font-size: 2rem !important;
+          line-height: 1.4;
+          bottom: 0 !important;
+          position: static;
         }
-
       }
     }
   }
@@ -301,7 +309,12 @@ const DropDownContainer = styled.div`
     position: static;
     width: 100%;
     .dropdown--button {
-      font-size: 2rem;
+      position: static;
+      width: 100%;
+      font-size: 1.6rem;
+      line-height: 1;
+      padding: 0.3rem 1rem;
+      height: auto;
     }
   }
 `;
@@ -666,44 +679,7 @@ const CompareView = () => {
         <HeaderBack>
           <Link to={`/${paramYear}/${paramProvince}`}>
             <BackButton>
-              <svg
-                width="36px"
-                height="36px"
-                viewBox="0 0 36 36"
-                style={{ verticalAlign: 'middle', marginBottom: '5px' }}
-              >
-                <g
-                  id="Guideline"
-                  stroke="none"
-                  strokeWidth="1"
-                  fill="none"
-                  fillRule="evenodd"
-                >
-                  <g
-                    id="Master-Guideline"
-                    transform="translate(-922.000000, -2769.000000)"
-                    stroke="#000000"
-                  >
-                    <g
-                      id="Group-16"
-                      transform="translate(911.000000, 2763.000000)"
-                    >
-                      <g
-                        id="Group-9"
-                        transform="translate(29.000000, 24.000000) rotate(-270.000000) translate(-29.000000, -24.000000) translate(11.000000, 6.000000)"
-                      >
-                        <g id="Group-7">
-                          <circle id="Oval" cx="18" cy="18" r="17.5"></circle>
-                          <polyline
-                            id="Path-2"
-                            points="10.7234043 15.3191489 18 22.9787234 25.2765957 15.3191489"
-                          ></polyline>
-                        </g>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>{' '}
+              <i className="icon--chevron icon--chevron__left"></i>{' '}
               Back
             </BackButton>
           </Link>
@@ -809,7 +785,7 @@ const DropdownCompare = props => {
         onClick={() => setShowItems(prev => !prev)}
       >
         {props.children}
-        <i className="dropdown--chevron" style={{ marginTop: '5px' }}></i>
+        <i className="dropdown--chevron"></i>
       </button>
       {showItems && (
         <div className="dropdown--items">

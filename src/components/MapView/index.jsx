@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
 import MapContext from '../../map/context';
+import MobileTopNav from './MobileTopNav';
 
 const MapView = () => {
   const { province } = useContext(MapContext);
@@ -11,6 +12,9 @@ const MapView = () => {
   return (
     <>
       <aside className="bar bar__left">
+        <div className="bar--upper__left">
+          <Route path="/:year/:province" component={MobileTopNav} />
+        </div>
         <div className="bar--lower__left">
           <Switch>
             <Route path="/:year?" exact component={NationalLeft} />

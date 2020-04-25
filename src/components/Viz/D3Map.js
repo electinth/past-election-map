@@ -4,6 +4,8 @@ import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 import partyColor, { partyFill } from '../../map/color';
 
+import { isMobile } from '../size';
+
 function D3Map(
   CountryTopoJson,
   w,
@@ -259,11 +261,18 @@ function D3Map(
         d => `zone province-${d.properties.province_id} zone-${d.properties.id}`
       )
       .attr('d', path)
-      .on('click', ({ properties: { province_name } }) =>
-        province_name === province
-          ? push(`/${electionYear.slice(-4)}`)
-          : push(`/${electionYear.slice(-4)}/${province_name}`)
-      )
+      .on('click', ({ properties: { province_name } }) => {
+        if (isMobile()) {
+          // On mobile, no-op when click current province
+          province_name === province
+            ? null
+            : push(`/${electionYear.slice(-4)}/${province_name}`)
+        } else {
+          province_name === province
+            ? push(`/${electionYear.slice(-4)}`)
+            : push(`/${electionYear.slice(-4)}/${province_name}`)
+        }
+      })
       .on('mouseenter', setTooltipContent)
       .attr('fill', fillFactory($defs)(electionYear)(province));
 

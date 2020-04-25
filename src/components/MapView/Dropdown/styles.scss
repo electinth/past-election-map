@@ -1,3 +1,5 @@
+@import "../../../styles/_mixin.scss";
+
 .dropdown {
   &--container {
     width: 100%;
@@ -51,9 +53,9 @@
 
   &--items {
     position: absolute;
-    top: 6rem;
-    left: 3%;
-    width: 94%;
+    top: 7rem;
+    left: 0%;
+    width: 100%;
     border: 1px solid var(--color-black);
     border-radius: var(--border-radius);
     box-shadow: 0 1px 2rem rgba(0, 0, 0, 0.3);
@@ -89,7 +91,7 @@
 
   &--item {
     color: var(--color-black);
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1.5rem 0;
     font-size: 2rem;
 
     &:hover {
@@ -110,6 +112,22 @@
       outline: none;
       border: none;
       border-bottom: 0.1rem solid var(--color-black);
+    }
+  }
+
+  @include mobile {
+    &--button {
+      font-size: 2rem;
+      height: auto;
+      line-height: 1.5;
+      padding: 0.5rem 1rem;
+    }
+    &--items {
+      top: 4.5rem;
+    }
+    &--item {
+      padding: 0.5rem 1.5rem 0;
+      font-size: 1.6rem;
     }
   }
 }

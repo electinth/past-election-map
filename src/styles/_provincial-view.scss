@@ -97,8 +97,15 @@
   }
 
   @include mobile {
+    &--header {
+      font-size: 2rem;
+    }
     &--list {
       max-height: initial;
+    }
+    &--content {
+      max-height: 14rem;
+      overflow: auto;
     }
   }
 }

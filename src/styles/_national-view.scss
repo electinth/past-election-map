@@ -13,4 +13,15 @@
       margin: 0.5rem 0;
     }
   }
+
+  @include mobile {
+    &--header {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    &--content {
+      max-height: 14rem;
+      overflow: auto;
+    }
+  }
 }

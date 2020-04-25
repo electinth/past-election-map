@@ -73,7 +73,7 @@ const NationalRight = () => {
           {isNoVote ? (
             <NoVoteDisplay view={'nationView'} />
           ) : (
-            <div>
+            <div className="national-view--content">
               <PartyList byPartySorted={byPartySorted} view={'nationView'} />
               <Overview waffleData={byPartySorted} view={'nationView'} />
             </div>

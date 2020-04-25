@@ -209,7 +209,7 @@ const SeePartyMenu = ({ partyView, view }) => {
   return (
     <div
       className="toggle-container"
-      style={{ fontSize: fontSize, position: 'absolute', bottom: bottom }}
+      style={{ fontSize: fontSize, bottom: bottom }}
     >
       <svg width={width} height={height} viewBox="0 0 18 13" style={style}>
         <title>Group 8</title>
@@ -274,7 +274,6 @@ const SeeWinnerMenu = ({ partyView, view }) => {
       className="toggle-container"
       style={{
         fontSize: fontSize,
-        position: 'absolute',
         bottom: bottom
       }}
     >

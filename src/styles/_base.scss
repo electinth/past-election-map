@@ -33,6 +33,14 @@ body {
   background-color: var(--color-background);
 }
 
+.mobile-only {
+  display: none !important;
+
+  @include mobile {
+    display: block;
+  }
+}
+
 .detail-layer {
   z-index: 100;
   position: relative;
@@ -40,7 +48,8 @@ body {
   justify-content: space-between;
   align-items: flex-start;
   height: calc(100vh - 6rem);
-  padding: 2rem 2rem 1rem 2rem;
+  // padding: 2rem 2rem 1rem 2rem;
+  padding: 0;
   pointer-events: none;
   min-width: 100rem;
 
@@ -60,4 +69,45 @@ body {
   top: 5rem;
   width: 100%;
   text-align: center;
+}
+
+.icon--chevron {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid;
+  border-radius: 100px;
+  vertical-align: middle;
+
+  &::after {
+    content: '';
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+    transform: rotate(45deg);
+    left: 0.9rem;
+    top: 0.65rem;
+  }
+
+  &__right {
+    &::after {
+      transform: rotate(-45deg);
+      left: 0.7rem;
+      top: 0.85rem;
+    }
+  }
+
+  &__left {
+    &::after {
+      transform: rotate(135deg);
+      left: 1.1rem;
+      top: 0.85rem;
+    }
+  }
 }
