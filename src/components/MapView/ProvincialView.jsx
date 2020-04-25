@@ -175,7 +175,7 @@ const Winner = ({ provincialProps }) => {
                   }}
                 ></span>
                 {winner.first_name} {winner.last_name}, พรรค{winner.party},{' '}
-                <span style={{ fontFamily: 'Noto Sans Medium' }}>
+                <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
                   {percentageFormat(winner.ratio)}
                 </span>
               </div>

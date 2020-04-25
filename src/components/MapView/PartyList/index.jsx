@@ -20,7 +20,7 @@ const PartyList = ({ byPartySorted, view }) => {
           พรรค{party}{' '}
           <span className="party-list--count">
             {' '}
-            <span style={{ fontFamily: 'Noto Sans Medium' }}>
+            <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
               {candidate}
             </span>{' '}
             คน

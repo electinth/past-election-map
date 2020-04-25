@@ -9,6 +9,12 @@
 
 @font-face {
   font-family: 'Noto Sans';
+  src: url('fonts/NotoSans-Medium.ttf');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Noto Sans';
   src: url('fonts/NotoSansThaiUI-Bold.woff2') format('woff2'),
     url('fonts/NotoSansThaiUI-Bold.woff') format('woff');
   font-weight: bold;
@@ -23,22 +29,18 @@
 
 @font-face {
   font-family: 'Noto Sans Thai';
+  src: url('fonts/NotoSansThaiUI-Medium.ttf');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Noto Sans Thai';
   src: url('fonts/NotoSansThaiUI-Bold.woff2') format('woff2'),
     url('fonts/NotoSansThaiUI-Bold.woff') format('woff');
   font-weight: bold;
 }
 
 @font-face {
-  font-family: 'The matter';
+  font-family: 'The MATTER';
   src: url('fonts/thematter-bold.ttf');
-}
-
-@font-face {
-  font-family: 'Noto Sans Thai UI Medium';
-  src: url('fonts/NotoSansThaiUI-Medium.ttf');
-}
-
-@font-face {
-  font-family: 'Noto Sans Medium';
-  src: url('fonts/NotoSans-Medium.ttf');
 }

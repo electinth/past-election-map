@@ -483,7 +483,7 @@ const PartyCard = ({ data = {} }) => {
                 ></span>
                 {party}{' '}
                 <span className="party-list--count">
-                  <span style={{ fontFamily: 'Noto Sans Medium' }}>
+                  <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
                     {candidate}
                   </span>{' '}
                   คน
@@ -559,7 +559,7 @@ const PersonCard = ({ data = {} }) => {
                         ></span>
                         {winner.title} {winner.first_name} {winner.last_name},{' '}
                         {winner.party},{' '}
-                        <span style={{ fontFamily: 'Noto Sans Medium' }}>
+                        <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
                           {percentageFormat(winner.ratio)}
                         </span>
                       </div>

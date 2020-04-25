@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { device } from './size';
+
 const DISTRICT_SOURCE = [
   {
     year: 'ปี 2550',
@@ -13,7 +15,7 @@ const DISTRICT_SOURCE = [
     link: 'http://www.ratchakitcha.soc.go.th/DATA/PDF/2554/A/019/29.PDF'
   },
   {
-    year: 'ปี 2554 (แก้ไขเพิ่มจังหวัดบึงกาฬ)',
+    year: 'ปี 2554 แก้ไขเพิ่มจังหวัดบึงกาฬ',
     site: 'ratchakitcha.soc.go.th',
     link: 'http://www.ratchakitcha.soc.go.th/DATA/PDF/2554/A/030/38.PDF'
   },
@@ -53,46 +55,57 @@ const Table = styled.table`
   table-layout: fixed;
   border-collapse: collapse;
 
-  & caption span {
-    display: block;
-    font-size: 1rem;
+  & caption {
+    text-align: left;
+    margin-bottom: 1rem;
   }
 
   & thead tr th {
+    font-weight: normal;
+    border-top: 1px solid var(--color-black);
     border-bottom: 1px solid var(--color-black);
   }
 
-  & a {
-    text-decoration: none;
-    color: var(--color-black);
-    border-bottom: 1px dotted var(--color-black);
+  & tbody tr:last-child td {
+    border-bottom: 1px solid var(--color-black);
   }
 
   & td,
   & th {
     padding: 0.25rem 2rem;
   }
+
+  & th {
+    @media ${device.mobile} {
+      width: 10rem;
+    }
+  }
 `;
 
-const GithubButton = styled.button`
-  display: block;
-  background-color: var(--color-black);
-  font-family: inherit;
-  font-size: 2.5rem;
-  margin: 0 auto;
-  border-radius: 1rem;
-
+const GithubButton = styled.div`
+  text-align: center;
   & a {
-    display: block;
     text-decoration: none;
+    font-size: 2.5rem;
+    font-family: 'The MATTER', sans-serif;
     color: var(--color-white);
-    padding: 1rem 10rem;
+    background-color: var(--color-black);
+    padding: 1rem 5rem;
+    border-radius: 1rem;
+    border: 0;
+
+    @media ${device.mobile} {
+      font-size: 2rem;
+      padding: 1rem 3rem;
+    }
   }
 `;
 
 const Copyright = styled.div`
   display: block;
   text-align: center;
+  margin-top: 2rem;
+  font-size: 1.4rem;
 `;
 
 const AboutUs = props => {
@@ -128,10 +141,6 @@ const AboutUs = props => {
             <Table>
               <caption>
                 ข้อมูลผลการเลือกตั้ง{' '}
-                <span>
-                  (ยึดเอาข้อมูลอย่างเป็นทางการที่รับรองโดย กกต. สำหรับการแสดงผล
-                  โดยไม่รวมการเปลี่ยนแปลงจากการลาออก พ้นสภาพ หรือเลือกตั้งซ่อม)
-                </span>
               </caption>
               <thead>
                 <tr>
@@ -150,15 +159,16 @@ const AboutUs = props => {
                 ))}
               </tbody>
             </Table>
+            <p className="remarks">
+              * หมายเหตุ: ยึดเอาข้อมูลอย่างเป็นทางการที่รับรองโดย กกต. สำหรับการแสดงผล
+              โดยไม่รวมการเปลี่ยนแปลงจากการลาออก พ้นสภาพ หรือเลือกตั้งซ่อม
+            </p>
           </li>
         </ul>
       </section>
 
       <section className="about-us--section about-us--section__program">
         <h3 className="about-us--program-header">เขียนโปรแกรม</h3>
-        <span>
-          <a href="https://github.com/rapee">rapee</a>
-        </span>
         <span>
           <a href="https://github.com/thasarito">thasarito</a>
         </span>
@@ -168,6 +178,9 @@ const AboutUs = props => {
         <span>
           <a href="https://github.com/tesol2y090">tesol2y090</a>
         </span>
+        <span>
+          <a href="https://github.com/rapee">rapee</a>
+        </span>
       </section>
 
       <section className="about-us--section about-us--section__design">
@@ -175,7 +188,7 @@ const AboutUs = props => {
           ออกแบบ บรรณาธิการ และประสานงาน
         </h3>
         <span>
-          <a href="https://punchup.world/">Punch Up Team</a>
+          <a href="https://punchup.world/">Punch Up</a>
         </span>
       </section>
 

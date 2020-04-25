@@ -1,6 +1,6 @@
 :root {
   font-size: 62.5%;
-  font-family: 'The matter', 'Noto Sans Thai', sans-serif;
+  font-family: 'The MATTER', 'Noto Sans Thai', sans-serif;
   color: var(--color-white);
 }
 
@@ -16,6 +16,19 @@ html {
   padding: 0;
 }
 
+a {
+  text-decoration: none;
+  &,
+  &:visited {
+    color: var(--color-black);
+  }
+  &:active,
+  &:focus,
+  &:hover {
+    color: #f0324b;
+  }
+}
+
 body {
   background-color: var(--color-background);
 }
@@ -26,7 +39,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  height: calc(100vh - 5rem);
+  height: calc(100vh - 6rem);
   padding: 2rem 2rem 1rem 2rem;
   pointer-events: none;
   min-width: 100rem;

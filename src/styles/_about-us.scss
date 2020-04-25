@@ -1,6 +1,7 @@
 .about-us {
   max-width: 90rem;
   margin: 0 auto;
+  font-family: 'Noto Sans', 'Noto Sans Thai', sans-serif;
   background-color: var(--color-white);
   color: var(--color-black);
   padding: 2rem 5rem;
@@ -9,10 +10,17 @@
   padding-bottom: 10rem;
   margin-bottom: 10rem;
 
+  a {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+  }
+
   &--header {
     font-size: 4rem;
     text-align: center;
     margin-bottom: 2rem;
+    font-family: 'The MATTER', 'Noto Sans Thai', sans-serif;
+    font-weight: bold;
   }
 
   &--section {
@@ -22,20 +30,22 @@
       border-top: 4px solid var(--color-black);
     }
 
+    h3 {
+      font-size: 2.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .remarks {
+      display: block;
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+    }
+
     &__program,
     &__design {
       span + span {
         &::before {
           content: ', ';
-        }
-      }
-
-      a {
-        text-decoration: none;
-        color: currentColor;
-
-        &:hover {
-          border-bottom: 1px dotted currentColor;
         }
       }
     }
@@ -48,6 +58,18 @@
 
     &-list {
       list-style: none;
+    }
+  }
+
+  @include mobile {
+    width: calc(100% + 4rem);
+    max-width: initial;
+    margin: -2rem;
+    border-radius: 0;
+    padding: 2rem;
+
+    &--header {
+      font-size: 3rem;
     }
   }
 }

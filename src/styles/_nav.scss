@@ -27,24 +27,21 @@
     height: 2.9rem;
   }
 
-  &--header {
-    // white-space: nowrap;
-    // overflow: scroll;
-    font-size: 3.6rem;
-
-    &__link {
-      text-decoration: none;
-      color: currentColor;
-    }
+  .nav--header {
+    font-size: 2.4rem;
   }
 
-  &--about-us {
-    white-space: nowrap;
+  .nav--header__link {
+    text-decoration: none;
+    color: var(--color-white);
+  }
 
-    &__link {
-      text-decoration: none;
-      color: currentColor;
-    }
+  .nav--about-us {
+    white-space: nowrap;
+  }
+  .nav--about-us__link {
+    text-decoration: none;
+    color: var(--color-white);
   }
 
   @include mobile {
@@ -53,15 +50,11 @@
     font-size: 1.6rem;
     padding: 0 2rem;
 
-    &--logo {
+    .nav--logo {
       display: none;
     }
-    &--logo-image {
-      // display: block;
-      // height: 1.4rem;
-    }
 
-    &--header {
+    .nav--header {
       font-size: 1.8rem;
       line-height: 1.4;
     }
