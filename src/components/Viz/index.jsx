@@ -19,6 +19,7 @@ const ZoneDetailTitle = styled.div`
 `;
 
 const ZoneDetailText = styled.p`
+  min-width: 180px;
   max-width: 240px;
   font-size: 1.2rem;
   font-family: 'Noto Sans Thai';
@@ -94,8 +95,6 @@ const Map = props => {
     setLoading(true);
     if (CountryTopoJson.length === 0) return;
 
-    const viewport = getViewport(w, h);
-
     // center map in viewport excluding left & right bars
     map = D3Map(
       CountryTopoJson,
@@ -161,13 +160,26 @@ const Map = props => {
             id="map"
             onMouseMove={e => {
               const offset = tooltipZoneRef.current.offsetHeight;
-              setTooltipStyles({
-                top: e.clientY - 120 - offset,
-                left: e.clientX,
-                overflow: 'hidden',
-                transform: 'translate(-50%, -50%)',
-                opacity: 1
-              });
+              const top = e.clientY - 120 - offset;
+
+              if (top > 80) {
+                setTooltipStyles({
+                  top: e.clientY - 120 - offset,
+                  left: e.clientX,
+                  overflow: 'hidden',
+                  transform: 'translate(-50%, -50%)',
+                  opacity: 1
+                });
+              } else {
+                // flip to lower position
+                setTooltipStyles({
+                  top: e.clientY + 0 - offset,
+                  left: e.clientX,
+                  overflow: 'hidden',
+                  transform: 'translate(-50%, 50%)',
+                  opacity: 1
+                });
+              }
             }}
             onMouseLeave={() =>
               setTooltipStyles({

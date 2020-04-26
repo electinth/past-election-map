@@ -33,7 +33,7 @@ const ZoneDetailTitle = styled.div`
 `;
 
 const ZoneDetailText = styled.p`
-  width: 320px;
+  width: 300px;
   font-size: 1.2rem;
   font-family: 'Noto Sans Thai';
   white-space: normal;
