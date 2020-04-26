@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import BeatLoader from 'react-spinners/BeatLoader';
 import _ from 'lodash';
 import styled from 'styled-components';
 
@@ -9,6 +8,7 @@ import Overview from './Overview';
 import PartyList from './PartyList';
 import ElectionYear from './ElectionYear';
 import novoteImage from '../../images/NoVote.svg';
+import { device } from '../size';
 
 const NationalLeft = () => {
   return <ElectionYear />;
@@ -27,6 +27,24 @@ const ToggleButton = styled.a`
 
   .show-info & {
     transform: rotate(0);
+  }
+`;
+
+const Loader = styled.div`
+  width: 100%;
+  height: 300px;
+  textAlign: center;
+
+  h1 {
+    font-size: 3rem;
+    line-height: 30rem;
+    text-align: center;
+  }
+
+  @media ${device.tablet} {
+    h1 {
+      line-height: 10rem;
+    }
   }
 `;
 
@@ -77,11 +95,11 @@ const NationalRight = ({ toggleShowDetail }) => {
   return (
     <div>
       {isLoading ? (
-        <div style={{ width: '100%', height: '300px', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '3rem', lineHeight: '300px' }}>
+        <Loader>
+          <h1>
             กำลังโหลดข้อมูล
           </h1>
-        </div>
+        </Loader>
       ) : (
         <div className="national-view">
           <h1 className="national-view--header">

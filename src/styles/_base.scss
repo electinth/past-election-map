@@ -2,6 +2,7 @@
   font-size: 62.5%;
   font-family: 'The MATTER', 'Noto Sans Thai', sans-serif;
   color: var(--color-white);
+  line-height: 1.5;
 }
 
 html {
@@ -36,7 +37,7 @@ body {
 .mobile-only {
   display: none !important;
 
-  @include mobile {
+  @include tablet {
     display: block;
   }
 }
@@ -57,7 +58,8 @@ body {
     pointer-events: auto;
   }
 
-  @include mobile {
+  @include tablet {
+    position: fixed; // fixed mobile bug where we can scroll y
     width: 100%;
     min-width: initial;
   }
@@ -66,7 +68,7 @@ body {
 .viz-layer {
   z-index: 1;
   position: fixed;
-  top: 5rem;
+  top: 6rem;
   width: 100%;
   text-align: center;
 }

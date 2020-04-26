@@ -6,13 +6,13 @@ import styled from 'styled-components';
 import { isMobile, device } from '../size';
 
 const Header = styled.div`
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     width: 100%;
     height: 5rem;
     padding: 1rem;
     display: grid !important;
     margin: 0;
-    grid-template-columns: 10rem 17rem;
+    grid-template-columns: 12rem 17rem;
     grid-template-rows: 5rem;
     grid-template-areas:
       "back forward";
@@ -55,12 +55,12 @@ const WhiteButton = styled.div`
   text-align: center;
   line-height: 40px;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     position: static;
     width: 100%;
     font-size: 1.6rem;
-    line-height: 1;
-    padding: 0.3rem 0;
+    line-height: 1.5;
+    padding: 0 0;
     height: auto;
   }
 `;
@@ -79,7 +79,7 @@ const CountryViewButton = ({ hideDetail }) => {
           className="icon--chevron icon--chevron__left"
           style={{ display: 'none' }}></i>
           {' '}
-          Back
+          ดูประเทศไทย
         </WhiteButton>
       </Link>
     </HeaderBack>
@@ -93,7 +93,7 @@ const CompareViewButton = () => {
     <HeaderForward>
       <Link to={`/${paramYear}/compare/${paramProvince}`}>
         <WhiteButton>
-          เปรียบเทียบ 4 ปี{' '}
+          ดูเปรียบเทียบ 4 ปี{' '}
           <i
             className="icon--chevron icon--chevron__right"
             style={{ display: 'none' }}></i>

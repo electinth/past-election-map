@@ -82,7 +82,7 @@ function D3Compare(
         const year = this.parentElement.getAttribute('data-election-year');
 
         d3.select(this)
-          .attr('fill', fillFactory($defs, 'compare')(year)(province))
+          .attr('fill', fillFactory($defs, 'small', 'compare')(year)(province))
           .on('mouseleave', handleOnMouseLeave)
           .on('mouseenter', setTooltipContent);
       });

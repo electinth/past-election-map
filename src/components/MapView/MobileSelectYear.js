@@ -11,10 +11,10 @@ import { ELECTION_YEAR } from '../../config';
 const Header = styled.div`
   display: none;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 
     a {
       width: 23%;
@@ -22,13 +22,15 @@ const Header = styled.div`
       font-size: 1.6rem;
       color: var(--color-white);
       background-color: var(--color-black);
-      border: 1px solid var(--color-black);
+      border: 1px solid var(--color-white);
       border-radius: var(--border-radius);
       text-align: center;
+      line-height: 1.5;
       box-shadow: 0 2px 4px 0 rgba(0,0,0,0.25);
 
       &.active {
         color: var(--color-black);
+        border-color: var(--color-black);
         background-color: var(--color-white);
       }
     }
@@ -40,7 +42,6 @@ const MobileSelectYear = ({ hideDetail }) => {
 
   const pathProvince = province === "ประเทศไทย" ? "" : province;
 
-  console.log('electionYear', electionYear)
   return (
     <Header>
       {ELECTION_YEAR.map(y => (

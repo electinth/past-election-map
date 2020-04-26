@@ -34,7 +34,7 @@ const MapView = () => {
           </Switch>
         </div>
       </aside>
-      <aside className={`bar bar__right ${showMobileDetail ? "show-info" : null}`}>
+      <aside className={`bar bar__right ${showMobileDetail ? "show-info" : ""}`}>
         <MobileSelectYear />
         <Dropdown>{province}</Dropdown>
         <div className="bar--lower bar--lower__right">

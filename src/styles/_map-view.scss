@@ -29,7 +29,7 @@
     padding-right: 2rem;
   }
 
-  @include mobile {
+  @include tablet {
     &__left {
       flex-grow: 1;
       padding-top: 0;

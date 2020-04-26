@@ -76,7 +76,7 @@ const Table = styled.table`
   }
 
   & th {
-    @media ${device.mobile} {
+    @media ${device.tablet} {
       width: 10rem;
     }
   }
@@ -94,7 +94,7 @@ const GithubButton = styled.div`
     border-radius: 1rem;
     border: 0;
 
-    @media ${device.mobile} {
+    @media ${device.tablet} {
       font-size: 2rem;
       padding: 1rem 3rem;
     }

@@ -28,6 +28,10 @@ const Container = styled.div`
   overflow: scroll;
 `;
 
+const ZoneDetailTitle = styled.div`
+  white-space: pre-wrap;
+`;
+
 const ZoneDetailText = styled.p`
   width: 320px;
   font-size: 1.2rem;
@@ -42,14 +46,14 @@ const Header = styled.div`
   height: 5rem;
   display: flex;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     width: 100%;
     height: 11rem;
     margin-top: 0;
     padding: 1rem;
     display: grid;
     grid-template-columns: 10rem 18rem;
-    grid-template-rows: 4rem 3.2rem;
+    grid-template-rows: 3.2rem 3.2rem;
     grid-template-areas:
       "back dropdown"
       "view view";
@@ -78,7 +82,7 @@ const PartyUL = styled.ul`
   margin: 0 auto;
   width: 100%;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     flex-direction: column;
   }
 `;
@@ -91,7 +95,7 @@ const Year = styled.li`
     border-right: 2px solid #000000;
   }
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     width: 100%;
   }
 `;
@@ -102,7 +106,7 @@ const CardList = styled.div`
   margin: 0 auto;
   text-align: center;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     width: 100%;
     display: grid;
     grid-template-columns: auto;
@@ -124,19 +128,19 @@ const CardYearTitle = styled.h1`
   font-family: 'The MATTER';
   font-size: 3rem;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     grid-area: year;
   }
 `;
 
 const CardMapSvg = styled.div`
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     grid-area: chart;
   }
 `;
 
 const CardInfo = styled.div`
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     grid-area: info;
   }
 `;
@@ -151,7 +155,7 @@ const PartyCardContainer = styled.div`
   margin: 0 auto;
   padding: 10px;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     margin-left: 0;
     max-width: initial;
     margin: 0 auto;
@@ -169,7 +173,7 @@ const PersonCardContainer = styled.div`
   margin: 0 auto;
   padding: 10px;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     margin-left: 0;
     max-width: initial;
     margin: 0 auto;
@@ -224,7 +228,7 @@ const HeaderBack = styled.div`
     text-decoration: none;
   }
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     grid-area: back;
   }
 `;
@@ -244,13 +248,17 @@ const BackButton = styled.div`
   text-align: center;
   line-height: 40px;
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     position: static;
     width: 100%;
     font-size: 1.6rem;
-    line-height: 1;
-    padding: 0.3rem 1rem;
+    line-height: 1.5;
+    padding: 0 1rem;
     height: auto;
+
+    i {
+      display: none;
+    }
   }
 `;
 
@@ -270,7 +278,7 @@ const HeaderViewMode = styled.div`
     position: absolute;
   }
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     grid-area: view;
     width: 100%;
     height: 100%;
@@ -304,17 +312,30 @@ const DropDownContainer = styled.div`
     overflow: hidden;
   }
 
-  @media ${device.mobile} {
+  @media ${device.tablet} {
     grid-area: dropdown;
     position: static;
     width: 100%;
+
     .dropdown--button {
       position: static;
       width: 100%;
       font-size: 1.6rem;
-      line-height: 1;
-      padding: 0.3rem 1rem;
+      line-height: 1.5;
+      padding: 0 1rem;
       height: auto;
+    }
+
+    .dropdown--items {
+      top: 3.5rem;
+    }
+
+    i {
+      border: none;
+      height: 1.5rem;
+      &::after {
+        top: 0;
+      }
     }
   }
 `;
@@ -412,10 +433,10 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                       const offset = tooltipZoneRef.current.offsetHeight;
                       if (tooltips.length !== 0) {
                         setTooltipStyles({
-                          top: e.clientY - 100 - offset,
+                          top: e.clientY - 120 - offset,
                           left: e.clientX,
                           overflow: 'hidden',
-                          transform: 'translateX(-50%)',
+                          transform: 'translate(-50%, -50%)',
                           whiteSpace: 'nowrap',
                           opacity: 1
                         });
@@ -439,7 +460,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                 )}
                 </CardInfo>
                 <div className="tooltips" style={tooltipsStyles}>
-                  {tooltips[0]}
+                  <ZoneDetailTitle>{tooltips[0]}</ZoneDetailTitle>
                   <ZoneDetailText ref={tooltipZoneRef}>
                     {tooltips[1]}
                   </ZoneDetailText>
@@ -680,7 +701,7 @@ const CompareView = () => {
           <Link to={`/${paramYear}/${paramProvince}`}>
             <BackButton>
               <i className="icon--chevron icon--chevron__left"></i>{' '}
-              Back
+              กลับ
             </BackButton>
           </Link>
         </HeaderBack>

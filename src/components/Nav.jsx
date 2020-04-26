@@ -9,7 +9,7 @@ const Nav = () => {
   const province = isCompareView ? location.pathname.split('/')[2] : '';
   return (
     <nav className="nav">
-      <a href="https://elect.in.th" className="nav--logo nav--logo__elect">
+      <a href="https://elect.in.th" target="_blank" className="nav--logo nav--logo__elect">
         <img src={siteLogoImage} className="nav--logo-image"></img>
       </a>
       {isCompareView ? (

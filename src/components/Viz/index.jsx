@@ -6,12 +6,17 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import D3Map from './D3Map';
 import MapContext from '../../map/context';
 import { withRouter } from 'react-router-dom';
-import { isMobile } from '../size';
+import { isMobile, device } from '../size';
 
-let w = innerWidth,
-  h = innerHeight;
+const sitenavHeight = 60;
+const w = innerWidth;
+const h = innerHeight - sitenavHeight;
 
 let map;
+
+const ZoneDetailTitle = styled.div`
+  white-space: pre-wrap;
+`;
 
 const ZoneDetailText = styled.p`
   max-width: 240px;
@@ -19,6 +24,17 @@ const ZoneDetailText = styled.p`
   font-family: 'Noto Sans Thai';
   white-space: normal;
   pointer-events: none;
+`;
+
+const Loader = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  @media ${device.tablet} {
+    top: calc(6rem + ((100vh - 36rem) / 2));
+  }
 `;
 
 function getElementWidth(selector) {
@@ -33,7 +49,9 @@ function getElementWidth(selector) {
  *
  * @param {*} w
  * @param {*} h
- * @return {Array} 0 = width, 1 = height, 2 = center X, 3 = center Y
+ * @return {Array} 0 = width, 1 = height,
+ *  2 = center X, 3 = center Y
+ *  4 = bound W, 5 = bound H
  */
 function getViewport(w, h) {
   if (isMobile()) {
@@ -41,7 +59,10 @@ function getViewport(w, h) {
       w,
       h,
       w / 2,
-      (h - 320) / 2
+      // height - detail panel - site nav
+      (h - 320) / 2,
+      Math.max(w - 80, 200),
+      Math.max(h - 320 - 80, 200)
     ];
   } else {
     const barLeft = getElementWidth('.bar__left');
@@ -50,7 +71,9 @@ function getViewport(w, h) {
       w - barLeft - barRight,
       h,
       barLeft + (w - barLeft - barRight) / 2,
-      h / 2
+      h / 2,
+      Math.max(w - 80, 200),
+      Math.max(h - 80, 200)
     ];
   }
 }
@@ -76,10 +99,11 @@ const Map = props => {
     // center map in viewport excluding left & right bars
     map = D3Map(
       CountryTopoJson,
-      ...getViewport(w, h),
+      getViewport(w, h),
       props.history.push,
       electionYear,
       province,
+      isMobile() ? 1500 : 2250,
       setTooltips
     );
     const $gVis = d3.select(visRef.current);
@@ -96,7 +120,7 @@ const Map = props => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (!map) return;
-        map.setViewport(...getViewport(innerWidth, innerHeight));
+        map.setViewport(getViewport(innerWidth, innerHeight));
       }, 150);
     };
     window.addEventListener('resize', resizeListener);
@@ -124,12 +148,12 @@ const Map = props => {
         className="tooltips"
         style={{ ...tooltipsStyles, pointerEvents: 'none' }}
       >
-        {tooltips[0]}
+        <ZoneDetailTitle>{tooltips[0]}</ZoneDetailTitle>
         <ZoneDetailText ref={tooltipZoneRef}>{tooltips[1]}</ZoneDetailText>
       </div>
-      <div style={{ position: 'fixed', top: '50%', left: '50%' }}>
+      <Loader>
         <BeatLoader size={25} color={'white'} loading={loading} />
-      </div>
+      </Loader>
       <svg width={w} height={h}>
         <g id="vis" ref={visRef}>
           <defs id={`map-defs`}></defs>
@@ -138,10 +162,10 @@ const Map = props => {
             onMouseMove={e => {
               const offset = tooltipZoneRef.current.offsetHeight;
               setTooltipStyles({
-                top: e.clientY - 100 - offset,
+                top: e.clientY - 120 - offset,
                 left: e.clientX,
                 overflow: 'hidden',
-                transform: 'translate(-50%, 0%)',
+                transform: 'translate(-50%, -50%)',
                 opacity: 1
               });
             }}

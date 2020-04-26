@@ -115,7 +115,7 @@
     }
   }
 
-  @include mobile {
+  @include tablet {
     &--button {
       font-size: 2rem;
       height: auto;

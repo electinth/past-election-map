@@ -56,10 +56,11 @@ const partyColor = electionYear => {
 /**
  * Return fill defintions for selected year
  * @param {*} electionYear
+ * @param {string} size Pattern size. normal|small
  * @param {str} uid make pattern id unique
  * @return {function} Fill defintion resolver. See below.
  */
-export const partyFill = (electionYear, uid = '') => {
+export const partyFill = (electionYear, size = 'normal', uid = '') => {
   const yearColor = {
     'election-2550': party50,
     'election-2554': party54,
@@ -82,11 +83,20 @@ export const partyFill = (electionYear, uid = '') => {
     if (partyWinnerCount < quotaCount) {
       const patternId = `fill--${uid}--${partyName}--${partyWinnerCount}-${quotaCount}`;
       // control pattern styles
-      const zoneStyle = {
-        '1-3': { rect: '#ffffff', circle: 'party', r: 3.0 },
-        '1-2': { rect: 'party', circle: '#ffffff', r: 3.6 },
-        '2-3': { rect: 'party', circle: '#ffffff', r: 2.0 }
-      };
+      const patternSize = size === 'small' ? 5 : 10;
+      const zoneStyle = size === 'small'
+        ?
+          {
+            '1-3': { rect: '#ffffff', circle: 'party', r: 1.5 },
+            '1-2': { rect: 'party', circle: '#ffffff', r: 1.8 },
+            '2-3': { rect: 'party', circle: '#ffffff', r: 1.0 }
+          }
+        :
+          {
+            '1-3': { rect: '#ffffff', circle: 'party', r: 3.0 },
+            '1-2': { rect: 'party', circle: '#ffffff', r: 3.6 },
+            '2-3': { rect: 'party', circle: '#ffffff', r: 2.0 }
+          };
       return {
         id: patternId,
         type: 'pattern',
@@ -100,23 +110,24 @@ export const partyFill = (electionYear, uid = '') => {
             .attr('id', patternId)
             .attr('x', 0)
             .attr('y', 0)
-            .attr('width', 10)
-            .attr('height', 10)
-            .attr('patternUnits', 'userSpaceOnUse');
+            .attr('width', patternSize)
+            .attr('height', patternSize)
+            .attr('patternUnits', 'userSpaceOnUse')
+            .attr('patternTransform', `rotate(45)`);
           // Base fill
           $pattern
             .append('rect')
             .attr('x', 0)
             .attr('y', 0)
-            .attr('width', 10)
-            .attr('height', 10)
+            .attr('width', patternSize)
+            .attr('height', patternSize)
             .style('stroke', 'none')
             .style('fill', style.rect === 'party' ? partyColor : style.rect);
           // Paint polka dots
           $pattern
             .append('circle')
-            .attr('cx', 5)
-            .attr('cy', 5)
+            .attr('cx', patternSize / 2)
+            .attr('cy', patternSize / 2)
             .attr('r', style.r)
             .style('stroke', 'none')
             .style(

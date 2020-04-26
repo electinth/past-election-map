@@ -19,13 +19,13 @@ $screen-desktop-max: 1440px;
 // Mobile devices
 @mixin mobile {
   @media (max-width: #{$screen-mobile-lg-max}) {
-      @content;
+    @content;
   }
 }
 
 // Tablet devices
 @mixin tablet {
   @media (max-width: #{$screen-tablet-max}) {
-      @content;
+    @content;
   }
 }

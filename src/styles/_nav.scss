@@ -44,19 +44,53 @@
     color: var(--color-white);
   }
 
-  @include mobile {
+  @include tablet {
     width: 100%;
     min-width: initial;
     font-size: 1.6rem;
     padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 10fr;
+    grid-template-rows: 3rem 3rem;
+    grid-template-areas:
+      "logo title"
+      "menu title";
+    column-gap: 2rem;
+    row-gap: 0rem;
+    justify-items: stretch;
+    align-items: center;
+    justify-content: space-between;
+    align-content: stretch;
 
     .nav--logo {
-      display: none;
+      grid-area: logo;
+      align-self: end;
+    }
+    .nav--logo-image {
+      height: 1.6rem;
+    }
+
+    .nav--header__link {
+      grid-area: title;
     }
 
     .nav--header {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       line-height: 1.4;
+      text-align: center;
+    }
+
+    .nav--about-us__link {
+      grid-area: menu;
+      align-self: start;
+      font-size: 1.4rem;
+      line-height: 1.6;
+    }
+  }
+
+  @include mobile {
+    .nav--header {
+      text-align: left;
     }
   }
 }

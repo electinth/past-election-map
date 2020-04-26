@@ -2,19 +2,17 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
-import partyColor, { partyFill } from '../../map/color';
 
+import partyColor, { partyFill } from '../../map/color';
 import { isMobile } from '../size';
 
 function D3Map(
   CountryTopoJson,
-  w,
-  h,
-  cw, // horizontal center
-  ch, // vertical center
+  viewport, // [w, h, cx, cy, bw, bh]
   push,
   initElectionYear,
   initProvince,
+  initScale,
   setTooltips
 ) {
   let $vis,
@@ -28,11 +26,11 @@ function D3Map(
     $border_zone,
     electionYear = initElectionYear,
     province = initProvince;
-  const SCALE = 2250;
+  const SCALE = initScale;
 
   const projection = d3
     .geoMercator()
-    .translate([cw, ch])
+    .translate([viewport[2], viewport[3]])
     .scale([SCALE])
     .center([100.5, 13.8]);
 
@@ -50,11 +48,8 @@ function D3Map(
     $zoneLabel = $vis.select('#zone-label');
   };
 
-  const setViewport = (_w, _h, _cw, _ch) => {
-    w = _w || w;
-    h = _h || h;
-    cw = _cw || cw;
-    ch = _ch || ch;
+  const setViewport = (vp) => {
+    viewport = vp;
     setProvince(province);
   };
 
@@ -133,17 +128,15 @@ function D3Map(
           )
       };
 
-      const bw = Math.max(w - 80, 200);
-      const bh = Math.max(h - 80, 200);
       const b = path.bounds(selection);
       const zoomScale =
-        0.875 / Math.max((b[1][0] - b[0][0]) / bw, (b[1][1] - b[0][1]) / bh);
+        0.875 / Math.max((b[1][0] - b[0][0]) / viewport[4], (b[1][1] - b[0][1]) / viewport[5]);
       const lonCenter = (b[0][0] + b[1][0]) / 2;
       const latCenter = (b[0][1] + b[1][1]) / 2;
       const center = [lonCenter, latCenter];
       const translate = [
-        zoomScale * -center[0] + cw,
-        zoomScale * -center[1] + ch
+        zoomScale * -center[0] + viewport[2],
+        zoomScale * -center[1] + viewport[3]
       ];
 
       let transform = `translate(${translate[0]}, ${translate[1]}) scale(${zoomScale})`;
@@ -154,7 +147,7 @@ function D3Map(
         .duration(750)
         .attr('transform', transform)
         .on('end', () => {
-          $zone.attr('fill', fillFactory($defs)(electionYear)(province)); // post map-panning
+          $zone.attr('fill', fillFactory($defs, 'normal')(electionYear)(province)); // post map-panning
           updatePatternTransform.call($vis.node(), 'zoom');
           labelJoin();
         });
@@ -165,7 +158,7 @@ function D3Map(
         .duration(750)
         .attr('transform', '')
         .on('end', () => {
-          $zone.attr('fill', fillFactory($defs)(electionYear)(province)); // post map-panning
+          $zone.attr('fill', fillFactory($defs, 'normal')(electionYear)(province)); // post map-panning
           updatePatternTransform.call($vis.node());
         });
     }
@@ -247,10 +240,17 @@ function D3Map(
       if (!properties.result) {
         return setTooltips(['การเลือกตั้งเป็นโมฆะ', properties.zone_detail]);
       }
-      const winner = properties.result.reduce(function(prev, current) {
-        return prev.score > current.score ? prev : current;
-      });
-      setTooltips([winner.party, properties.zone_detail]);
+
+      const rankings = _.orderBy(properties.result, ['score'], ['desc']);
+      const winners = rankings.slice(0, properties.quota || 1).map(r => r.party);
+      let winnerText = winners[0];
+      if (properties.quota > 1) {
+        winnerText = _.map(_.groupBy(winners), (list, party) => `${party} ×${list.length}`).join("  ");
+      }
+      setTooltips([
+        `${province} เขต ${properties.zone_id}\n${winnerText}`,
+        properties.zone_detail
+      ]);
     }
   }
 
@@ -274,7 +274,7 @@ function D3Map(
         }
       })
       .on('mouseenter', setTooltipContent)
-      .attr('fill', fillFactory($defs)(electionYear)(province));
+      .attr('fill', fillFactory($defs, 'normal')(electionYear)(province));
 
     updatePatternTransform.call(
       $vis.node(),
@@ -297,9 +297,10 @@ function D3Map(
     const polylabelPosition = polylabelPositionFactory(projection);
     // Smaller font size for large province like Bangkok
     const labelData = $label.data();
-    const fontSize =
-      labelData.length < 10 ? 20 : labelData.length < 16 ? 16 : 12;
-    // const fontSize = fontSizeFactory(path);
+    const fontSize = isMobile()
+      ? labelData.length < 10 ? 16 : labelData.length < 16 ? 12 : 8
+      : labelData.length < 10 ? 20 : labelData.length < 16 ? 16 : 12;
+
     $label
       .append('circle')
       .attr('cx', polylabelPosition('x'))
@@ -424,7 +425,7 @@ function D3Map(
   return { render, setVis, setElectionYear, setProvince, setViewport };
 }
 
-function fillFactory($defs, uid = '') {
+function fillFactory($defs, isMobile, uid = '') {
   return electionYear => {
     return province =>
       function({ properties }) {
@@ -442,7 +443,7 @@ function fillFactory($defs, uid = '') {
           .length;
 
         // load fill definitions
-        const fillOptions = partyFill(electionYear, uid)(
+        const fillOptions = partyFill(electionYear, isMobile, uid)(
           winnerParty,
           totalWinnerParty,
           quota
