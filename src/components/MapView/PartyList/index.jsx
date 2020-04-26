@@ -17,7 +17,8 @@ const PartyList = ({ byPartySorted, view }) => {
               backgroundColor: partyColor(electionYear)(party)
             }}
           ></span>
-          พรรค{party}{' '}
+          <a href={`https://theyworkforus.elect.in.th/party/${party}`} target="_blank">พรรค{party}</a>
+          {' '}
           <span className="party-list--count">
             {' '}
             <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>

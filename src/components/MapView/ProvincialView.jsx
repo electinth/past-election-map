@@ -200,7 +200,10 @@ const Winner = ({ provincialProps }) => {
                     backgroundColor: partyColor(year)(winner.party)
                   }}
                 ></span>
-                {winner.first_name} {winner.last_name}, พรรค{winner.party},{' '}
+                <a href={`https://theyworkforus.elect.in.th/people/${winner.first_name}-${winner.last_name}`} target="_blank">{winner.title} {winner.first_name} {winner.last_name}</a>
+                {", "}
+                <a href={`https://theyworkforus.elect.in.th/party/${winner.party}`} target="_blank">พรรค{winner.party}</a>
+                {", "}
                 <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
                   {percentageFormat(winner.ratio)}
                 </span>

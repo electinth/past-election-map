@@ -527,7 +527,8 @@ const PartyCard = ({ data = {} }) => {
                     backgroundColor: partyColor(data.year)(party)
                   }}
                 ></span>
-                {party}{' '}
+                <a href={`https://theyworkforus.elect.in.th/party/${party}`} target="_blank">พรรค{party}</a>
+                {' '}
                 <span className="party-list--count">
                   <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
                     {candidate}
@@ -603,8 +604,10 @@ const PersonCard = ({ data = {} }) => {
                             backgroundColor: partyColor(data.year)(winner.party)
                           }}
                         ></span>
-                        {winner.title} {winner.first_name} {winner.last_name},{' '}
-                        {winner.party},{' '}
+                        <a href={`https://theyworkforus.elect.in.th/people/${winner.first_name}-${winner.last_name}`} target="_blank">{winner.title} {winner.first_name} {winner.last_name}</a>
+                        {", "}
+                        <a href={`https://theyworkforus.elect.in.th/party/${winner.party}`} target="_blank">พรรค{winner.party}</a>
+                        {', '}
                         <span
                           style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}
                         >
