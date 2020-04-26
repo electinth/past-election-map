@@ -48,7 +48,7 @@ function D3Map(
     $zoneLabel = $vis.select('#zone-label');
   };
 
-  const setViewport = (vp) => {
+  const setViewport = vp => {
     viewport = vp;
     setProvince(province);
   };
@@ -130,7 +130,11 @@ function D3Map(
 
       const b = path.bounds(selection);
       const zoomScale =
-        0.875 / Math.max((b[1][0] - b[0][0]) / viewport[4], (b[1][1] - b[0][1]) / viewport[5]);
+        0.875 /
+        Math.max(
+          (b[1][0] - b[0][0]) / viewport[4],
+          (b[1][1] - b[0][1]) / viewport[5]
+        );
       const lonCenter = (b[0][0] + b[1][0]) / 2;
       const latCenter = (b[0][1] + b[1][1]) / 2;
       const center = [lonCenter, latCenter];
@@ -147,7 +151,10 @@ function D3Map(
         .duration(750)
         .attr('transform', transform)
         .on('end', () => {
-          $zone.attr('fill', fillFactory($defs, 'normal')(electionYear)(province)); // post map-panning
+          $zone.attr(
+            'fill',
+            fillFactory($defs, 'normal')(electionYear)(province)
+          ); // post map-panning
           updatePatternTransform.call($vis.node(), 'zoom');
           labelJoin();
         });
@@ -158,7 +165,10 @@ function D3Map(
         .duration(750)
         .attr('transform', '')
         .on('end', () => {
-          $zone.attr('fill', fillFactory($defs, 'normal')(electionYear)(province)); // post map-panning
+          $zone.attr(
+            'fill',
+            fillFactory($defs, 'normal')(electionYear)(province)
+          ); // post map-panning
           updatePatternTransform.call($vis.node());
         });
     }
@@ -245,10 +255,15 @@ function D3Map(
       }
 
       const rankings = _.orderBy(properties.result, ['score'], ['desc']);
-      const winners = rankings.slice(0, properties.quota || 1).map(r => r.party);
+      const winners = rankings
+        .slice(0, properties.quota || 1)
+        .map(r => r.party);
       let winnerText = winners[0];
       if (properties.quota > 1) {
-        winnerText = _.map(_.groupBy(winners), (list, party) => `${party} ×${list.length}`).join("  ");
+        winnerText = _.map(
+          _.groupBy(winners),
+          (list, party) => `${party} ×${list.length}`
+        ).join('  ');
       }
       setTooltips([
         `${province} เขต ${properties.zone_id}\n${winnerText}`,
@@ -269,11 +284,11 @@ function D3Map(
           // On mobile, no-op when click current province
           province_name === province
             ? null
-            : push(`/${electionYear.slice(-4)}/${province_name}`)
+            : push(`/${electionYear.slice(-4)}/${province_name}`);
         } else {
           province_name === province
             ? push(`/${electionYear.slice(-4)}`)
-            : push(`/${electionYear.slice(-4)}/${province_name}`)
+            : push(`/${electionYear.slice(-4)}/${province_name}`);
         }
       })
       .on('mouseenter', setTooltipContent)
@@ -301,8 +316,16 @@ function D3Map(
     // Smaller font size for large province like Bangkok
     const labelData = $label.data();
     const fontSize = isMobile()
-      ? labelData.length < 10 ? 16 : labelData.length < 16 ? 12 : 8
-      : labelData.length < 10 ? 20 : labelData.length < 16 ? 16 : 12;
+      ? labelData.length < 10
+        ? 16
+        : labelData.length < 16
+        ? 12
+        : 8
+      : labelData.length < 10
+      ? 20
+      : labelData.length < 16
+      ? 16
+      : 12;
 
     $label
       .append('circle')

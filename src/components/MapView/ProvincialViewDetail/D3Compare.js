@@ -18,7 +18,7 @@ function D3Compare(
   initScale,
   setTooltips = () => {}
 ) {
-  const getProvinceFeature = (topo, object_name, province_name) => {
+  const getZoneFeature = (topo, object_name, province_name) => {
     const { type, geometries } = topo.objects[object_name];
     const provinceGeometries = geometries.filter(
       geometry => geometry.properties.province_name === province_name
@@ -29,15 +29,32 @@ function D3Compare(
     });
   };
 
+  const getProvinceFeature = (topo, object_name, province_name) => {
+    const { type, geometries } = topo.objects[object_name];
+    const provinceGeometries = geometries.filter(
+      geometry => geometry.properties.province_name === province_name
+    );
+    return topojson.mesh(
+      topo,
+      {
+        type,
+        geometries: provinceGeometries
+      },
+      function(a, b) {
+        return a === b;
+      }
+    );
+  };
+
   const handleProvinceChange = province => {
     // adaptive simplification
     // the larger province, the more simlified
-    const pf = getProvinceFeature(
+    const zf = getZoneFeature(
       CountryTopoJson,
       `election-${_.last(compareYears)}`,
       province
     );
-    const pb = d3.geoBounds(pf);
+    const pb = d3.geoBounds(zf);
     const size = Math.max(pb[1][0] - pb[0][0], pb[1][1] - pb[0][1]);
     const simplifyScale = d3
       .scaleLinear()
@@ -50,7 +67,7 @@ function D3Compare(
 
     // province's geojson features for all years
     const data = compareYears.map(electionYear =>
-      getProvinceFeature(geo, `election-${electionYear}`, province)
+      getZoneFeature(geo, `election-${electionYear}`, province)
     );
     const b = d3.geoBounds(_.last(data));
 
@@ -67,10 +84,26 @@ function D3Compare(
       .scale([SCALE])
       .center([lonCenter, latCenter]);
     const path = d3.geoPath(projection);
+
+    const provinceBoundarydata = compareYears.map(electionYear =>
+      getProvinceFeature(geo, `election-${electionYear}`, province)
+    );
+    const $gProvince = $compare.data(provinceBoundarydata).join();
+    $gProvince
+      .selectAll('path.province')
+      .data(d => [d])
+      .join('path')
+      .attr('class', 'province')
+      .attr('d', path)
+      .attr('fill', 'transparent')
+      .attr('stroke-width', '3')
+      .attr('stroke', 'black')
+      .attr('vector-effect', 'non-scaling-stroke');
+
     const $gElection = $compare.data(data).join('svg');
 
     const $path = $gElection
-      .selectAll('path')
+      .selectAll('path.zone')
       .data(d => d.features)
       .join('path')
       .attr('class', 'zone')
@@ -135,10 +168,15 @@ function D3Compare(
       }
 
       const rankings = _.orderBy(properties.result, ['score'], ['desc']);
-      const winners = rankings.slice(0, properties.quota || 1).map(r => r.party);
+      const winners = rankings
+        .slice(0, properties.quota || 1)
+        .map(r => r.party);
       let winnerText = winners[0];
       if (properties.quota > 1) {
-        winnerText = _.map(_.groupBy(winners), (list, party) => `${party} ×${list.length}`).join("  ");
+        winnerText = _.map(
+          _.groupBy(winners),
+          (list, party) => `${party} ×${list.length}`
+        ).join('  ');
       }
       setTooltips([
         `${province} เขต ${properties.zone_id}\n${winnerText}`,
