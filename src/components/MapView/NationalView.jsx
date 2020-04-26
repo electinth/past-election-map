@@ -160,9 +160,8 @@ const WarnText = styled.h1`
 const ExplainText = styled.p`
   color: #000000;
   font-family: 'Noto Sans Thai';
-  font-size: 2rem;
-  font-weight: 500;
-  line-height: 2.5rem;
+  font-size: 1.6rem;
+  font-weight: normal;
   text-align: left;
   ${props =>
     props.compareView &&
@@ -170,9 +169,8 @@ const ExplainText = styled.p`
     color: #000000;
     font-family: "Noto Sans Thai";
     font-size: 1.1rem;
-    font-weight: 500;
+    font-weight: normal;
     letter-spacing: 0;
-    line-height: 14px;
     margin-top: 0.5rem;
   `}
   a {

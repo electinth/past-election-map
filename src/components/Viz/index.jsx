@@ -6,7 +6,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import D3Map from './D3Map';
 import MapContext from '../../map/context';
 import { withRouter } from 'react-router-dom';
-import { isMobile, device } from '../size';
+import { isTablet, device } from '../size';
 
 const sitenavHeight = 60;
 const w = innerWidth;
@@ -55,7 +55,7 @@ function getElementWidth(selector) {
  *  4 = bound W, 5 = bound H
  */
 function getViewport(w, h) {
-  if (isMobile()) {
+  if (isTablet()) {
     return [
       w,
       h,
@@ -103,7 +103,7 @@ const Map = props => {
       props.history.push,
       electionYear,
       province,
-      isMobile() ? 1500 : 2250,
+      isTablet() ? 1500 : 2250,
       setTooltips
     );
     const $gVis = d3.select(visRef.current);

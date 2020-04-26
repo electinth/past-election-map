@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import MapContext from '../../map/context';
 
-import { isMobile, device } from '../size';
+import { device } from '../size';
 import { ELECTION_YEAR } from '../../config';
 
 const Header = styled.div`

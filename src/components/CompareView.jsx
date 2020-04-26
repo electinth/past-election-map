@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import MapContext from '../map/context';
 import partyColor from '../map/color';
 import { ELECTION_YEAR } from '../config';
-import { isMobile, device } from './size';
+import { isTablet, isLaptop, device } from './size';
 
 import StackedBar from './MapView/StackedBar';
 import { NoVoteDisplay, NoBeungKanProvince } from './MapView/NationalView';
@@ -45,7 +45,7 @@ const Header = styled.div`
   height: 5rem;
   display: flex;
 
-  @media ${device.tablet} {
+  @media ${device.laptop} {
     width: 100%;
     height: 11rem;
     margin-top: 0;
@@ -67,7 +67,6 @@ const Header = styled.div`
 
 const ViewParty = styled.div`
   width: 100%;
-  // height: 800px;
   margin: 0 auto;
   margin-top: 28px;
   color: black;
@@ -76,7 +75,6 @@ const ViewParty = styled.div`
 const PartyUL = styled.ul`
   display: flex;
   list-style-type: none;
-  // align-items: center;
   justify-content: center;
   margin: 0 auto;
   width: 100%;
@@ -95,6 +93,10 @@ const Year = styled.li`
     border-right: 2px solid #000000;
   }
 
+  @media ${device.laptop} {
+    width: 25vw;
+  }
+
   @media ${device.tablet} {
     width: 100%;
 
@@ -106,9 +108,12 @@ const Year = styled.li`
 
 const CardList = styled.div`
   width: 295px;
-  // height: 700px;
   margin: 0 auto;
   text-align: center;
+
+  @media ${device.laptop} {
+    width: 100%;
+  }
 
   @media ${device.tablet} {
     width: 100%;
@@ -202,6 +207,10 @@ const Quota = styled.h1`
   line-height: 21px;
   text-align: left;
   margin-top: 15px;
+
+  @media ${device.laptop} {
+    font-size: 2.0rem;
+  }
 `;
 
 const LineHr = styled.hr`
@@ -214,9 +223,6 @@ const UlPartyList = styled.ul`
   list-style: none;
   max-height: 35vh;
   overflow-y: scroll;
-  a {
-    color: inherit;
-  }
 `;
 
 const LiPartyList = styled.li`
@@ -225,6 +231,10 @@ const LiPartyList = styled.li`
   text-align: left;
   font-family: 'Noto Sans';
   overflow: hidden;
+
+  @media ${device.laptop} {
+    font-size: 1.2rem;
+  }
 `;
 
 const HeaderBack = styled.div`
@@ -232,7 +242,7 @@ const HeaderBack = styled.div`
     text-decoration: none;
   }
 
-  @media ${device.tablet} {
+  @media ${device.laptop} {
     grid-area: back;
   }
 `;
@@ -252,7 +262,7 @@ const BackButton = styled.div`
   text-align: center;
   line-height: 40px;
 
-  @media ${device.tablet} {
+  @media ${device.laptop} {
     position: static;
     width: 100%;
     font-size: 1.6rem;
@@ -282,7 +292,7 @@ const HeaderViewMode = styled.div`
     position: absolute;
   }
 
-  @media ${device.tablet} {
+  @media ${device.laptop} {
     grid-area: view;
     width: 100%;
     height: 100%;
@@ -316,7 +326,7 @@ const DropDownContainer = styled.div`
     overflow: hidden;
   }
 
-  @media ${device.tablet} {
+  @media ${device.laptop} {
     grid-area: dropdown;
     position: static;
     width: 100%;
@@ -347,7 +357,7 @@ const DropDownContainer = styled.div`
 let maps;
 
 function getMapDimension() {
-  if (isMobile()) {
+  if (isTablet()) {
     const marginTop = 0,
       marginBottom = 0,
       marginLeft = 10,
@@ -362,6 +372,21 @@ function getMapDimension() {
       marginLeft,
       marginRight
     };
+  } else if (isLaptop()) {
+      const marginTop = 0,
+        marginBottom = 0,
+        marginLeft = 10,
+        marginRight = 10;
+      const w = innerWidth / 4 - marginLeft - marginRight,
+        h = 250 - marginTop - marginBottom;
+      return {
+        w,
+        h,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight
+      };
   } else {
     const marginTop = 0,
       marginBottom = 0,
@@ -406,7 +431,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
       $compare,
       $defs,
       mapDimension,
-      isMobile() ? 12000 : 15000,
+      isTablet() ? 12000 : (isLaptop() ? 10000 : 15000),
       setTooltips
     );
   }, [CountryTopoJson]);

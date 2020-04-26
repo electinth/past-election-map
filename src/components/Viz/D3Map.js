@@ -4,7 +4,7 @@ import * as topojson from 'topojson-client';
 import * as tps from 'topojson-simplify';
 
 import partyColor, { partyFill } from '../../map/color';
-import { isMobile } from '../size';
+import { isTablet } from '../size';
 
 function D3Map(
   CountryTopoJson,
@@ -280,7 +280,7 @@ function D3Map(
       )
       .attr('d', path)
       .on('click', ({ properties: { province_name } }) => {
-        if (isMobile()) {
+        if (isTablet()) {
           // On mobile, no-op when click current province
           province_name === province
             ? null
@@ -315,7 +315,7 @@ function D3Map(
     const polylabelPosition = polylabelPositionFactory(projection);
     // Smaller font size for large province like Bangkok
     const labelData = $label.data();
-    const fontSize = isMobile()
+    const fontSize = isTablet()
       ? labelData.length < 10
         ? 16
         : labelData.length < 16
@@ -451,7 +451,7 @@ function D3Map(
   return { render, setVis, setElectionYear, setProvince, setViewport };
 }
 
-function fillFactory($defs, isMobile, uid = '') {
+function fillFactory($defs, isTablet, uid = '') {
   return electionYear => {
     return province =>
       function({ properties }) {
@@ -469,7 +469,7 @@ function fillFactory($defs, isMobile, uid = '') {
           .length;
 
         // load fill definitions
-        const fillOptions = partyFill(electionYear, isMobile, uid)(
+        const fillOptions = partyFill(electionYear, isTablet, uid)(
           winnerParty,
           totalWinnerParty,
           quota

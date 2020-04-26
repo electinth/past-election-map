@@ -9,9 +9,15 @@ export const size = {
 
 export const device = {
   mobile: `(max-width: ${size.mobileL}px)`,
-  tablet: `(max-width: ${size.tablet}px)`
+  tablet: `(max-width: ${size.tablet}px)`,
+  laptop: `(max-width: ${size.laptop}px)`,
+  desktop: `(max-width: ${size.desktop}px)`
 };
 
-export function isMobile() {
+export function isTablet() {
   return innerWidth <= size.tablet;
+}
+
+export function isLaptop() {
+  return innerWidth <= size.laptop;
 }

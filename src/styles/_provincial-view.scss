@@ -45,7 +45,7 @@
       padding: 1rem 0;
       border-bottom: 1px solid black;
       font-family: 'Noto Sans Thai';
-      font-weight: 500;
+      // font-weight: 500;
 
       // &:first-child {
       //   border-top: 1px solid black;
@@ -106,13 +106,15 @@
       max-height: initial;
     }
     &--content {
-      max-height: 18rem;
+      max-height: 13rem;
+      padding-bottom: 2rem;
       overflow: auto;
       transition: height .5s ease-out;
 
       .show-info & {
         height: calc(100vh - 30rem);
         max-height: initial;
+        padding-bottom: 4rem;
       }
     }
   }

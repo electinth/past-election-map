@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import _ from 'lodash';
 import styled from 'styled-components';
 
-import { isMobile, device } from '../size';
+import { device } from '../size';
 
 const Header = styled.div`
   @media ${device.tablet} {
