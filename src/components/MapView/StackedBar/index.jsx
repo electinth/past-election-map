@@ -54,7 +54,10 @@ const StackedBar = ({ data, zoneQuota, year }) => {
                   marginRight: '.5rem'
                 }}
               ></span>
-              {winner.party} {percentageFormat(winner.ratio)}
+              {winner.party}{' '}
+              <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
+                {percentageFormat(winner.ratio)}
+              </span>
             </span>
           </li>
         ))}
@@ -98,7 +101,10 @@ const StackedBar = ({ data, zoneQuota, year }) => {
                 marginRight: '.5rem'
               }}
             ></span>
-            {winner.party} {percentageFormat(winner.ratio)}
+            {winner.party}{' '}
+            <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
+              {percentageFormat(winner.ratio)}
+            </span>
           </span>
         </li>
         <div
@@ -119,7 +125,10 @@ const StackedBar = ({ data, zoneQuota, year }) => {
                 marginRight: '.5rem'
               }}
             ></span>
-            {runnerUp.party} {percentageFormat(runnerUp.ratio)}
+            {runnerUp.party}{' '}
+            <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
+              {percentageFormat(runnerUp.ratio)}
+            </span>
           </span>
         </div>
         <div
@@ -140,7 +149,10 @@ const StackedBar = ({ data, zoneQuota, year }) => {
                 marginRight: '.5rem'
               }}
             ></span>
-            {rest.party} {percentageFormat(rest.ratio)}
+            {rest.party}{' '}
+            <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
+              {percentageFormat(rest.ratio)}
+            </span>
           </span>
         </div>
       </ul>
