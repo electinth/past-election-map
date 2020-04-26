@@ -347,11 +347,14 @@ function D3Map(
       .append('text')
       .text(({ properties: { zone_id } }) => zone_id)
       .attr('x', polylabelPosition('x'))
-      .attr('y', polylabelPosition('y'))
+      .attr('y', d => {
+        const y = polylabelPosition('y')(d);
+        const em = getFixedFontSize($vis, fontSize);
+        return y + 0.25 * em;
+      })
       .attr('font-size', geo => {
         return getFixedFontSize($vis, fontSize);
       })
-      .attr('dominant-baseline', 'middle')
       .attr('opacity', 0)
       .transition()
       .delay(delay ? 500 : 0)

@@ -147,9 +147,12 @@ function D3Compare(
       .attr('class', 'zone-label')
       .text(({ properties: { zone_id } }) => zone_id)
       .attr('x', polylabelPosition('x'))
-      .attr('y', polylabelPosition('y'))
+      .attr('y', d => {
+        const y = polylabelPosition('y')(d);
+        const em = fontSize(d) / 5;
+        return y + 0.25 * em;
+      })
       .attr('font-size', geo => fontSize(geo) / 5)
-      .attr('dominant-baseline', 'middle')
       .style('pointer-events', 'none')
       .raise();
   };
