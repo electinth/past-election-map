@@ -272,7 +272,7 @@ const HeaderViewMode = styled.div`
 
   .provincial-view--toggle {
     height: 100%;
-    borderradius: var(--border-radius);
+    border-radius: var(--border-radius);
   }
 
   .provincial-view--toggle-button {
@@ -311,7 +311,7 @@ const DropDownContainer = styled.div`
   }
   .dropdown--button {
     height: 100%;
-    paddingtop: 0;
+    padding-top: 0;
     font-size: 3rem;
     overflow: hidden;
   }
