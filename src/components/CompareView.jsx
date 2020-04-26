@@ -446,7 +446,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                           top: e.currentTarget.parentElement.offsetTop - offset,
                           left: e.clientX,
                           overflow: 'hidden',
-                          transform: 'translate(-50%, -50%)',
+                          transform: 'translate(-50%, 0%)',
                           whiteSpace: 'nowrap',
                           opacity: 1,
                           zIndex: '10'
