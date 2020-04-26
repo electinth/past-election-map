@@ -14,7 +14,6 @@ import { NoVoteDisplay, NoBeungKanProvince } from './MapView/NationalView';
 import { SeePartyMenu, SeeWinnerMenu } from './MapView/ProvincialView';
 import D3Compare from './MapView/ProvincialViewDetail/D3Compare';
 
-
 const Container = styled.div`
   position: fixed;
   display: block;
@@ -55,8 +54,8 @@ const Header = styled.div`
     grid-template-columns: 10rem 18rem;
     grid-template-rows: 3.2rem 3.2rem;
     grid-template-areas:
-      "back dropdown"
-      "view view";
+      'back dropdown'
+      'view view';
     column-gap: 1rem;
     row-gap: 1rem;
     justify-items: stretch;
@@ -117,9 +116,9 @@ const CardList = styled.div`
     grid-template-columns: auto;
     grid-template-rows: 3rem 25rem auto;
     grid-template-areas:
-      "year"
-      "chart"
-      "info";
+      'year'
+      'chart'
+      'info';
     column-gap: 0;
     row-gap: 2rem;
     justify-items: stretch;
@@ -273,7 +272,7 @@ const HeaderViewMode = styled.div`
 
   .provincial-view--toggle {
     height: 100%;
-    borderRadius: var(--border-radius);
+    borderradius: var(--border-radius);
   }
 
   .provincial-view--toggle-button {
@@ -312,7 +311,7 @@ const DropDownContainer = styled.div`
   }
   .dropdown--button {
     height: 100%;
-    paddingTop: 0;
+    paddingtop: 0;
     font-size: 3rem;
     overflow: hidden;
   }
@@ -353,7 +352,7 @@ function getMapDimension() {
       marginBottom = 0,
       marginLeft = 10,
       marginRight = 10;
-    const w = (innerWidth) - marginLeft - marginRight,
+    const w = innerWidth - marginLeft - marginRight,
       h = 250 - marginTop - marginBottom;
     return {
       w,
@@ -430,10 +429,14 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                     id={`compare-election-${year}`}
                     data-election-year={`election-${year}`}
                     width={
-                      mapDimension.w + mapDimension.marginLeft + mapDimension.marginRight
+                      mapDimension.w +
+                      mapDimension.marginLeft +
+                      mapDimension.marginRight
                     }
                     height={
-                      mapDimension.h + mapDimension.marginTop + mapDimension.marginBottom
+                      mapDimension.h +
+                      mapDimension.marginTop +
+                      mapDimension.marginBottom
                     }
                     onMouseMove={e => {
                       const offset = tooltipZoneRef.current.offsetHeight;
@@ -445,7 +448,8 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                           overflow: 'hidden',
                           transform: 'translate(-50%, -50%)',
                           whiteSpace: 'nowrap',
-                          opacity: 1
+                          opacity: 1,
+                          zIndex: '10'
                         });
                       } else {
                         setTooltipStyles({
@@ -461,11 +465,11 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                   </svg>
                 </CardMapSvg>
                 <CardInfo>
-                {view === 'party' ? (
-                  <PartyCard data={party[index]} />
-                ) : (
-                  <PersonCard data={person[index]} />
-                )}
+                  {view === 'party' ? (
+                    <PartyCard data={party[index]} />
+                  ) : (
+                    <PersonCard data={person[index]} />
+                  )}
                 </CardInfo>
                 <div className="tooltips" style={tooltipsStyles}>
                   <ZoneDetailTitle>{tooltips[0]}</ZoneDetailTitle>
@@ -601,7 +605,9 @@ const PersonCard = ({ data = {} }) => {
                         ></span>
                         {winner.title} {winner.first_name} {winner.last_name},{' '}
                         {winner.party},{' '}
-                        <span style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}>
+                        <span
+                          style={{ fontFamily: 'Noto Sans', fontWeight: 500 }}
+                        >
                           {percentageFormat(winner.ratio)}
                         </span>
                       </div>
@@ -708,15 +714,12 @@ const CompareView = () => {
         <HeaderBack>
           <Link to={`/${paramYear}/${paramProvince}`}>
             <BackButton>
-              <i className="icon--chevron icon--chevron__left"></i>{' '}
-              กลับ
+              <i className="icon--chevron icon--chevron__left"></i> กลับ
             </BackButton>
           </Link>
         </HeaderBack>
         <HeaderViewMode>
-          <div
-            className="provincial-view--toggle"
-          >
+          <div className="provincial-view--toggle">
             <div
               className={`provincial-view--toggle-button ${partyView &&
                 'active'}`}
@@ -805,16 +808,16 @@ const DropdownCompare = props => {
   }, [showItems]);
 
   return (
-    <div
-      className="dropdown--container"
-      ref={ref}
-    >
+    <div className="dropdown--container" ref={ref}>
       <button
         className="dropdown--button"
         onClick={() => setShowItems(prev => !prev)}
+        style={{
+          paddingTop: '0px'
+        }}
       >
         {props.children}
-        <i className="dropdown--chevron"></i>
+        <i className="dropdown--chevron" style={{ marginTop: '5px' }}></i>
       </button>
       {showItems && (
         <div className="dropdown--items">

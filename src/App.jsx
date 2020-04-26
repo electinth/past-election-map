@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import MetaTags from 'react-meta-tags';
 import Nav from './components/Nav';
 
 import Viz from './components/Viz';
@@ -25,6 +26,12 @@ const App = () => {
         }}
       >
         <BrowserRouter>
+          <MetaTags>
+            <meta
+              property="og:image"
+              content="%PUBLIC_URL%/images/elect-map-og-image.png"
+            />
+          </MetaTags>
           <Nav />
           <main>
             <article className="detail-layer">

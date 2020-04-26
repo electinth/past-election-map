@@ -23,7 +23,10 @@ const Overview = ({ waffleData, view }) => {
                 height: height
               }}
             >
-              <span className="waffle--waffle__tooltiptext">
+              <span
+                className="waffle--waffle__tooltiptext"
+                style={{ zIndex: '5' }}
+              >
                 <span
                   className="waffle--waffle__tooltipcolor"
                   style={{
