@@ -238,7 +238,10 @@ function D3Map(
       setTooltips([properties.province_name]);
     } else {
       if (!properties.result) {
-        return setTooltips(['การเลือกตั้งเป็นโมฆะ', properties.zone_detail]);
+        return setTooltips([
+          `${province} เขต ${properties.zone_id}\nการเลือกตั้งเป็นโมฆะ`,
+          properties.zone_detail
+        ]);
       }
 
       const rankings = _.orderBy(properties.result, ['score'], ['desc']);

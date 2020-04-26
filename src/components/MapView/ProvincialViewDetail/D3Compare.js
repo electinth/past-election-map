@@ -125,12 +125,25 @@ function D3Compare(
     if (!properties) {
       setTooltips([properties.province_name]);
     } else {
-      if (!properties.result)
-        return setTooltips(['การเลือกตั้งเป็นโมฆะ', properties.zone_detail]);
-      const winner = properties.result.reduce(function(prev, current) {
-        return prev.score > current.score ? prev : current;
-      });
-      setTooltips([winner.party, properties.zone_detail]);
+      const province = properties.province_name;
+
+      if (!properties.result) {
+        return setTooltips([
+          `${province} เขต ${properties.zone_id}\nการเลือกตั้งเป็นโมฆะ`,
+          properties.zone_detail
+        ]);
+      }
+
+      const rankings = _.orderBy(properties.result, ['score'], ['desc']);
+      const winners = rankings.slice(0, properties.quota || 1).map(r => r.party);
+      let winnerText = winners[0];
+      if (properties.quota > 1) {
+        winnerText = _.map(_.groupBy(winners), (list, party) => `${party} ×${list.length}`).join("  ");
+      }
+      setTooltips([
+        `${province} เขต ${properties.zone_id}\n${winnerText}`,
+        properties.zone_detail
+      ]);
     }
   }
 

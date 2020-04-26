@@ -61,7 +61,7 @@ function getViewport(w, h) {
       h,
       w / 2,
       // height - detail panel - site nav
-      (h - 320) / 2,
+      (h - 320) / 2 + 40,
       Math.max(w - 80, 200),
       Math.max(h - 320 - 80, 200)
     ];
@@ -86,6 +86,7 @@ const Map = props => {
   const [tooltips, setTooltips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tooltipsStyles, setTooltipStyles] = useState({
+    width: 0,
     left: null,
     top: null,
     opacity: 0
@@ -183,6 +184,7 @@ const Map = props => {
             }}
             onMouseLeave={() =>
               setTooltipStyles({
+                width: 0,
                 top: null,
                 left: null,
                 opacity: 0

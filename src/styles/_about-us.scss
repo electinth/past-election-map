@@ -1,12 +1,12 @@
 .about-us {
   max-width: 90rem;
   margin: 0 auto;
+  font-size: 1.6rem;
   font-family: 'Noto Sans', 'Noto Sans Thai', sans-serif;
   background-color: var(--color-white);
   color: var(--color-black);
   padding: 2rem 5rem;
   border-radius: 2.5rem;
-  font-size: 1.8rem;
   padding-bottom: 10rem;
   margin-bottom: 10rem;
 
@@ -62,7 +62,7 @@
   }
 
   @include tablet {
-    width: calc(100% + 4rem);
+    width: 100vw;
     max-width: initial;
     border-radius: 0;
     padding: 2rem;

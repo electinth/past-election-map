@@ -91,12 +91,17 @@ const Year = styled.li`
   top: 0px;
   margin-bottom: 5rem;
   width: 344px;
+
   &:not(:last-child) {
     border-right: 2px solid #000000;
   }
 
   @media ${device.tablet} {
     width: 100%;
+
+    &:not(:last-child) {
+      border-right: none;
+    }
   }
 `;
 
@@ -385,6 +390,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
   const { province, CountryTopoJson } = useContext(MapContext);
   const [tooltips, setTooltips] = useState([]);
   const [tooltipsStyles, setTooltipStyles] = useState({
+    width: 0,
     left: null,
     top: null,
     opacity: 0
@@ -431,9 +437,10 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                     }
                     onMouseMove={e => {
                       const offset = tooltipZoneRef.current.offsetHeight;
+
                       if (tooltips.length !== 0) {
                         setTooltipStyles({
-                          top: e.clientY - 120 - offset,
+                          top: e.currentTarget.parentElement.offsetTop - offset,
                           left: e.clientX,
                           overflow: 'hidden',
                           transform: 'translate(-50%, -50%)',
@@ -442,6 +449,7 @@ const YearList = ({ view = 'party', party = [], person = [] }) => {
                         });
                       } else {
                         setTooltipStyles({
+                          width: 0,
                           top: null,
                           left: null,
                           opacity: 0

@@ -73,11 +73,19 @@ const Table = styled.table`
   & td,
   & th {
     padding: 0.25rem 2rem;
+    vertical-align: top;
   }
 
   & th {
     @media ${device.tablet} {
       width: 10rem;
+    }
+  }
+  @media ${device.tablet} {
+    font-size: 1.4rem;
+    & td,
+    & th {
+      padding: 0.25rem 0;
     }
   }
 `;
@@ -95,8 +103,8 @@ const GithubButton = styled.div`
     border: 0;
 
     @media ${device.tablet} {
-      font-size: 2rem;
-      padding: 1rem 3rem;
+      font-size: 1.8rem;
+      padding: 1rem 2rem;
     }
   }
 `;
@@ -209,7 +217,7 @@ const AboutUs = props => {
           View This Project on Github
         </a>
       </GithubButton>
-      <Copyright>&copy; 2019 ELECT - All Rights Reserved</Copyright>
+      <Copyright>&copy; 2020 ELECT - All Rights Reserved</Copyright>
     </div>
   );
 };

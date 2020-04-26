@@ -1,11 +1,23 @@
 import React, { useContext, useState } from 'react';
-import Dropdown from './Dropdown';
 import { Route, Switch } from 'react-router-dom';
+import styled from 'styled-components';
+
+import Dropdown from './Dropdown';
 import { NationalLeft, NationalRight } from './NationalView';
 import { ProvincialLeft, ProvincialRight } from './ProvincialView';
 import MapContext from '../../map/context';
 import MobileTopNav from './MobileTopNav';
 import MobileSelectYear from './MobileSelectYear';
+
+const Contianer = styled.div`
+  position: fixed;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+`;
 
 const MapView = () => {
   const { province } = useContext(MapContext);
@@ -19,7 +31,7 @@ const MapView = () => {
   }
 
   return (
-    <>
+    <Contianer>
       <aside className="bar bar__left">
         <div className="bar--upper__left">
           <Route
@@ -51,7 +63,7 @@ const MapView = () => {
           </Switch>
         </div>
       </aside>
-    </>
+    </Contianer>
   );
 };
 

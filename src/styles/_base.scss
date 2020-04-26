@@ -45,11 +45,10 @@ body {
 .detail-layer {
   z-index: 100;
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: flex-start;
   height: calc(100vh - 6rem);
-  // padding: 2rem 2rem 1rem 2rem;
   padding: 0;
   pointer-events: none;
   min-width: 100rem;
@@ -59,7 +58,7 @@ body {
   }
 
   @include tablet {
-    position: fixed; // fixed mobile bug where we can scroll y
+    // position: fixed; // fixed mobile bug where we can scroll y
     width: 100%;
     min-width: initial;
   }

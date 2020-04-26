@@ -15,18 +15,23 @@ const NationalLeft = () => {
 };
 
 const ToggleButton = styled.a`
-  float: right;
-  line-height: 1;
-  transform: rotate(180deg);
-  transition: transform .4s ease-out;
-  margin-top: 0.3rem;
+  display: none;
 
-  i {
-    border: none;
-  }
+  @media ${device.tablet} {
+    display: block;
+    float: right;
+    line-height: 1;
+    transform: rotate(180deg);
+    transition: transform .4s ease-out;
+    margin-top: 0.3rem;
 
-  .show-info & {
-    transform: rotate(0);
+    i {
+      border: none;
+    }
+
+    .show-info & {
+      transform: rotate(0);
+    }
   }
 `;
 
