@@ -4,12 +4,13 @@
 **Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Past Election Map for Thailand](#past-election-map-for-thailand)
-  - [What is this about?](#what-is-this-about)
+    - [What is this about?](#what-is-this-about)
   - [Development](#development)
     - [Prerequisites](#prerequisites)
     - [Install dependencies](#install-dependencies)
     - [Run development mode](#run-development-mode)
     - [Build the project into a static web page](#build-the-project-into-a-static-web-page)
+    - [Release project](#release-project)
     - [Resources for Developers](#resources-for-developers)
     - [Environments](#environments)
   - [System Design](#system-design)
@@ -55,6 +56,14 @@ npm start
 ```
 npm run build
 ```
+
+### Release project
+
+```
+npm version [major|minor|patch] && git push --tags
+```
+
+When pushing tags, we have a GitHub Action that will automatically build the project and upload the build artifiact to [the release page](https://github.com/codeforthailand/past-election-map/releases).
 
 ### Resources for Developers
 
