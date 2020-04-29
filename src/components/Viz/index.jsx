@@ -7,10 +7,9 @@ import D3Map from './D3Map';
 import MapContext from '../../map/context';
 import { withRouter } from 'react-router-dom';
 import { isTablet, device } from '../size';
+import { set } from 'd3';
 
 const sitenavHeight = 60;
-const w = innerWidth;
-const h = innerHeight - sitenavHeight;
 
 let map;
 
@@ -80,6 +79,8 @@ function getViewport(w, h) {
 }
 
 const Map = props => {
+  const [w, setW] = useState(innerWidth);
+  const [h, setH] = useState(innerHeight - sitenavHeight);
   const visRef = useRef();
   const tooltipZoneRef = useRef();
   const { province, electionYear, CountryTopoJson } = useContext(MapContext);
@@ -117,6 +118,8 @@ const Map = props => {
     let timeoutId = null;
     const resizeListener = () => {
       // throttle event
+      setW(innerWidth);
+      setH(innerHeight - sitenavHeight);
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         if (!map) return;
