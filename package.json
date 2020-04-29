@@ -1,6 +1,6 @@
 {
   "name": "past-election-map",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Past general election comparison map for Thailand",
   "main": "index.js",
   "scripts": {
