@@ -28,13 +28,13 @@ function D3Map(
     province = initProvince;
   const SCALE = initScale;
 
-  const projection = d3
+  let projection = d3
     .geoMercator()
     .translate([viewport[2], viewport[3]])
     .scale([SCALE])
     .center([100.5, 13.8]);
 
-  const path = d3.geoPath(projection);
+  let path = d3.geoPath(projection);
 
   const simplifyMinWeight = 1e-5;
   const CountryTopo = tps.presimplify(CountryTopoJson);
@@ -50,6 +50,18 @@ function D3Map(
 
   const setViewport = vp => {
     viewport = vp;
+    projection = d3
+      .geoMercator()
+      .translate([viewport[2], viewport[3]])
+      .scale([SCALE])
+      .center([100.5, 13.8]);
+
+    path = d3.geoPath(projection);
+    updateBorderCountry($border_country);
+    updateBorderProvince($border_province);
+    updateBorderZone($border_zone);
+    $zone.call(drawMap);
+    labelJoin(false);
     setProvince(province);
   };
 
